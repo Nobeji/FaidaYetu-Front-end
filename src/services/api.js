@@ -49,6 +49,7 @@ export const api = {
   // Deliveries
   deliveries: (params) => request(`/deliveries/${params ? '?' + new URLSearchParams(params) : ''}`),
   delivery: (id) => request(`/deliveries/${id}/`),
+  updateDelivery: (id, data) => request(`/deliveries/${id}/`, { method: 'PATCH', body: JSON.stringify(data) }),
   logLocation: (deliveryId, data) => request(`/deliveries/${deliveryId}/log-location/`, { method: 'POST', body: JSON.stringify(data) }),
   latestLocation: (deliveryId) => request(`/deliveries/${deliveryId}/latest-location/`),
 

@@ -56,11 +56,7 @@ export default function DeliveryDashboard() {
       const deliveries = await api.deliveries({ delivery_person: deliveryPersonId });
       const activeDel = deliveries.find(d => d.status === 'in_transit' || d.status === 'assigned' || d.status === 'picked_up');
       if (activeDel) {
-        await fetch(`/api/deliveries/${activeDel.id}/`, {
-          method: 'PATCH',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ status: 'completed' }),
-        });
+        await api.updateDelivery(activeDel.id, { status: 'completed' });
         const dash = await api.deliveryDashboard(1);
         setDashboardData(dash);
       }

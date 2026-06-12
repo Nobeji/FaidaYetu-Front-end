@@ -36,11 +36,15 @@ export default function Auth() {
     } else {
       setLocating(true);
       try {
-        const coords = await new Promise((resolve, reject) => {
+        const coords = await new Promise((resolve) => {
+          if (!navigator.geolocation) {
+            resolve({ lat: -6.7924, lng: 39.2083 });
+            return;
+          }
           navigator.geolocation.getCurrentPosition(
             pos => resolve({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
-            () => reject(new Error('Location is required. Please enable GPS and reload.')),
-            { timeout: 10000 },
+            () => resolve({ lat: -6.7924, lng: 39.2083 }),
+            { timeout: 5000 },
           );
         });
 
