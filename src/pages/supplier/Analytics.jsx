@@ -8,6 +8,7 @@ const navItems = [
   { icon: '📦', label: 'Inventory', nav: '/supplier/inventory' },
   { icon: '🛒', label: 'Orders', nav: '/supplier/orders' },
   { icon: '📈', label: 'Analytics', nav: '/supplier/analytics' },
+  { icon: '📉', label: 'Statistics', nav: '/supplier/statistics' },
   { icon: '⚙️', label: 'Settings', nav: '/supplier/settings' },
   { icon: '❓', label: 'Support', nav: '/supplier/support' },
 ];

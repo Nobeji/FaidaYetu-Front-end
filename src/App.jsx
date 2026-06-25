@@ -15,6 +15,7 @@ import SupplierDashboard from './pages/SupplierDashboard';
 import SupplierInventory from './pages/supplier/Inventory';
 import SupplierOrders from './pages/supplier/Orders';
 import SupplierAnalytics from './pages/supplier/Analytics';
+import SupplierStatistics from './pages/supplier/Statistics';
 import SupplierSettings from './pages/supplier/Settings';
 import SupplierSupport from './pages/supplier/Support';
 
@@ -44,6 +45,7 @@ export default function App() {
         <Route path="/supplier/inventory" element={<SupplierInventory />} />
         <Route path="/supplier/orders" element={<SupplierOrders />} />
         <Route path="/supplier/analytics" element={<SupplierAnalytics />} />
+        <Route path="/supplier/statistics" element={<SupplierStatistics />} />
         <Route path="/supplier/settings" element={<SupplierSettings />} />
         <Route path="/supplier/support" element={<SupplierSupport />} />
 
