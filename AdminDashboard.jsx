@@ -18,7 +18,6 @@ const sidebarItems = [
 ];
 
 export default function AdminDashboard() {
-  const [collapsed, setCollapsed] = useState(false);
   const [analyticsOpen, setAnalyticsOpen] = useState(true);
   const navigate = useNavigate();
   const location = useLocation();
@@ -29,10 +28,9 @@ export default function AdminDashboard() {
   return (
     <div style={{ display: 'flex', minHeight: '100vh', background: '#f0f5f2' }}>
       <aside style={{
-        width: collapsed ? 0 : 260, overflow: 'hidden',
+        width: 260, overflow: 'hidden',
         background: '#fff', borderRight: '1px solid #e0e8e4',
         display: 'flex', flexDirection: 'column',
-        transition: 'width 0.25s',
         flexShrink: 0, height: '100vh', position: 'sticky', top: 0,
       }}>
         <div style={{ minWidth: 260, padding: '24px 24px 0', marginBottom: 24 }}>
@@ -110,14 +108,7 @@ export default function AdminDashboard() {
           borderBottom: '1px solid #e0e8e4', position: 'sticky', top: 0, zIndex: 30,
           boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
         }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-            <button onClick={() => setCollapsed(!collapsed)} style={{
-              width: 36, height: 36, display: 'flex', alignItems: 'center', justifyContent: 'center',
-              borderRadius: 10, fontSize: 18, cursor: 'pointer', background: '#f0f5f2', border: 'none',
-              color: '#0a6e46', flexShrink: 0,
-            }}>{collapsed ? '☰' : '✕'}</button>
-            <span style={{ fontSize: 16, fontWeight: 700, color: '#0a6e46' }}>Admin Dashboard</span>
-          </div>
+          <span style={{ fontSize: 16, fontWeight: 700, color: '#0a6e46' }}>Admin Dashboard</span>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
             <div style={{ fontSize: 13, color: '#8a9b93', textAlign: 'right' }}>
               <div style={{ fontWeight: 600, color: '#1a1a1a' }}>Admin</div>
