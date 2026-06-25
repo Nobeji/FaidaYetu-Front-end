@@ -60,4 +60,14 @@ export const api = {
   supplierDashboard: (id) => request(`/dashboard/supplier/${id}/`),
   customerDashboard: (id) => request(`/dashboard/customer/${id}/`),
   deliveryDashboard: (id) => request(`/dashboard/delivery/${id}/`),
+
+  // Admin
+  adminDashboard: () => request('/admin/dashboard/'),
+  adminDemandAnalysis: () => request('/admin/demand-analysis/'),
+  adminHeatMap: () => request('/admin/heat-map/'),
+  adminSalesPrediction: () => request('/admin/sales-prediction/'),
+  adminPerformance: () => request('/admin/performance/'),
+  adminSuppliers: () => request('/admin/suppliers/'),
+  adminCustomers: () => request('/admin/customers/'),
+  adminList: (type) => request(`/admin/${type}/`),
 };

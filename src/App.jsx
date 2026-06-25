@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Welcome from './pages/Welcome';
 import Auth from './pages/Auth';
 import PasswordReset from './pages/PasswordReset';
@@ -24,6 +24,16 @@ import RouteHistory from './pages/delivery/RouteHistory';
 import DeliveryEarnings from './pages/delivery/Earnings';
 import DeliverySettings from './pages/delivery/Settings';
 import DeliverySupport from './pages/delivery/Support';
+
+import AdminDashboard from './pages/AdminDashboard';
+import DemandAnalysis from './pages/admin/DemandAnalysis';
+import AdminHeatMap from './pages/admin/HeatMap';
+import SalesPrediction from './pages/admin/SalesPrediction';
+import AdminReports from './pages/admin/Reports';
+import AdminSuppliers from './pages/admin/Suppliers';
+import AdminCustomers from './pages/admin/Customers';
+import AdminOrders from './pages/admin/Orders';
+import AdminDeliveries from './pages/admin/Deliveries';
 
 export default function App() {
   return (
@@ -54,6 +64,18 @@ export default function App() {
         <Route path="/delivery/earnings" element={<DeliveryEarnings />} />
         <Route path="/delivery/settings" element={<DeliverySettings />} />
         <Route path="/delivery/support" element={<DeliverySupport />} />
+
+        <Route path="/admin" element={<AdminDashboard />}>
+          <Route index element={<Navigate to="/admin/demand-analysis" replace />} />
+          <Route path="demand-analysis" element={<DemandAnalysis />} />
+          <Route path="heat-map" element={<AdminHeatMap />} />
+          <Route path="sales-prediction" element={<SalesPrediction />} />
+          <Route path="reports" element={<AdminReports />} />
+          <Route path="suppliers" element={<AdminSuppliers />} />
+          <Route path="customers" element={<AdminCustomers />} />
+          <Route path="orders" element={<AdminOrders />} />
+          <Route path="deliveries" element={<AdminDeliveries />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   );
