@@ -1,70 +1,28 @@
-import { colors, spacing, radius } from '../constants/theme';
+import { colors } from '../constants/theme';
 
 export default function StatsCard({ label, value, sub, icon, error, tertiary, subIcon }) {
-  const valueStyle = error ? { color: colors.error } : tertiary ? { color: colors.tertiary } : { color: colors.primary };
-  const cardStyle = error
-    ? { backgroundColor: colors.errorContainer, borderColor: colors.error }
-    : { backgroundColor: colors.surfaceContainerLowest, borderColor: colors.outlineVariant };
-  const iconBg = error ? 'errorBg' : tertiary ? 'tertiaryBg' : 'primaryBg';
-
-  const iconStyles = {
-    primaryBg: { background: colors.primaryFixed, color: colors.primary },
-    tertiaryBg: { background: colors.tertiaryFixed, color: colors.tertiary },
-    errorBg: { background: colors.white, color: colors.error },
-  };
-
+  const accent = error ? colors.error : tertiary ? '#7b61ff' : colors.primary;
   return (
-    <div style={{ ...styles.card, ...cardStyle }}>
+    <div style={{
+      background: '#fff', border: '1px solid #eaeaea', borderRadius: 10,
+      padding: '20px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+    }}>
       <div>
-        <div style={styles.label}>{label}</div>
-        <div style={{ ...styles.value, ...valueStyle }}>{value}</div>
+        <div style={{ fontSize: 12, fontWeight: 500, color: '#888', marginBottom: 4, letterSpacing: '0.02em' }}>{label}</div>
+        <div style={{ fontSize: 30, fontWeight: 700, color: '#111', lineHeight: 1.1 }}>{value}</div>
         {sub && (
-          <div style={{ ...styles.sub, color: error ? colors.error : tertiary ? colors.tertiary : colors.primary }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 12, fontWeight: 600, color: accent, marginTop: 6 }}>
             {subIcon && <span>{subIcon}</span>} {sub}
           </div>
         )}
       </div>
-      <div style={{ ...styles.iconWrap, ...iconStyles[iconBg] }}>{icon}</div>
+      {icon && (
+        <div style={{
+          width: 48, height: 48, borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center',
+          background: error ? '#fef2f2' : tertiary ? '#f5f0ff' : '#eaf7f0',
+          color: accent, fontSize: 24, flexShrink: 0,
+        }}>{icon}</div>
+      )}
     </div>
   );
 }
-
-const styles = {
-  card: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    padding: spacing.lg,
-    borderRadius: radius.xl,
-    border: '1px solid',
-    transition: 'box-shadow 0.2s',
-  },
-  label: {
-    fontSize: 13,
-    fontWeight: 500,
-    color: colors.onSurfaceVariant,
-    marginBottom: spacing.xs,
-  },
-  value: {
-    fontSize: 34,
-    fontWeight: 700,
-    lineHeight: 1.1,
-  },
-  sub: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: 4,
-    fontSize: 12,
-    fontWeight: 700,
-    marginTop: spacing.xs,
-  },
-  iconWrap: {
-    width: 56,
-    height: 56,
-    borderRadius: '50%',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    fontSize: 28,
-  },
-};

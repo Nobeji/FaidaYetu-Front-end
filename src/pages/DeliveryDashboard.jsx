@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { colors, spacing, radius } from '../constants/theme';
+import { colors } from '../constants/theme';
 import DashboardShell from '../components/DashboardShell';
 import MapComponent from '../components/MapComponent';
 import { api } from '../services/api';
@@ -36,7 +36,6 @@ export default function DeliveryDashboard() {
     }).catch(() => setLoading(false));
   }, []);
 
-  // Watch position and send to backend
   useEffect(() => {
     const watchId = navigator.geolocation.watchPosition(pos => {
       const loc = [pos.coords.latitude, pos.coords.longitude];
@@ -67,7 +66,7 @@ export default function DeliveryDashboard() {
 
   if (loading) return (
     <DashboardShell brand="FaidaYetu" brandSub="Delivery Portal" navItems={navItems}>
-      <div style={{ textAlign: 'center', padding: spacing.xxl, color: colors.onSurfaceVariant }}>Loading dashboard...</div>
+      <div style={{ textAlign: 'center', padding: 60, color: '#888' }}>Loading dashboard...</div>
     </DashboardShell>
   );
 
@@ -79,119 +78,116 @@ export default function DeliveryDashboard() {
   const initials = (name.match(/\b\w/g) || ['D']).join('').slice(0, 2).toUpperCase();
 
   return (
-    <DashboardShell
-      brand="FaidaYetu"
-      brandSub="Delivery Portal"
-      navItems={navItems}
-      profile={
-        <div style={{ display: 'flex', alignItems: 'center', gap: spacing.md, background: colors.surfaceContainerHigh, padding: `${spacing.sm}px ${spacing.md}px`, borderRadius: radius.xl }}>
-          <div style={{ width: 40, height: 40, borderRadius: '50%', background: colors.primaryContainer, display: 'flex', alignItems: 'center', justifyContent: 'center', color: colors.onPrimaryContainer, fontWeight: 700 }}>{initials}</div>
-          <div>
-            <div style={{ fontWeight: 700, fontSize: 14 }}>{name}</div>
-            <div style={{ fontSize: 12, color: colors.onSurfaceVariant }}>ID: {dp.id || 'N/A'}-PD</div>
-          </div>
+    <DashboardShell brand="FaidaYetu" brandSub="Delivery Portal" navItems={navItems} profile={
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10, background: '#f9f9f9', padding: '8px 12px', borderRadius: 10 }}>
+        <div style={{ width: 36, height: 36, borderRadius: '50%', background: '#eaf7f0', display: 'flex', alignItems: 'center', justifyContent: 'center', color: colors.primary, fontWeight: 700, fontSize: 13 }}>{initials}</div>
+        <div>
+          <div style={{ fontWeight: 600, fontSize: 13 }}>{name}</div>
+          <div style={{ fontSize: 11, color: '#888' }}>ID: {dp.id || 'N/A'}-PD</div>
         </div>
-      }
-    >
-      <div className="fade-in">
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: spacing.lg, flexWrap: 'wrap', gap: spacing.md }}>
+      </div>
+    }>
+      <div>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 24, flexWrap: 'wrap', gap: 12 }}>
           <div>
-            <h1 style={{ fontSize: 28, fontWeight: 600, color: colors.onSurface }}>Delivery Dashboard</h1>
-            <p style={{ fontSize: 15, color: colors.onSurfaceVariant }}>Optimized routes for regional poultry logistics.</p>
+            <h1 style={{ fontSize: 22, fontWeight: 700, color: '#111', margin: 0 }}>Delivery Dashboard</h1>
+            <p style={{ fontSize: 13, color: '#888', margin: '4px 0 0' }}>Optimized routes for regional poultry logistics.</p>
           </div>
-          <div style={{ display: 'flex', gap: spacing.md, alignItems: 'center', flexWrap: 'wrap' }}>
-            <div onClick={() => setDriverOnline(!driverOnline)} style={{ display: 'flex', alignItems: 'center', gap: spacing.sm, padding: '8px 16px', background: colors.surfaceContainerHigh, borderRadius: radius.round, border: `1px solid ${colors.outlineVariant}`, cursor: 'pointer' }}>
-              <span style={{ width: 10, height: 10, borderRadius: '50%', background: driverOnline ? colors.primary : colors.error }} />
-              <span style={{ fontSize: 14, fontWeight: 700 }}>{driverOnline ? 'Driver Online' : 'Offline'}</span>
+          <div style={{ display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap' }}>
+            <div onClick={() => setDriverOnline(!driverOnline)} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '8px 16px', background: '#fff', borderRadius: 20, border: '1px solid #e0e0e0', cursor: 'pointer' }}>
+              <span style={{ width: 8, height: 8, borderRadius: '50%', background: driverOnline ? colors.primary : '#ccc' }} />
+              <span style={{ fontSize: 13, fontWeight: 500, color: '#555' }}>{driverOnline ? 'Online' : 'Offline'}</span>
             </div>
             <button onClick={() => navigate('/delivery/route-history')} style={{
-              display: 'flex', alignItems: 'center', gap: spacing.sm,
-              padding: '12px 24px', borderRadius: radius.round, background: colors.primary, color: colors.onPrimary,
-              border: 'none', cursor: 'pointer', fontWeight: 700, fontSize: 14,
+              display: 'flex', alignItems: 'center', gap: 6,
+              padding: '10px 20px', borderRadius: 8, background: colors.primary, color: '#fff',
+              border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: 13,
             }}>
               ▶ Start Route
             </button>
           </div>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: spacing.lg }}>
-          <MapComponent
-            height={400}
-            userLocation={userLocation}
-            deliveries={activeDelivery ? [activeDelivery] : []}
-            routePoints={
-              activeDelivery?.supplier_lat && activeDelivery?.supplier_lng && activeDelivery?.delivery_lat && activeDelivery?.delivery_lng
-                ? [[activeDelivery.supplier_lat, activeDelivery.supplier_lng], [activeDelivery.delivery_lat, activeDelivery.delivery_lng]]
-                : []
-            }
-            suppliers={[]}
-          />
+        <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: 20 }}>
+          <div style={{ borderRadius: 10, overflow: 'hidden', border: '1px solid #eee' }}>
+            <MapComponent
+              height={400}
+              userLocation={userLocation}
+              deliveries={activeDelivery ? [activeDelivery] : []}
+              routePoints={
+                activeDelivery?.supplier_lat && activeDelivery?.supplier_lng && activeDelivery?.delivery_lat && activeDelivery?.delivery_lng
+                  ? [[activeDelivery.supplier_lat, activeDelivery.supplier_lng], [activeDelivery.delivery_lat, activeDelivery.delivery_lng]]
+                  : []
+              }
+              suppliers={[]}
+            />
+          </div>
 
           {activeDelivery ? (
-            <div style={{ background: 'rgba(255,255,255,0.7)', border: `1px solid ${colors.outlineVariant}`, borderRadius: radius.xl, padding: spacing.lg, borderTop: `4px solid ${colors.primary}`, display: 'flex', flexDirection: 'column' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: spacing.lg }}>
-                <span style={{ fontSize: 13, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: colors.primary }}>Active Delivery</span>
-                <span style={{ padding: '4px 12px', background: colors.primary, color: colors.onPrimary, fontSize: 12, fontWeight: 600, borderRadius: radius.round }}>In Progress</span>
+            <div style={{ background: '#fff', border: '1px solid #eaeaea', borderRadius: 10, padding: '20px', display: 'flex', flexDirection: 'column' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+                <span style={{ fontSize: 11, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#888' }}>Active Delivery</span>
+                <span style={{ padding: '3px 10px', background: '#eaf7f0', color: colors.primary, fontSize: 11, fontWeight: 600, borderRadius: 20 }}>In Progress</span>
               </div>
-              <div style={{ display: 'flex', gap: spacing.md, marginBottom: spacing.md }}>
-                <span style={{ fontSize: 20, color: colors.tertiary }}>📍</span>
+              <div style={{ display: 'flex', gap: 12, marginBottom: 12 }}>
+                <span style={{ fontSize: 16, color: '#888' }}>📍</span>
                 <div>
-                  <div style={{ fontSize: 12, color: colors.onSurfaceVariant, textTransform: 'uppercase', fontWeight: 600 }}>Pickup (Supplier)</div>
-                  <div style={{ fontSize: 15, fontWeight: 700 }}>{activeDelivery.supplier_name || 'Supplier'}</div>
-                  <div style={{ fontSize: 13, color: colors.onSurfaceVariant }}>Order #{activeDelivery.id}</div>
+                  <div style={{ fontSize: 11, color: '#888', textTransform: 'uppercase', fontWeight: 600 }}>Pickup</div>
+                  <div style={{ fontSize: 14, fontWeight: 600 }}>{activeDelivery.supplier_name || 'Supplier'}</div>
+                  <div style={{ fontSize: 12, color: '#888' }}>Order #{activeDelivery.id}</div>
                 </div>
               </div>
-              <div style={{ display: 'flex', gap: spacing.md, marginBottom: spacing.md }}>
-                <span style={{ fontSize: 20, color: colors.primary }}>📍</span>
+              <div style={{ display: 'flex', gap: 12, marginBottom: 16 }}>
+                <span style={{ fontSize: 16, color: colors.primary }}>📍</span>
                 <div>
-                  <div style={{ fontSize: 12, color: colors.onSurfaceVariant, textTransform: 'uppercase', fontWeight: 600 }}>Drop-off (Customer)</div>
-                  <div style={{ fontSize: 15, fontWeight: 700 }}>{activeDelivery.customer_name || 'Customer'}</div>
-                  <div style={{ fontSize: 13, color: colors.onSurfaceVariant }}>{activeDelivery.delivery_address || 'N/A'}</div>
+                  <div style={{ fontSize: 11, color: '#888', textTransform: 'uppercase', fontWeight: 600 }}>Drop-off</div>
+                  <div style={{ fontSize: 14, fontWeight: 600 }}>{activeDelivery.customer_name || 'Customer'}</div>
+                  <div style={{ fontSize: 12, color: '#888' }}>{activeDelivery.delivery_address || 'N/A'}</div>
                 </div>
               </div>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: spacing.md, marginTop: 'auto', paddingTop: spacing.lg, borderTop: `1px solid ${colors.outlineVariant}` }}>
-                <button onClick={() => alert('Calling +255 716 789 012...')} style={{ padding: '12px', borderRadius: radius.md, border: `1px solid ${colors.primary}`, background: 'none', color: colors.primary, cursor: 'pointer', fontWeight: 700 }}>Contact</button>
-                <button onClick={handleComplete} style={{ padding: '12px', borderRadius: radius.md, background: colors.primary, color: colors.onPrimary, border: 'none', cursor: 'pointer', fontWeight: 700 }}>Complete</button>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginTop: 'auto', paddingTop: 16, borderTop: '1px solid #f0f0f0' }}>
+                <button onClick={() => alert('Calling +255 716 789 012...')} style={{ padding: '10px', borderRadius: 8, border: '1px solid #e0e0e0', background: '#fff', color: '#555', cursor: 'pointer', fontWeight: 600, fontSize: 12 }}>Contact</button>
+                <button onClick={handleComplete} style={{ padding: '10px', borderRadius: 8, background: colors.primary, color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: 12 }}>Complete</button>
               </div>
             </div>
           ) : (
-            <div style={{ background: 'rgba(255,255,255,0.7)', border: `1px solid ${colors.outlineVariant}`, borderRadius: radius.xl, padding: spacing.lg, display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: spacing.md }}>
-              <span style={{ fontSize: 48 }}>📭</span>
-              <div style={{ fontWeight: 700, fontSize: 18, color: colors.onSurface }}>No Active Deliveries</div>
-              <p style={{ fontSize: 14, color: colors.onSurfaceVariant, textAlign: 'center' }}>You're all caught up! Awaiting new task assignments.</p>
+            <div style={{ background: '#fff', border: '1px solid #eaeaea', borderRadius: 10, padding: 20, display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: 12 }}>
+              <span style={{ fontSize: 40 }}>📭</span>
+              <div style={{ fontWeight: 700, fontSize: 16, color: '#111' }}>No Active Deliveries</div>
+              <p style={{ fontSize: 13, color: '#888', textAlign: 'center', margin: 0 }}>You're all caught up! Awaiting new task assignments.</p>
             </div>
           )}
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: spacing.lg, marginTop: spacing.lg }}>
-          <div onClick={() => navigate('/delivery/earnings')} style={{ background: 'rgba(255,255,255,0.7)', border: `1px solid ${colors.outlineVariant}`, borderRadius: radius.xl, padding: spacing.lg, cursor: 'pointer' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: spacing.sm }}>
-              <span style={{ fontSize: 13, fontWeight: 700, textTransform: 'uppercase', color: colors.onSurfaceVariant }}>Earnings Today</span>
-              <span style={{ color: colors.primary }}>📈</span>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: 20, marginTop: 20 }}>
+          <div onClick={() => navigate('/delivery/earnings')} style={{ background: '#fff', border: '1px solid #eaeaea', borderRadius: 10, padding: '20px', cursor: 'pointer' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+              <span style={{ fontSize: 11, fontWeight: 600, textTransform: 'uppercase', color: '#888' }}>Earnings Today</span>
+              <span style={{ color: colors.primary, fontSize: 16 }}>📈</span>
             </div>
-            <div style={{ display: 'flex', alignItems: 'baseline', gap: spacing.sm, marginBottom: spacing.lg }}>
-              <span style={{ fontSize: 28, fontWeight: 600 }}>{stats.earnings_today || '$0.00'}</span>
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: 8 }}>
+              <span style={{ fontSize: 24, fontWeight: 700, color: '#111' }}>{stats.earnings_today || '$0.00'}</span>
             </div>
           </div>
 
-          <div style={{ background: 'rgba(255,255,255,0.7)', border: `1px solid ${colors.outlineVariant}`, borderRadius: radius.xl, padding: spacing.lg }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: spacing.md }}>
-              <span style={{ fontSize: 13, fontWeight: 700, textTransform: 'uppercase', color: colors.onSurfaceVariant }}>Task Queue</span>
-              <span onClick={() => navigate('/delivery/route-history')} style={{ fontSize: 14, fontWeight: 700, color: colors.primary, cursor: 'pointer' }}>View All</span>
+          <div style={{ background: '#fff', border: '1px solid #eaeaea', borderRadius: 10, padding: '20px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+              <span style={{ fontSize: 11, fontWeight: 600, textTransform: 'uppercase', color: '#888' }}>Task Queue</span>
+              <span onClick={() => navigate('/delivery/route-history')} style={{ fontSize: 12, fontWeight: 600, color: colors.primary, cursor: 'pointer' }}>View All</span>
             </div>
             {tasks.slice(0, 3).map(t => (
               <div key={t.id} onClick={() => navigate('/delivery/route-history')} style={{
-                display: 'flex', alignItems: 'center', gap: spacing.md,
-                padding: spacing.md, background: colors.surfaceContainerLow,
-                borderRadius: radius.xl, marginBottom: spacing.sm, cursor: 'pointer',
+                display: 'flex', alignItems: 'center', gap: 12,
+                padding: '12px', borderRadius: 8, marginBottom: 6, cursor: 'pointer',
+                background: '#fafafa',
               }}>
-                <div style={{ width: 48, height: 48, borderRadius: radius.md, background: colors.white, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22, border: `1px solid ${colors.outlineVariant}`, flexShrink: 0 }}>📦</div>
+                <div style={{ width: 40, height: 40, borderRadius: 8, background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18, border: '1px solid #eee', flexShrink: 0 }}>📦</div>
                 <div style={{ flex: 1 }}>
-                  <div style={{ fontWeight: 700, fontSize: 15 }}>Delivery #{t.id}</div>
-                  <div style={{ fontSize: 13, color: colors.onSurfaceVariant }}>Status: {t.status} • {t.distance_km || 'N/A'} km</div>
+                  <div style={{ fontWeight: 600, fontSize: 13 }}>Delivery #{t.id}</div>
+                  <div style={{ fontSize: 12, color: '#888' }}>{t.status} • {t.distance_km || 'N/A'} km</div>
                 </div>
                 <div style={{ textAlign: 'right' }}>
-                  <div style={{ fontWeight: 700, fontSize: 14 }}>${t.earnings || '0.00'}</div>
+                  <div style={{ fontWeight: 600, fontSize: 13, color: '#111' }}>${t.earnings || '0.00'}</div>
                 </div>
               </div>
             ))}

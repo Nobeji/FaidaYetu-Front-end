@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { colors, spacing, radius } from '../constants/theme';
+import { colors } from '../constants/theme';
 import DashboardShell from '../components/DashboardShell';
 import SupplierCard from '../components/SupplierCard';
 import MapComponent from '../components/MapComponent';
@@ -25,12 +25,10 @@ export default function CustomerDashboard() {
   const [driverLocation, setDriverLocation] = useState(null);
   const navigate = useNavigate();
 
-  const customerId = JSON.parse(localStorage.getItem('customer') || '{}').id || 1;
-
   const handleCancelOrder = async (id) => {
     try {
       await api.updateOrder(id, { status: 'cancelled' });
-      const updated = await api.orders({ customer: customerId });
+      const updated = await api.orders({ customer: id });
       setOrders(updated);
     } catch {
       alert('Failed to cancel order.');
@@ -60,7 +58,6 @@ export default function CustomerDashboard() {
 
   const activeOrder = orders.find(o => ['in_transit', 'assigned', 'picked_up'].includes(o.status));
 
-  // Poll driver location for active order
   useEffect(() => {
     if (!activeOrder?.delivery_id) { setDriverLocation(null); return; }
     const poll = () => {
@@ -79,44 +76,44 @@ export default function CustomerDashboard() {
 
   return (
     <DashboardShell brand="FaidaYetu" brandSub="Customer Portal" navItems={navItems} profile="JB">
-      <div className="fade-in">
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: spacing.lg }}>
+      <div>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 24 }}>
           <div>
-            <h1 style={{ fontSize: 28, fontWeight: 600, color: colors.primary }}>Find Poultry</h1>
-            <p style={{ fontSize: 15, color: colors.onSurfaceVariant }}>Discover fresh products near you</p>
+            <h1 style={{ fontSize: 22, fontWeight: 700, color: '#111', margin: 0 }}>Find Poultry</h1>
+            <p style={{ fontSize: 13, color: '#888', margin: '4px 0 0' }}>Discover fresh products near you</p>
           </div>
         </div>
 
         {activeOrder && (
           <div style={{
             display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-            padding: '8px 16px', background: colors.primary, color: colors.onPrimary,
-            borderRadius: radius.xl, marginBottom: spacing.lg, flexWrap: 'wrap', gap: spacing.sm,
+            padding: '10px 20px', background: '#f5f5f5', border: '1px solid #eaeaea',
+            borderRadius: 10, marginBottom: 20, flexWrap: 'wrap', gap: 8,
           }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: spacing.sm }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
               <span>🚚</span>
-              <span style={{ fontSize: 13 }}>Active Order: <strong>In transit</strong></span>
+              <span style={{ fontSize: 13, color: '#333' }}>Active Order: <strong>In transit</strong></span>
             </div>
             <button onClick={() => navigate('/customer/orders')} style={{
-              fontSize: 12, fontWeight: 600, padding: '4px 16px',
-              border: '1px solid rgba(255,255,255,0.3)', borderRadius: radius.round,
-              background: 'none', color: colors.onPrimary, cursor: 'pointer',
+              fontSize: 12, fontWeight: 600, padding: '6px 16px',
+              border: '1px solid #ddd', borderRadius: 20,
+              background: '#fff', color: '#333', cursor: 'pointer',
             }}>Track Live</button>
           </div>
         )}
 
-        <div style={{ display: 'flex', gap: spacing.md, marginBottom: spacing.md }}>
+        <div style={{ display: 'flex', gap: 12, marginBottom: 16 }}>
           <div style={{ position: 'relative', flex: 1 }}>
-            <span style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)', color: colors.outline }}>🔍</span>
+            <span style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: '#ccc', fontSize: 14 }}>🔍</span>
             <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search supplier..." style={{
-              width: '100%', padding: '12px 16px 12px 44px', borderRadius: radius.xl,
-              border: `1px solid ${colors.outlineVariant}`, background: colors.surface,
-              fontSize: 15, color: colors.onSurface, boxSizing: 'border-box',
+              width: '100%', padding: '10px 14px 10px 38px', borderRadius: 10,
+              border: '1px solid #e0e0e0', background: '#fff',
+              fontSize: 14, color: '#333', boxSizing: 'border-box', outline: 'none',
             }} />
           </div>
           <select value={radiusFilter} onChange={e => setRadiusFilter(Number(e.target.value))} style={{
-            padding: '12px 16px', borderRadius: radius.xl, border: `1px solid ${colors.outlineVariant}`,
-            background: colors.surface, fontSize: 14, fontWeight: 600, color: colors.onSurface,
+            padding: '10px 14px', borderRadius: 10, border: '1px solid #e0e0e0',
+            background: '#fff', fontSize: 13, fontWeight: 500, color: '#333', outline: 'none',
           }}>
             <option value={10}>10 km</option>
             <option value={25}>25 km</option>
@@ -125,9 +122,9 @@ export default function CustomerDashboard() {
           </select>
         </div>
 
-        <div style={{ marginBottom: spacing.lg }}>
+        <div style={{ marginBottom: 20, borderRadius: 10, overflow: 'hidden', border: '1px solid #eee' }}>
           <MapComponent
-            height={360}
+            height={340}
             userLocation={userLocation}
             suppliers={filtered}
             radiusKm={radiusFilter}
@@ -135,15 +132,15 @@ export default function CustomerDashboard() {
           />
         </div>
 
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: spacing.md }}>
-          <h3 style={{ fontSize: 20, fontWeight: 600, color: colors.primary }}>Recommended Near You</h3>
-          <span onClick={() => navigate('/customer/marketplace')} style={{ fontSize: 14, fontWeight: 700, color: colors.primary, cursor: 'pointer' }}>View All →</span>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+          <h3 style={{ fontSize: 15, fontWeight: 600, color: '#111', margin: 0 }}>Recommended Near You</h3>
+          <span onClick={() => navigate('/customer/marketplace')} style={{ fontSize: 12, fontWeight: 600, color: colors.primary, cursor: 'pointer' }}>View All →</span>
         </div>
 
         {loading ? (
-          <div style={{ textAlign: 'center', padding: spacing.xl, color: colors.onSurfaceVariant }}>Loading suppliers...</div>
+          <div style={{ textAlign: 'center', padding: 40, color: '#888' }}>Loading suppliers...</div>
         ) : (
-          <div style={{ display: 'flex', gap: spacing.md, overflowX: 'auto', paddingBottom: spacing.sm }}>
+          <div style={{ display: 'flex', gap: 12, overflowX: 'auto', paddingBottom: 4 }}>
             {filtered.map(s => (
               <SupplierCard key={s.id} id={s.id} name={s.business_name} rating={s.rating} distance="Nearby" price="From supplier" img={s.image} />
             ))}
@@ -152,24 +149,28 @@ export default function CustomerDashboard() {
 
         {orders.length > 0 && (
           <>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: spacing.md, marginTop: spacing.xl }}>
-              <h3 style={{ fontSize: 20, fontWeight: 600, color: colors.primary }}>Recent Orders</h3>
-              <span onClick={() => navigate('/customer/orders')} style={{ fontSize: 14, fontWeight: 700, color: colors.primary, cursor: 'pointer' }}>View All →</span>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12, marginTop: 32 }}>
+              <h3 style={{ fontSize: 15, fontWeight: 600, color: '#111', margin: 0 }}>Recent Orders</h3>
+              <span onClick={() => navigate('/customer/orders')} style={{ fontSize: 12, fontWeight: 600, color: colors.primary, cursor: 'pointer' }}>View All →</span>
             </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: spacing.sm }}>
-              {orders.slice(0, 5).map(o => (
-                <div key={o.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: spacing.md, background: '#fff', borderRadius: radius.xl, border: `1px solid ${colors.outlineVariant}` }}>
+            <div style={{ background: '#fff', border: '1px solid #eaeaea', borderRadius: 10, overflow: 'hidden' }}>
+              {orders.slice(0, 5).map((o, i) => (
+                <div key={o.id} style={{
+                  display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                  padding: '14px 20px',
+                  borderBottom: i < orders.slice(0, 5).length - 1 ? '1px solid #f0f0f0' : 'none',
+                }}>
                   <div>
-                    <div style={{ fontWeight: 700, fontSize: 14, color: colors.onSurface }}>{o.supplier_name || `Order #${o.id}`}</div>
-                    <div style={{ fontSize: 12, color: colors.onSurfaceVariant }}>{Number(o.total).toLocaleString()} TZS • {o.status}</div>
+                    <div style={{ fontWeight: 600, fontSize: 13, color: '#111' }}>{o.supplier_name || `Order #${o.id}`}</div>
+                    <div style={{ fontSize: 12, color: '#888' }}>{Number(o.total).toLocaleString()} TZS • {o.status}</div>
                   </div>
-                  <div style={{ display: 'flex', gap: spacing.sm }}>
-                    <button onClick={() => navigate('/customer/orders')} style={{ padding: '6px 12px', borderRadius: radius.md, border: `1px solid ${colors.outlineVariant}`, background: 'none', cursor: 'pointer', fontWeight: 600, fontSize: 11 }}>Details</button>
+                  <div style={{ display: 'flex', gap: 8 }}>
+                    <button onClick={() => navigate('/customer/orders')} style={{ padding: '6px 12px', borderRadius: 8, border: '1px solid #e0e0e0', background: '#fff', cursor: 'pointer', fontWeight: 500, fontSize: 11, color: '#555' }}>Details</button>
                     {canCancel(o.status) && (
-                      <button onClick={() => handleCancelOrder(o.id)} style={{ padding: '6px 12px', borderRadius: radius.md, background: colors.errorContainer, color: colors.error, border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: 11 }}>Cancel</button>
+                      <button onClick={() => handleCancelOrder(o.id)} style={{ padding: '6px 12px', borderRadius: 8, background: '#fef2f2', color: '#d32f2f', border: 'none', cursor: 'pointer', fontWeight: 500, fontSize: 11 }}>Cancel</button>
                     )}
                     {o.status === 'in_transit' && (
-                      <button onClick={() => navigate('/customer')} style={{ padding: '6px 12px', borderRadius: radius.md, background: colors.primary, color: colors.onPrimary, border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: 11 }}>Track</button>
+                      <button onClick={() => navigate('/customer')} style={{ padding: '6px 12px', borderRadius: 8, background: colors.primary, color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 500, fontSize: 11 }}>Track</button>
                     )}
                   </div>
                 </div>

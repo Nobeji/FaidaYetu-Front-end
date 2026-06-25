@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { colors, spacing, radius } from '../constants/theme';
+import { colors } from '../constants/theme';
 import DashboardShell from '../components/DashboardShell';
 import StatsCard from '../components/StatsCard';
 import StatusBadge from '../components/StatusBadge';
@@ -31,73 +31,63 @@ export default function SupplierDashboard() {
   }, []);
 
   return (
-    <DashboardShell
-      brand="FaidaYetu"
-      brandSub="Poultry Logistics Hub"
-      navItems={navItems}
-      profile={
-        <div style={{ display: 'flex', alignItems: 'center', gap: spacing.md, background: colors.surfaceContainerHigh, padding: `${spacing.sm}px ${spacing.md}px`, borderRadius: radius.xl }}>
-          <div style={{ width: 40, height: 40, borderRadius: '50%', background: colors.primaryContainer, display: 'flex', alignItems: 'center', justifyContent: 'center', color: colors.onPrimaryContainer, fontWeight: 700 }}>{initials}</div>
-          <div>
-            <div style={{ fontWeight: 700, fontSize: 14 }}>{user.username || 'Supplier'}</div>
-            <div style={{ fontSize: 12, color: colors.onSurfaceVariant }}>Supplier Portal</div>
-          </div>
+    <DashboardShell brand="FaidaYetu" brandSub="Poultry Logistics Hub" navItems={navItems} profile={
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10, background: '#f9f9f9', padding: '8px 12px', borderRadius: 10 }}>
+        <div style={{ width: 36, height: 36, borderRadius: '50%', background: '#eaf7f0', display: 'flex', alignItems: 'center', justifyContent: 'center', color: colors.primary, fontWeight: 700, fontSize: 13 }}>{initials}</div>
+        <div>
+          <div style={{ fontWeight: 600, fontSize: 13 }}>{user.username || 'Supplier'}</div>
+          <div style={{ fontSize: 11, color: '#888' }}>Supplier Portal</div>
         </div>
-      }
-    >
-      <div className="fade-in">
-        <div style={{ marginBottom: spacing.lg }}>
-          <h1 style={{ fontSize: 28, fontWeight: 600, color: colors.primary }}>Supplier Dashboard</h1>
-          <p style={{ fontSize: 15, color: colors.onSurfaceVariant }}>Manage your poultry operations.</p>
+      </div>
+    }>
+      <div>
+        <div style={{ marginBottom: 24 }}>
+          <h1 style={{ fontSize: 22, fontWeight: 700, color: '#111', margin: 0 }}>Supplier Dashboard</h1>
+          <p style={{ fontSize: 13, color: '#888', margin: '4px 0 0' }}>Manage your poultry operations.</p>
         </div>
 
         {loading ? (
-          <div style={{ textAlign: 'center', padding: spacing.xxl, color: colors.onSurfaceVariant }}>Loading data...</div>
+          <div style={{ textAlign: 'center', padding: 60, color: '#888' }}>Loading data...</div>
         ) : (
           <>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: spacing.lg, marginBottom: spacing.lg }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16, marginBottom: 24 }}>
               <StatsCard label="Total Orders" value={data.stats.orders} sub="this month" subIcon="📈" icon="🛍️" />
               <StatsCard label="Revenue (TZS)" value={data.stats.revenue} sub="Estimated Earnings" subIcon="💰" icon="💳" tertiary />
               <StatsCard label="Low Stock Alerts" value={data.stats.lowStock} sub="Immediate Action Required" subIcon="⚠️" icon="📦" error />
             </div>
 
-            <div style={{
-              display: 'flex', alignItems: 'center', gap: spacing.md,
-              padding: `${spacing.md}px ${spacing.lg}px`, background: colors.tertiaryContainer,
-              border: `1px solid ${colors.tertiary}`, borderRadius: radius.xl, marginBottom: spacing.lg,
-              flexWrap: 'wrap',
-            }}>
-              <span style={{ fontSize: 28 }}>🔔</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '14px 20px', background: '#fafafa', border: '1px solid #eee', borderRadius: 10, marginBottom: 24, flexWrap: 'wrap' }}>
+              <span style={{ fontSize: 20 }}>🔔</span>
               <div style={{ flex: 1 }}>
-              <div style={{ fontSize: 14, fontWeight: 700, color: colors.onTertiaryContainer }}>{data.stats.lowStock} Pending Deliveries Require Confirmation</div>
-              <div style={{ fontSize: 12, color: colors.onTertiaryContainer, opacity: 0.85 }}>Logistics partners are waiting for "Ready for Pickup" status update.</div>
+                <div style={{ fontSize: 13, fontWeight: 600, color: '#333' }}>{data.stats.lowStock} Pending Deliveries Require Confirmation</div>
+                <div style={{ fontSize: 12, color: '#888' }}>Logistics partners are waiting for "Ready for Pickup" status update.</div>
               </div>
-              <button onClick={() => navigate('/supplier/orders')} style={{ padding: '8px 16px', borderRadius: radius.md, background: colors.tertiaryFixed, border: 'none', cursor: 'pointer', fontWeight: 700, fontSize: 13 }}>Review Alerts</button>
+              <button onClick={() => navigate('/supplier/orders')} style={{ padding: '8px 16px', borderRadius: 8, background: '#111', border: 'none', cursor: 'pointer', fontWeight: 500, fontSize: 12, color: '#fff' }}>Review Alerts</button>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: spacing.lg }}>
-              <div style={{ background: colors.surfaceContainerLowest, border: `1px solid ${colors.outlineVariant}`, borderRadius: radius.xl, overflow: 'hidden' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: spacing.lg, borderBottom: `1px solid ${colors.outlineVariant}` }}>
-                  <h3 style={{ fontSize: 20, fontWeight: 600, color: colors.primary }}>Recent Orders</h3>
-                  <span onClick={() => navigate('/supplier/orders')} style={{ fontSize: 14, color: colors.primary, cursor: 'pointer' }}>View All</span>
+            <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: 20 }}>
+              <div style={{ background: '#fff', border: '1px solid #eaeaea', borderRadius: 10, overflow: 'hidden' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 20px', borderBottom: '1px solid #f0f0f0' }}>
+                  <h3 style={{ fontSize: 15, fontWeight: 600, color: '#111', margin: 0 }}>Recent Orders</h3>
+                  <span onClick={() => navigate('/supplier/orders')} style={{ fontSize: 12, color: colors.primary, cursor: 'pointer', fontWeight: 600 }}>View All</span>
                 </div>
                 <div style={{ overflowX: 'auto' }}>
                   <table style={{ width: '100%', textAlign: 'left', borderCollapse: 'collapse' }}>
                     <thead>
-                      <tr style={{ background: 'rgba(193,236,212,0.3)' }}>
+                      <tr>
                         {['Order ID', 'Customer', 'Product', 'Status', 'Amount'].map(h => (
-                          <th key={h} style={{ padding: spacing.md, fontSize: 13, fontWeight: 600, color: colors.onSurfaceVariant, borderBottom: `1px solid ${colors.outlineVariant}` }}>{h}</th>
+                          <th key={h} style={{ padding: '10px 16px', fontSize: 11, fontWeight: 600, color: '#888', borderBottom: '1px solid #f0f0f0', textTransform: 'uppercase', letterSpacing: '0.04em' }}>{h}</th>
                         ))}
                       </tr>
                     </thead>
                     <tbody>
                       {data.orders.map(o => (
-                        <tr key={o.id} onClick={() => navigate('/supplier/orders')} style={{ cursor: 'pointer' }}>
-                          <td style={{ padding: spacing.md, fontWeight: 700, color: colors.primary }}>#{o.id}</td>
-                          <td style={{ padding: spacing.md }}>{o.customer_name}</td>
-                          <td style={{ padding: spacing.md }}>{o.items?.[0]?.product_name || 'Poultry Products'}</td>
-                          <td style={{ padding: spacing.md }}><StatusBadge status={o.status} /></td>
-                          <td style={{ padding: spacing.md, fontWeight: 700, textAlign: 'right' }}>{Number(o.total).toLocaleString()} TZS</td>
+                        <tr key={o.id} onClick={() => navigate('/supplier/orders')} style={{ cursor: 'pointer', borderBottom: '1px solid #f5f5f5' }}>
+                          <td style={{ padding: '10px 16px', fontWeight: 600, color: colors.primary, fontSize: 13 }}>#{o.id}</td>
+                          <td style={{ padding: '10px 16px', fontSize: 13 }}>{o.customer_name}</td>
+                          <td style={{ padding: '10px 16px', fontSize: 13 }}>{o.items?.[0]?.product_name || 'Poultry Products'}</td>
+                          <td style={{ padding: '10px 16px' }}><StatusBadge status={o.status} /></td>
+                          <td style={{ padding: '10px 16px', fontWeight: 600, textAlign: 'right', fontSize: 13 }}>{Number(o.total).toLocaleString()} TZS</td>
                         </tr>
                       ))}
                     </tbody>
@@ -106,21 +96,21 @@ export default function SupplierDashboard() {
               </div>
 
               <div>
-                <div style={{ background: colors.surfaceContainerLowest, border: `1px solid ${colors.outlineVariant}`, borderRadius: radius.xl, padding: spacing.lg, marginBottom: spacing.lg }}>
-                  <h3 style={{ fontSize: 20, fontWeight: 600, color: colors.primary, marginBottom: spacing.lg }}>Inventory Status</h3>
+                <div style={{ background: '#fff', border: '1px solid #eaeaea', borderRadius: 10, padding: '20px', marginBottom: 20 }}>
+                  <h3 style={{ fontSize: 15, fontWeight: 600, color: '#111', margin: '0 0 16px' }}>Inventory Status</h3>
                   {data.inventory.map(i => <ProgressBar key={i.name} {...i} />)}
                   <button onClick={() => navigate('/supplier/inventory')} style={{
-                    width: '100%', padding: '12px', borderRadius: radius.md,
-                    border: `1px solid ${colors.primary}`, background: 'none', color: colors.primary,
-                    cursor: 'pointer', fontWeight: 600, marginTop: spacing.sm,
-                  }}>⏱ View Full History</button>
+                    width: '100%', padding: '10px', borderRadius: 8,
+                    border: '1px solid #e0e0e0', background: '#fff', color: '#555',
+                    cursor: 'pointer', fontWeight: 500, fontSize: 12, marginTop: 4,
+                  }}>View Inventory</button>
                 </div>
 
-                <div style={{ background: colors.primaryLight, padding: spacing.lg, borderRadius: radius.xl, border: `1px solid ${colors.primary}` }}>
-                  <div style={{ fontSize: 36, marginBottom: spacing.md, color: colors.onPrimaryContainer }}>🏪</div>
-                  <h4 style={{ fontSize: 20, fontWeight: 700, color: colors.onPrimaryContainer, marginBottom: spacing.sm }}>Expand Your Marketplace Presence</h4>
-                  <p style={{ fontSize: 14, color: colors.onPrimaryContainer, opacity: 0.9, marginBottom: spacing.md }}>Reach 12 logistics zones. Add more products to increase visibility by 40%.</p>
-                  <div onClick={() => navigate('/supplier/settings')} style={{ display: 'flex', alignItems: 'center', gap: 4, fontWeight: 700, color: colors.onPrimaryContainer, fontSize: 14, cursor: 'pointer' }}>
+                <div style={{ background: '#fafafa', padding: '20px', borderRadius: 10, border: '1px solid #eee' }}>
+                  <div style={{ fontSize: 28, marginBottom: 8 }}>🏪</div>
+                  <h4 style={{ fontSize: 15, fontWeight: 700, color: '#111', margin: '0 0 4px' }}>Expand Your Marketplace Presence</h4>
+                  <p style={{ fontSize: 12, color: '#888', margin: '0 0 12px' }}>Reach 12 logistics zones. Add more products to increase visibility by 40%.</p>
+                  <div onClick={() => navigate('/supplier/settings')} style={{ display: 'flex', alignItems: 'center', gap: 4, fontWeight: 600, color: colors.primary, fontSize: 13, cursor: 'pointer' }}>
                     Get Started <span>→</span>
                   </div>
                 </div>
