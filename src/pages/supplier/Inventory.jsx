@@ -33,7 +33,7 @@ export default function SupplierInventory() {
   const [loading, setLoading] = useState(true);
   const [showAdd, setShowAdd] = useState(false);
   const [showEdit, setShowEdit] = useState(null);
-  const [form, setForm] = useState({ name: '', category: 'Eggs', price: '', unit: 'kg', stock: '', min_stock: '' });
+  const [form, setForm] = useState({ name: '', category: 'eggs', price: '', unit: 'kg', stock: '', min_stock: '' });
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState('');
   const navigate = useNavigate();
@@ -52,7 +52,7 @@ export default function SupplierInventory() {
   };
 
   const resetForm = () => {
-    setForm({ name: '', category: 'Eggs', price: '', unit: 'kg', stock: '', min_stock: '' });
+    setForm({ name: '', category: 'eggs', price: '', unit: 'kg', stock: '', min_stock: '' });
     setImageFile(null);
     setImagePreview('');
   };
@@ -164,7 +164,7 @@ export default function SupplierInventory() {
 
             <label style={{ fontSize: 13, fontWeight: 600, display: 'block', marginBottom: 4 }}>Category</label>
             <select style={inputStyle} value={form.category} onChange={e => setForm({ ...form, category: e.target.value })}>
-              {['Eggs', 'Chicken', 'Feed', 'Supplements'].map(c => <option key={c} value={c}>{c}</option>)}
+              {[['eggs','Eggs'],['chicken','Chicken'],['feed','Feed'],['supplements','Supplements']].map(([v,l]) => <option key={v} value={v}>{l}</option>)}
             </select>
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
@@ -214,7 +214,7 @@ export default function SupplierInventory() {
 
             <label style={{ fontSize: 13, fontWeight: 600, display: 'block', marginBottom: 4 }}>Category</label>
             <select style={inputStyle} value={form.category} onChange={e => setForm({ ...form, category: e.target.value })}>
-              {['Eggs', 'Chicken', 'Feed', 'Supplements'].map(c => <option key={c} value={c}>{c}</option>)}
+              {[['eggs','Eggs'],['chicken','Chicken'],['feed','Feed'],['supplements','Supplements']].map(([v,l]) => <option key={v} value={v}>{l}</option>)}
             </select>
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
