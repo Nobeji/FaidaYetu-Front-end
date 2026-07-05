@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import DashboardShell from '../components/DashboardShell';
 import SupplierCard from '../components/SupplierCard';
@@ -32,6 +32,8 @@ export default function CustomerDashboard() {
   const [showPayModal, setShowPayModal] = useState(null);
   const [phoneNumber, setPhoneNumber] = useState('');
   const [paying, setPaying] = useState(false);
+  const [pendingPayments, setPendingPayments] = useState({});
+  const pollRefs = useRef({});
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
@@ -64,6 +66,8 @@ export default function CustomerDashboard() {
       if (result.success) {
         toast(result.message || 'Payment push sent! Check your phone.', 'success');
         setShowPayModal(null);
+        setPendingPayments(prev => ({ ...prev, [showPayModal.id]: 'pending' }));
+        startPolling(showPayModal.id);
         const cid = JSON.parse(localStorage.getItem('customer') || '{}').id || 1;
         const updated = await api.orders({ customer: cid });
         setOrders(updated);
@@ -105,6 +109,10 @@ export default function CustomerDashboard() {
       setSuppliers(s);
       setOrders(o);
       setLoading(false);
+      const pending = {};
+      o.forEach(ord => { if (ord.payment_status === 'pending') pending[ord.id] = 'pending'; });
+      setPendingPayments(pending);
+      Object.keys(pending).forEach(id => startPolling(Number(id)));
     }).catch(() => setLoading(false));
   }, [userLocation, radiusFilter]);
 
@@ -121,6 +129,32 @@ export default function CustomerDashboard() {
     const id = setInterval(poll, 5000);
     return () => clearInterval(id);
   }, [activeOrder?.delivery_id]);
+
+  useEffect(() => {
+    return () => Object.values(pollRefs.current).forEach(clearInterval);
+  }, []);
+
+  const startPolling = (orderId) => {
+    if (pollRefs.current[orderId]) return;
+    pollRefs.current[orderId] = setInterval(async () => {
+      try {
+        const res = await api.paymentStatus(orderId);
+        if (res.paid) {
+          clearInterval(pollRefs.current[orderId]);
+          delete pollRefs.current[orderId];
+          setPendingPayments(prev => { const n = {...prev}; delete n[orderId]; return n; });
+          const cid = JSON.parse(localStorage.getItem('customer') || '{}').id || 1;
+          const updated = await api.orders({ customer: cid });
+          setOrders(updated);
+        } else if (res.status === 'failed') {
+          clearInterval(pollRefs.current[orderId]);
+          delete pollRefs.current[orderId];
+          setPendingPayments(prev => { const n = {...prev}; delete n[orderId]; return n; });
+          toast('Payment failed. You can try again.', 'error');
+        }
+      } catch {}
+    }, 5000);
+  };
 
   const filtered = search
     ? suppliers.filter(s => s.business_name?.toLowerCase().includes(search.toLowerCase()))
@@ -226,8 +260,11 @@ export default function CustomerDashboard() {
                   </div>
                   <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
                     <button onClick={() => navigate('/customer/orders')} style={{ padding: '6px 12px', borderRadius: 8, border: '1px solid #e0e0e0', background: '#fff', cursor: 'pointer', fontWeight: 500, fontSize: 11, color: '#555' }}>Details</button>
-                    {o.status === 'new' && !o.paid && (
+                    {o.status === 'new' && !o.paid && !pendingPayments[o.id] && (
                       <button onClick={() => { setShowPayModal(o); setPhoneNumber(''); }} style={{ padding: '6px 12px', borderRadius: 8, background: '#0a6e46', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: 11 }}>Pay Now</button>
+                    )}
+                    {pendingPayments[o.id] === 'pending' && (
+                      <span style={{ padding: '6px 12px', borderRadius: 8, background: '#fff8e1', color: '#f57f17', fontWeight: 600, fontSize: 11 }}>⌛ Pending</span>
                     )}
                     {o.paid && <span style={{ padding: '6px 12px', borderRadius: 8, background: '#e8f5e9', color: '#2e7d32', fontWeight: 600, fontSize: 11 }}>✓ Paid</span>}
                     {canCancel(o.status) && (

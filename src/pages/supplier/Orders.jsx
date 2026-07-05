@@ -92,7 +92,7 @@ export default function SupplierOrders() {
         </div>
 
         <div style={{ display: 'flex', gap: 12, marginBottom: 20, flexWrap: 'wrap' }}>
-          {['All', 'New', 'Processing', 'Ready', 'Delivered', 'Cancelled'].map(t => (
+          {['All', 'New', 'Paid', 'Processing', 'Ready', 'Delivered', 'Cancelled'].map(t => (
             <button key={t} onClick={() => setFilter(t)} style={{
               padding: '8px 20px', borderRadius: 999, border: 'none', cursor: 'pointer',
               background: t === filter ? '#000' : '#f5f5f5',
@@ -177,11 +177,11 @@ export default function SupplierOrders() {
             </div>
 
             <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-              {selectedOrder.status === 'new' && (
-                <button onClick={() => handleStatusUpdate(selectedOrder.id, 'processing')} style={{ padding: '10px 20px', borderRadius: 8, background: '#000', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 700, flex: 1 }}>Accept & Process</button>
+              {selectedOrder.status === 'ready' && (
+                <button onClick={() => { setSelectedOrder(null); openAssign(selectedOrder); }} style={{ padding: '10px 20px', borderRadius: 8, background: '#e67e22', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 700, flex: 1 }}>Assign Driver</button>
               )}
-              {selectedOrder.status === 'processing' && (
-                <button onClick={() => handleStatusUpdate(selectedOrder.id, 'ready')} style={{ padding: '10px 20px', borderRadius: 8, background: '#000', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 700, flex: 1 }}>Mark Ready</button>
+              {['new', 'ready'].includes(selectedOrder.status) && (
+                <button onClick={() => handleStatusUpdate(selectedOrder.id, 'cancelled')} style={{ padding: '10px 20px', borderRadius: 8, background: '#fef2f2', color: '#d32f2f', border: '1px solid #fecaca', cursor: 'pointer', fontWeight: 600 }}>Cancel</button>
               )}
               <button onClick={() => setSelectedOrder(null)} style={{ padding: '10px 20px', borderRadius: 8, background: 'none', border: `1px solid ${'#eee'}`, cursor: 'pointer', fontWeight: 600 }}>Close</button>
             </div>

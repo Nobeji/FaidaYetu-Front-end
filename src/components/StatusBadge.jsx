@@ -1,5 +1,6 @@
 const statusColors = {
   New: { bg: '#f0f0f0', text: '#000' },
+  Paid: { bg: '#e8f5e9', text: '#2e7d32' },
   Processing: { bg: '#fff3e0', text: '#e65100' },
   Ready: { bg: '#000', text: '#fff' },
 };
