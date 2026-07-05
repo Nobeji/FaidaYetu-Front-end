@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { api } from '../services/api';
 import LocationPicker from '../components/LocationPicker';
@@ -32,15 +32,31 @@ export default function Auth() {
     return () => window.removeEventListener('resize', check);
   }, []);
 
-  useEffect(() => {
-    if (tab !== 'signup') return;
-    if (!navigator.geolocation) return;
+  const detectFromIP = async () => {
+    try {
+      const res = await fetch('https://ipapi.co/json/');
+      const data = await res.json();
+      if (data.latitude && data.longitude) {
+        setSignupCoords({ lat: data.latitude, lng: data.longitude });
+        return true;
+      }
+    } catch {}
+    return false;
+  };
+
+  const detectLocation = useCallback(async () => {
+    if (!navigator.geolocation) { await detectFromIP(); return; }
     setLocationDetecting(true);
     navigator.geolocation.getCurrentPosition(
       pos => { setSignupCoords({ lat: pos.coords.latitude, lng: pos.coords.longitude }); setLocationDetecting(false); },
-      () => setLocationDetecting(false),
-      { timeout: 10000, enableHighAccuracy: true },
+      async () => { const ok = await detectFromIP(); setLocationDetecting(false); },
+      { timeout: 8000 },
     );
+  }, []);
+
+  useEffect(() => {
+    if (tab !== 'signup') return;
+    detectLocation();
   }, [tab, role]);
 
   const handleSubmit = async (e) => {
@@ -218,15 +234,7 @@ export default function Auth() {
                     {signupCoords.lat.toFixed(4)}, {signupCoords.lng.toFixed(4)}
                   </span>
                   {!locationDetecting && (
-                    <button type="button" onClick={() => {
-                      if (!navigator.geolocation) return;
-                      setLocationDetecting(true);
-                      navigator.geolocation.getCurrentPosition(
-                        pos => { setSignupCoords({ lat: pos.coords.latitude, lng: pos.coords.longitude }); setLocationDetecting(false); },
-                        () => setLocationDetecting(false),
-                        { timeout: 10000, enableHighAccuracy: true },
-                      );
-                    }} style={{ fontSize: 11, color: '#0a6e46', background: 'none', border: 'none', cursor: 'pointer', fontWeight: 600, padding: 0 }}>
+                    <button type="button" onClick={detectLocation} style={{ fontSize: 11, color: '#0a6e46', background: 'none', border: 'none', cursor: 'pointer', fontWeight: 600, padding: 0 }}>
                       Detect again
                     </button>
                   )}
