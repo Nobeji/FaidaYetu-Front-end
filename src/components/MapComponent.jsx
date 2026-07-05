@@ -66,7 +66,7 @@ export default function MapComponent({
   radiusKm,
   driverLocation,
 }) {
-  const [satellite, setSatellite] = useState(false);
+  const [satellite, setSatellite] = useState(true);
   const [selected, setSelected] = useState(null);
 
   const allMarkers = [];
