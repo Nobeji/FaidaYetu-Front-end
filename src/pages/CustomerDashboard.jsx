@@ -92,15 +92,7 @@ export default function CustomerDashboard() {
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(
       pos => { setUserLocation([pos.coords.latitude, pos.coords.longitude]); setEditCoords({ lat: pos.coords.latitude, lng: pos.coords.longitude }); },
-      () => {
-        fetch('https://ipapi.co/json/').then(r => r.json()).then(data => {
-          if (data.latitude && data.longitude) {
-            setUserLocation([data.latitude, data.longitude]);
-            setEditCoords({ lat: data.latitude, lng: data.longitude });
-          }
-        }).catch(() => {});
-      },
-      { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 },
+      () => {}
     );
   }, []);
 

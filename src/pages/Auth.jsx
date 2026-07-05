@@ -50,7 +50,7 @@ export default function Auth() {
     navigator.geolocation.getCurrentPosition(
       pos => { setSignupCoords({ lat: pos.coords.latitude, lng: pos.coords.longitude }); setLocationDetecting(false); },
       async () => { const ok = await detectFromIP(); setLocationDetecting(false); },
-      { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 },
+      { timeout: 8000 },
     );
   }, []);
 
