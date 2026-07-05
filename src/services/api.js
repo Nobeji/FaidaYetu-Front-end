@@ -1,16 +1,41 @@
 const BASE = import.meta.env.VITE_API_URL || '/api';
+const cache = new Map();
+const CACHE_TTL = 5 * 60 * 1000;
+
+function getCacheKey(method, url) {
+  return `${method}:${url}`;
+}
 
 async function request(url, options = {}) {
   const token = localStorage.getItem('token');
   const headers = { ...options.headers };
   if (!options.noJson) headers['Content-Type'] = 'application/json';
   if (token) headers['Authorization'] = `Bearer ${token}`;
+  const method = (options.method || 'GET').toUpperCase();
+  const cacheKey = getCacheKey(method, url);
+
+  if (method === 'GET') {
+    const cached = cache.get(cacheKey);
+    if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
+      return cached.data;
+    }
+  }
+
   const res = await fetch(`${BASE}${url}`, { ...options, headers });
   if (!res.ok) {
     const body = await res.text().catch(() => '');
     throw new Error(body || `API error: ${res.status}`);
   }
-  return res.json();
+
+  const data = await res.json();
+
+  if (method === 'GET') {
+    cache.set(cacheKey, { data, timestamp: Date.now() });
+  } else {
+    cache.clear();
+  }
+
+  return data;
 }
 
 async function upload(url, data, method = 'POST') {
@@ -21,6 +46,7 @@ async function upload(url, data, method = 'POST') {
     const body = await res.text().catch(() => '');
     throw new Error(body || `API error: ${res.status}`);
   }
+  cache.clear();
   return res.json();
 }
 
