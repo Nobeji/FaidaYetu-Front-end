@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { api } from '../services/api';
-import LocationPicker from '../components/LocationPicker';
 
 export default function Auth() {
   const [searchParams] = useSearchParams();
@@ -22,7 +21,6 @@ export default function Auth() {
   const [signupLoading, setSignupLoading] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [signupCoords, setSignupCoords] = useState({ lat: -6.7924, lng: 39.2083 });
-  const [locationDetecting, setLocationDetecting] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -46,10 +44,9 @@ export default function Auth() {
 
   const detectLocation = useCallback(async () => {
     if (!navigator.geolocation) { await detectFromIP(); return; }
-    setLocationDetecting(true);
     navigator.geolocation.getCurrentPosition(
-      pos => { setSignupCoords({ lat: pos.coords.latitude, lng: pos.coords.longitude }); setLocationDetecting(false); },
-      async () => { const ok = await detectFromIP(); setLocationDetecting(false); },
+      pos => { setSignupCoords({ lat: pos.coords.latitude, lng: pos.coords.longitude }); },
+      async () => { await detectFromIP(); },
       { timeout: 8000 },
     );
   }, []);
@@ -217,30 +214,7 @@ export default function Auth() {
                 </div>
               </>
             )}
-            {tab === 'signup' && (
-              <div style={{ marginBottom: 12 }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
-                  <label style={{ fontSize: 13, fontWeight: 600 }}>Your Location</label>
-                  {locationDetecting && <span style={{ fontSize: 11, color: '#888' }}>📍 Detecting...</span>}
-                </div>
-                <LocationPicker
-                  lat={signupCoords.lat}
-                  lng={signupCoords.lng}
-                  height={180}
-                  onChange={(lat, lng) => setSignupCoords({ lat, lng })}
-                />
-                <div style={{ display: 'flex', gap: 8, marginTop: 6, alignItems: 'center' }}>
-                  <span style={{ fontSize: 11, color: '#888' }}>
-                    {signupCoords.lat.toFixed(4)}, {signupCoords.lng.toFixed(4)}
-                  </span>
-                  {!locationDetecting && (
-                    <button type="button" onClick={detectLocation} style={{ fontSize: 11, color: '#0a6e46', background: 'none', border: 'none', cursor: 'pointer', fontWeight: 600, padding: 0 }}>
-                      Detect again
-                    </button>
-                  )}
-                </div>
-              </div>
-            )}
+
             <div style={{ marginBottom: 12 }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
                 <label style={{ fontSize: 13, fontWeight: 600 }}>Password</label>
