@@ -2,15 +2,15 @@ import { useState, useRef } from 'react';
 import Map, { Marker, NavigationControl } from 'react-map-gl/maplibre';
 import 'maplibre-gl/dist/maplibre-gl.css';
 
+const key = import.meta.env.VITE_TOMTOM_API_KEY;
+
 const style = {
   version: 8,
   sources: {
-    esri: { type: 'raster', tiles: ['https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'], tileSize: 256, attribution: '&copy; Esri' },
-    labels: { type: 'raster', tiles: ['https://tile.openstreetmap.org/{z}/{x}/{y}.png'], tileSize: 256, attribution: '&copy; OpenStreetMap' },
+    tomtom_hybrid: { type: 'raster', tiles: [`https://api.tomtom.com/map/1/tile/hybrid/main/{z}/{x}/{y}.png?tileSize=256&key=${key}`], tileSize: 256, attribution: '&copy; TomTom' },
   },
   layers: [
-    { id: 'esri', type: 'raster', source: 'esri' },
-    { id: 'labels', type: 'raster', source: 'labels', paint: { 'raster-opacity': 0.3 } },
+    { id: 'tomtom-hybrid', type: 'raster', source: 'tomtom_hybrid' },
   ],
 };
 
