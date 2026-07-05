@@ -23,7 +23,7 @@ const modalBox = {
 export default function Marketplace() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [activeCat, setActiveCat] = useState('All');
+  const [activeCat, setActiveCat] = useState('all');
   const [cartItem, setCartItem] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const user = JSON.parse(localStorage.getItem('user') || '{}');
@@ -36,7 +36,7 @@ export default function Marketplace() {
     api.products().then(p => { setProducts(p); setLoading(false); }).catch(() => setLoading(false));
   }, []);
 
-  const filtered = activeCat === 'All' ? products : products.filter(p => p.category === activeCat);
+  const filtered = activeCat === 'all' ? products : products.filter(p => p.category === activeCat);
 
   const handleAddToCart = (p) => {
     setCartItem(p);
@@ -79,13 +79,13 @@ export default function Marketplace() {
         </div>
 
         <div style={{ display: 'flex', gap: 12, marginBottom: 20, flexWrap: 'wrap' }}>
-          {['All', 'Eggs', 'Chicken', 'Feed', 'Supplements'].map(c => (
-            <button key={c} onClick={() => setActiveCat(c)} style={{
+          {[['all','All'],['eggs','Eggs'],['chicken','Chicken'],['feed','Feed'],['supplements','Supplements']].map(([v,l]) => (
+            <button key={v} onClick={() => setActiveCat(v)} style={{
               padding: '8px 20px', borderRadius: 999, border: 'none', cursor: 'pointer',
-              background: c === activeCat ? '#000' : '#f5f5f5',
-              color: c === activeCat ? '#fff' : '#888',
+              background: v === activeCat ? '#000' : '#f5f5f5',
+              color: v === activeCat ? '#fff' : '#888',
               fontWeight: 600, fontSize: 13,
-            }}>{c}</button>
+            }}>{l}</button>
           ))}
         </div>
 
