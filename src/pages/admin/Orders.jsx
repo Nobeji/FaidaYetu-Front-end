@@ -49,7 +49,7 @@ export default function AdminOrders() {
                     </td>
                     <td style={{ padding: 12 }}>
                       {o.paid
-                        ? <span style={{ color: '#2e7d32', fontWeight: 600, fontSize: 13 }}>✓ Paid</span>
+                        ? <span style={{ color: '#2e7d32', fontWeight: 600, fontSize: 13 }}>Paid</span>
                         : <span style={{ color: '#d32f2f', fontWeight: 600, fontSize: 13 }}>Unpaid</span>
                       }
                     </td>

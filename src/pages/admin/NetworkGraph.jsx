@@ -30,7 +30,7 @@ export default function NetworkGraph() {
       </div>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
         <div style={{ background: '#fff', borderRadius: 16, border: '1px solid #eaeaea', overflow: 'hidden' }}>
-          <div style={{ padding: 16, fontWeight: 700, borderBottom: '1px solid #eaeaea' }}>🏪 Suppliers</div>
+          <div style={{ padding: 16, fontWeight: 700, borderBottom: '1px solid #eaeaea' }}>Suppliers</div>
           <div style={{ padding: 12 }}>
             {suppliers.map(s => (
               <div key={s.id} style={{ padding: 10, borderBottom: '1px solid #f5f5f5', display: 'flex', justifyContent: 'space-between' }}>
@@ -41,7 +41,7 @@ export default function NetworkGraph() {
           </div>
         </div>
         <div style={{ background: '#fff', borderRadius: 16, border: '1px solid #eaeaea', overflow: 'hidden' }}>
-          <div style={{ padding: 16, fontWeight: 700, borderBottom: '1px solid #eaeaea' }}>👤 Customers</div>
+          <div style={{ padding: 16, fontWeight: 700, borderBottom: '1px solid #eaeaea' }}>Customers</div>
           <div style={{ padding: 12 }}>
             {customers.map(s => (
               <div key={s.id} style={{ padding: 10, borderBottom: '1px solid #f5f5f5', display: 'flex', justifyContent: 'space-between' }}>

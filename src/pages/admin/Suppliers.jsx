@@ -39,7 +39,7 @@ export default function AdminSuppliers() {
                   <td style={{ padding: 12 }}>{s.orders}</td>
                   <td style={{ padding: 12 }}>
                     <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, padding: '2px 10px', borderRadius: 20, background: s.rating >= 4 ? '#f5f5f5' : s.rating >= 3 ? '#fff8f0' : '#fff5f5', color: s.rating >= 4 ? '#111' : s.rating >= 3 ? '#e07c00' : '#ba1a1a', fontSize: 12, fontWeight: 700 }}>
-                      ⭐ {s.rating}
+                      {s.rating}
                     </span>
                   </td>
                   <td style={{ padding: 12, fontSize: 13, color: '#666' }}>{s.createdAt ? new Date(s.createdAt).toLocaleDateString() : '-'}</td>

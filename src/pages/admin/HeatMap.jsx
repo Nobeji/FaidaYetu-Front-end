@@ -111,7 +111,7 @@ export default function HeatMap() {
         </div>
 
         <div style={{ background: '#fff', borderRadius: 16, padding: 20, border: '1px solid #eaeaea', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
-          <h3 style={{ fontSize: 16, fontWeight: 700, color: '#111', marginBottom: 12 }}>📍 Order Concentration</h3>
+          <h3 style={{ fontSize: 16, fontWeight: 700, color: '#111', marginBottom: 12 }}>Order Concentration</h3>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
             {sortedPoints.map((p, i) => (
               <div key={i}
@@ -140,7 +140,7 @@ export default function HeatMap() {
       </div>
 
       <div style={{ background: '#fff', borderRadius: 16, padding: 20, border: '1px solid #eaeaea', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
-        <h3 style={{ fontSize: 16, fontWeight: 700, color: '#111', marginBottom: 12 }}>🌍 Dar es Salaam Coverage Zones</h3>
+        <h3 style={{ fontSize: 16, fontWeight: 700, color: '#111', marginBottom: 12 }}>Dar es Salaam Coverage Zones</h3>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: 8 }}>
           {(data?.wards || []).map((w, i) => {
             const found = sortedPoints.find(p => p.ward === w.ward);
@@ -150,7 +150,7 @@ export default function HeatMap() {
                 padding: '8px 12px', borderRadius: 8,
                 background: found ? (found.count > 5 ? '#fff5f5' : found.count > 2 ? '#fff8f0' : '#f0faf5') : '#f5f7f6',
               }}>
-                <span style={{ fontSize: 16 }}>{found ? '📍' : '◯'}</span>
+                <span style={{ width: 8, height: 8, borderRadius: '50%', flexShrink: 0, background: found ? '#111' : '#ddd' }} />
                 <span style={{ fontSize: 13, fontWeight: found ? 600 : 400, color: '#1a1a1a' }}>{w.ward}</span>
                 {found && <span style={{ marginLeft: 'auto', fontSize: 12, fontWeight: 700, color: '#111' }}>{found.count}</span>}
               </div>

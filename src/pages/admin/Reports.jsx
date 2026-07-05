@@ -80,14 +80,14 @@ export default function AdminReports() {
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: 12, marginBottom: 28 }}>
         {[
-          { label: 'Total Users', value: dashboard?.totalUsers, icon: '👤' },
-          { label: 'Suppliers', value: dashboard?.totalSuppliers, icon: '🏪' },
-          { label: 'Customers', value: dashboard?.totalCustomers, icon: '👥' },
-          { label: 'Orders Today', value: dashboard?.ordersToday, icon: '📦' },
-          { label: 'Revenue Today', value: dashboard?.revenueToday, icon: '💰' },
-          { label: 'Products', value: dashboard?.totalProducts, icon: '📦' },
-          { label: 'Active Deliveries', value: dashboard?.activeDeliveries, icon: '🚚' },
-          { label: 'Total Revenue', value: dashboard?.totalRevenue, icon: '💳' },
+          { label: 'Total Users', value: dashboard?.totalUsers },
+          { label: 'Suppliers', value: dashboard?.totalSuppliers },
+          { label: 'Customers', value: dashboard?.totalCustomers },
+          { label: 'Orders Today', value: dashboard?.ordersToday },
+          { label: 'Revenue Today', value: dashboard?.revenueToday },
+          { label: 'Products', value: dashboard?.totalProducts },
+          { label: 'Active Deliveries', value: dashboard?.activeDeliveries },
+          { label: 'Total Revenue', value: dashboard?.totalRevenue },
         ].map(c => (
           <div key={c.label} style={{ background: '#fff', borderRadius: 12, padding: 12, border: '1px solid #eaeaea', boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}>
             <div style={{ fontSize: 11, fontWeight: 600, color: '#666', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 4 }}>{c.label}</div>
@@ -98,7 +98,7 @@ export default function AdminReports() {
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 28, marginBottom: 28 }}>
         <div style={{ background: '#fff', borderRadius: 16, padding: 20, border: '1px solid #eaeaea', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
-          <h3 style={{ fontSize: 16, fontWeight: 700, color: '#111', marginBottom: 20 }}>📉 Delivery Performance</h3>
+          <h3 style={{ fontSize: 16, fontWeight: 700, color: '#111', marginBottom: 20 }}>Delivery Performance</h3>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
             {[
               { label: 'Avg Delivery Time', value: performance?.avgDeliveryTime },
@@ -117,7 +117,7 @@ export default function AdminReports() {
         </div>
 
         <div style={{ background: '#fff', borderRadius: 16, padding: 20, border: '1px solid #eaeaea', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
-          <h3 style={{ fontSize: 16, fontWeight: 700, color: '#111', marginBottom: 20 }}>📊 Platform Overview</h3>
+          <h3 style={{ fontSize: 16, fontWeight: 700, color: '#111', marginBottom: 20 }}>Platform Overview</h3>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
             {[
               { label: 'Supplier to Customer Ratio', value: dashboard?.totalSuppliers && dashboard?.totalCustomers ? `${((dashboard.totalSuppliers / Math.max(dashboard.totalCustomers, 1)) * 100).toFixed(1)}%` : 'N/A' },
@@ -135,10 +135,10 @@ export default function AdminReports() {
       </div>
 
       <div style={{ background: 'linear-gradient(135deg, #111, #111)', borderRadius: 16, padding: 28, color: '#fff' }}>
-        <h3 style={{ fontSize: 18, fontWeight: 700, margin: '0 0 12px 0' }}>📄 Generate Full Report</h3>
+        <h3 style={{ fontSize: 18, fontWeight: 700, margin: '0 0 12px 0' }}>Generate Full Report</h3>
         <p style={{ fontSize: 14, opacity: 0.85, marginBottom: 20 }}>Download a comprehensive PDF report with all platform analytics, charts, and predictions.</p>
         <button onClick={downloadReport} style={{ padding: '12px 32px', borderRadius: 12, background: '#fff', color: '#111', border: 'none', fontSize: 15, fontWeight: 700, cursor: 'pointer' }}>
-          📥 Download Report (PDF)
+          Download Report (PDF)
         </button>
       </div>
     </div>

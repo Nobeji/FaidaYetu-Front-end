@@ -33,10 +33,10 @@ export default function DemandAnalysis() {
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 12, marginBottom: 28 }}>
         {[
-          { label: 'Total Orders', value: data.totalOrders, icon: '📦', color: '#111' },
-          { label: 'Weekly Orders', value: data.ordersWeekly, icon: '📅', color: '#333' },
-          { label: 'Monthly Orders', value: data.ordersMonthly, icon: '📆', color: '#40916c' },
-          { label: 'Top Area', value: data.mostOrderedArea, icon: '📍', color: '#e07c00' },
+          { label: 'Total Orders', value: data.totalOrders, color: '#111' },
+          { label: 'Weekly Orders', value: data.ordersWeekly, color: '#333' },
+          { label: 'Monthly Orders', value: data.ordersMonthly, color: '#40916c' },
+          { label: 'Top Area', value: data.mostOrderedArea, color: '#e07c00' },
         ].map(c => (
           <div key={c.label} style={{ background: '#fff', borderRadius: 16, padding: 20, border: '1px solid #eaeaea', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
             <div style={{ fontSize: 13, fontWeight: 600, color: '#666', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 8 }}>{c.label}</div>
@@ -47,7 +47,7 @@ export default function DemandAnalysis() {
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 28, marginBottom: 28 }}>
         <div style={{ background: '#fff', borderRadius: 16, padding: 20, border: '1px solid #eaeaea', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
-          <h3 style={{ fontSize: 16, fontWeight: 700, color: '#111', marginBottom: 20 }}>📈 Orders Per Day (Last 7 Days)</h3>
+          <h3 style={{ fontSize: 16, fontWeight: 700, color: '#111', marginBottom: 20 }}>Orders Per Day (Last 7 Days)</h3>
           <div style={{ display: 'flex', alignItems: 'flex-end', gap: 8, height: 160 }}>
             {(data.ordersPerDay || []).map((d, i) => (
               <div key={i} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
@@ -67,7 +67,7 @@ export default function DemandAnalysis() {
         </div>
 
         <div style={{ background: '#fff', borderRadius: 16, padding: 20, border: '1px solid #eaeaea', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
-          <h3 style={{ fontSize: 16, fontWeight: 700, color: '#111', marginBottom: 20 }}>🏆 Most Ordered Areas (Top 5 Wards)</h3>
+          <h3 style={{ fontSize: 16, fontWeight: 700, color: '#111', marginBottom: 20 }}>Most Ordered Areas (Top 5 Wards)</h3>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
             {(data.ordersPerWard || []).map((w, i) => (
               <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
@@ -86,9 +86,8 @@ export default function DemandAnalysis() {
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 28 }}>
         <div style={{ background: '#fff', borderRadius: 16, padding: 20, border: '1px solid #eaeaea', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
-          <h3 style={{ fontSize: 16, fontWeight: 700, color: '#111', marginBottom: 20 }}>🌟 Most Ordered Product</h3>
+          <h3 style={{ fontSize: 16, fontWeight: 700, color: '#111', marginBottom: 20 }}>Most Ordered Product</h3>
           <div style={{ display: 'flex', alignItems: 'center', gap: 20, padding: 20, background: 'linear-gradient(135deg, #f5f5f5, #eee)', borderRadius: 12 }}>
-            <span style={{ fontSize: 48 }}>🥚</span>
             <div>
               <div style={{ fontSize: 22, fontWeight: 800, color: '#111' }}>{data.mostOrderedProduct?.name || 'N/A'}</div>
               <div style={{ fontSize: 15, color: '#666' }}>{data.mostOrderedProduct?.quantity || 0} units sold</div>
@@ -97,7 +96,7 @@ export default function DemandAnalysis() {
         </div>
 
         <div style={{ background: '#fff', borderRadius: 16, padding: 20, border: '1px solid #eaeaea', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
-          <h3 style={{ fontSize: 16, fontWeight: 700, color: '#111', marginBottom: 20 }}>📊 Product Categories</h3>
+          <h3 style={{ fontSize: 16, fontWeight: 700, color: '#111', marginBottom: 20 }}>Product Categories</h3>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
             {(data.productCategories || []).map((c, i) => {
               const maxCat = Math.max(...(data.productCategories || []).map(x => x.total), 1);
