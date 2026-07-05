@@ -78,8 +78,8 @@ export default function SupplierOrders() {
       const updated = await api.orders({ supplier: supplierId });
       setOrders(updated);
       setShowAssign(null);
-    } catch {
-      toast('Failed to assign delivery.', 'error');
+    } catch (e) {
+      toast(e.message || 'Failed to assign delivery.', 'error');
     }
   };
 
