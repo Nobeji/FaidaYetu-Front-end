@@ -34,6 +34,7 @@ export default function LocationPicker({ lat = -6.7924, lng = 39.2083, onChange,
         mapStyle={style}
         style={{ width: '100%', height: '100%' }}
         scrollZoom={true}
+        attributionControl={false}
         onClick={handleMapClick}
       >
         <NavigationControl position="bottom-right" />

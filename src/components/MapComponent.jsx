@@ -107,6 +107,7 @@ export default function MapComponent({
         mapStyle={satellite ? satelliteStyle : streetStyle}
         style={{ width: '100%', height: '100%' }}
         scrollZoom={true}
+        attributionControl={false}
         onClick={() => setSelected(null)}
       >
         <NavigationControl position="bottom-right" />
