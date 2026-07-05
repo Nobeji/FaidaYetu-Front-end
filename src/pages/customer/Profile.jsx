@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import DashboardShell from '../../components/DashboardShell';
 import { api } from '../../services/api';
 import { useToast } from '../../components/ToastContext';
@@ -54,11 +55,14 @@ const sectionsConfig = {
 
 export default function CustomerProfile() {
   const toast = useToast();
+  const navigate = useNavigate();
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState(false);
   const [openSection, setOpenSection] = useState(null);
   const [form, setForm] = useState({ first_name: '', last_name: '', email: '', phone: '' });
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [deleting, setDeleting] = useState(false);
   const [sectionData, setSectionData] = useState({
     addresses: { home: '', work: '', other: '' },
     payments: { mobile: '', card: '' },
@@ -79,6 +83,20 @@ export default function CustomerProfile() {
     localStorage.setItem('user', JSON.stringify({ ...JSON.parse(localStorage.getItem('user') || '{}'), first_name: form.first_name, last_name: form.last_name, email: form.email }));
     setProfile(prev => ({ ...prev, user: { ...prev.user, first_name: form.first_name, last_name: form.last_name, email: form.email }, phone: form.phone }));
     setEditing(false);
+  };
+
+  const handleDeleteAccount = async () => {
+    setDeleting(true);
+    try {
+      await api.deleteAccount();
+      localStorage.clear();
+      navigate('/');
+      toast('Account deleted permanently.', 'info');
+    } catch {
+      toast('Failed to delete account.', 'error');
+    } finally {
+      setDeleting(false);
+    }
   };
 
   const handleSectionSave = (section) => {
@@ -219,6 +237,27 @@ export default function CustomerProfile() {
             <div style={{ display: 'flex', gap: 12 }}>
               <button onClick={handleSave} style={{ padding: '10px 24px', borderRadius: 8, background: '#000', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 700 }}>Save Changes</button>
               <button onClick={() => setEditing(false)} style={{ padding: '10px 24px', borderRadius: 8, background: 'none', border: `1px solid ${'#eee'}`, cursor: 'pointer', fontWeight: 600 }}>Cancel</button>
+            </div>
+          </div>
+        )}
+
+        <div style={{ marginTop: 24, padding: 20, border: '1px solid #fecaca', borderRadius: 12, background: '#fef2f2' }}>
+          <h3 style={{ fontSize: 15, fontWeight: 600, color: '#d32f2f', margin: '0 0 8px' }}>Delete Account</h3>
+          <p style={{ fontSize: 13, color: '#d32f2f', marginBottom: 12, opacity: 0.8 }}>Permanently delete your account and all data. This action cannot be undone.</p>
+          <button onClick={() => setShowDeleteConfirm(true)} style={{ padding: '10px 20px', borderRadius: 8, background: '#d32f2f', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: 13 }}>Delete My Account</button>
+        </div>
+
+        {showDeleteConfirm && (
+          <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: 16 }} onClick={() => !deleting && setShowDeleteConfirm(false)}>
+            <div style={{ background: '#fff', borderRadius: 16, padding: 24, width: '100%', maxWidth: 400 }} onClick={e => e.stopPropagation()}>
+              <h3 style={{ fontSize: 20, fontWeight: 700, color: '#d32f2f', margin: '0 0 8px' }}>Delete Account?</h3>
+              <p style={{ fontSize: 14, color: '#666', marginBottom: 20 }}>This will permanently delete your account, orders, and all associated data. Are you sure?</p>
+              <div style={{ display: 'flex', gap: 12 }}>
+                <button onClick={() => setShowDeleteConfirm(false)} disabled={deleting} style={{ flex: 1, padding: '12px', borderRadius: 8, border: '1px solid #ddd', background: '#fff', color: '#666', cursor: 'pointer', fontWeight: 600 }}>Cancel</button>
+                <button onClick={handleDeleteAccount} disabled={deleting} style={{ flex: 1, padding: '12px', borderRadius: 8, background: '#d32f2f', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 700, opacity: deleting ? 0.7 : 1 }}>
+                  {deleting ? 'Deleting...' : 'Delete Forever'}
+                </button>
+              </div>
             </div>
           </div>
         )}

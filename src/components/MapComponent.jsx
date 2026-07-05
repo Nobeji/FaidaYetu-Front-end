@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, Polyline, Circle, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -56,6 +56,7 @@ export default function MapComponent({
   radiusKm,
   driverLocation,
 }) {
+  const [satellite, setSatellite] = useState(false);
   const allMarkers = [];
   if (userLocation) allMarkers.push({ lat: userLocation[0], lng: userLocation[1] });
   if (driverLocation) allMarkers.push({ lat: driverLocation[0], lng: driverLocation[1] });
@@ -74,12 +75,36 @@ export default function MapComponent({
   });
 
   return (
-    <div style={{ height, borderRadius: 16, overflow: 'hidden' }}>
+    <div style={{ height, borderRadius: 16, overflow: 'hidden', position: 'relative' }}>
+      <button onClick={() => setSatellite(v => !v)} style={{
+        position: 'absolute', top: 10, right: 10, zIndex: 1000,
+        padding: '6px 12px', borderRadius: 8, border: '1px solid #ccc',
+        background: 'rgba(255,255,255,0.95)', cursor: 'pointer',
+        fontSize: 12, fontWeight: 600, boxShadow: '0 1px 4px rgba(0,0,0,0.15)',
+        display: 'flex', alignItems: 'center', gap: 6,
+      }}>
+        <span>{satellite ? '🗺️' : '🛰️'}</span>
+        {satellite ? 'Street' : 'Satellite'}
+      </button>
       <MapContainer center={center} zoom={zoom} style={{ height: '100%', width: '100%' }} scrollWheelZoom={true}>
-        <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
+        {satellite ? (
+          <TileLayer
+            attribution='&copy; <a href="https://www.esri.com/">ESRI</a>'
+            url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+          />
+        ) : (
+          <TileLayer
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          />
+        )}
+        {satellite && (
+          <TileLayer
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            opacity={0.2}
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+          />
+        )}
         <FitBounds markers={allMarkers} />
 
         {userLocation && (

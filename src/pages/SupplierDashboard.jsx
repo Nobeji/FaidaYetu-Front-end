@@ -4,6 +4,8 @@ import DashboardShell from '../components/DashboardShell';
 import StatsCard from '../components/StatsCard';
 import StatusBadge from '../components/StatusBadge';
 import ProgressBar from '../components/ProgressBar';
+import MapComponent from '../components/MapComponent';
+import LocationPicker from '../components/LocationPicker';
 import { api } from '../services/api';
 
 const navItems = [
@@ -22,12 +24,32 @@ export default function SupplierDashboard() {
   const navigate = useNavigate();
 
   const user = JSON.parse(localStorage.getItem('user') || '{}');
+  const profile = JSON.parse(localStorage.getItem('profile') || '{}');
   const initials = (user.username || 'U').charAt(0).toUpperCase() + ((user.username || '').slice(-1) || '').toUpperCase();
+
+  const [editLocation, setEditLocation] = useState(false);
+  const [locationCoords, setLocationCoords] = useState({ lat: -6.7924, lng: 39.2083 });
+  const [savingLocation, setSavingLocation] = useState(false);
+  const [originalCoords, setOriginalCoords] = useState({ lat: -6.7924, lng: 39.2083 });
 
   useEffect(() => {
     const sid = JSON.parse(localStorage.getItem('supplier') || '{}').id || 1;
     api.supplierDashboard(sid).then(d => { setData(d); setLoading(false); }).catch(() => setLoading(false));
   }, []);
+
+  const handleSaveLocation = async () => {
+    setSavingLocation(true);
+    try {
+      await api.updateProfile({
+        lat: locationCoords.lat,
+        lng: locationCoords.lng,
+      });
+      const updated = await api.profile();
+      localStorage.setItem('profile', JSON.stringify(updated));
+      setEditLocation(false);
+    } catch { alert('Failed to update location.'); }
+    finally { setSavingLocation(false); }
+  };
 
   return (
     <DashboardShell brand="FaidaYetu" brandSub="Poultry Logistics Hub" navItems={navItems} profile={
@@ -64,6 +86,35 @@ export default function SupplierDashboard() {
               <button onClick={() => navigate('/supplier/orders')} style={{ padding: '8px 16px', borderRadius: 8, background: '#000', border: 'none', cursor: 'pointer', fontWeight: 500, fontSize: 12, color: '#fff' }}>Review Alerts</button>
             </div>
 
+            <div style={{ background: '#fff', border: '1px solid #eaeaea', borderRadius: 10, padding: 16, marginBottom: 20 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+                <h3 style={{ fontSize: 14, fontWeight: 600, color: '#111', margin: 0 }}>📍 Your Business Location</h3>
+                {!editLocation && (
+                  <button onClick={() => { setOriginalCoords({ lat: profile.lat || -6.7924, lng: profile.lng || 39.2083 }); setLocationCoords({ lat: profile.lat || -6.7924, lng: profile.lng || 39.2083 }); setEditLocation(true); }} style={{ fontSize: 12, fontWeight: 600, color: '#0a6e46', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>Update</button>
+                )}
+              </div>
+              {editLocation ? (
+                <>
+                  <LocationPicker
+                    lat={locationCoords.lat}
+                    lng={locationCoords.lng}
+                    height={200}
+                    onChange={(lat, lng) => setLocationCoords({ lat, lng })}
+                  />
+                  <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
+                    <button onClick={() => { setEditLocation(false); setLocationCoords(originalCoords); }} style={{ flex: 1, padding: '8px', borderRadius: 8, border: '1px solid #ddd', background: '#fff', cursor: 'pointer', fontWeight: 500, fontSize: 12 }}>Cancel</button>
+                    <button onClick={handleSaveLocation} disabled={savingLocation} style={{ flex: 1, padding: '8px', borderRadius: 8, background: '#0a6e46', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: 12, opacity: savingLocation ? 0.7 : 1 }}>
+                      {savingLocation ? 'Saving...' : 'Save Location'}
+                    </button>
+                  </div>
+                </>
+              ) : (
+                <MapComponent
+                  height={200}
+                  userLocation={[locationCoords.lat, locationCoords.lng]}
+                />
+              )}
+            </div>
             <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: 20 }}>
               <div style={{ background: '#fff', border: '1px solid #eaeaea', borderRadius: 10, overflow: 'hidden' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 20px', borderBottom: '1px solid #f0f0f0' }}>

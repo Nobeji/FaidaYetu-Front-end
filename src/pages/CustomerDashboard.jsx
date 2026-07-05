@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import DashboardShell from '../components/DashboardShell';
 import SupplierCard from '../components/SupplierCard';
 import MapComponent from '../components/MapComponent';
+import LocationPicker from '../components/LocationPicker';
 import { api } from '../services/api';
 import { useToast } from '../components/ToastContext';
 
@@ -34,9 +35,10 @@ export default function CustomerDashboard() {
   const [paying, setPaying] = useState(false);
   const [pendingPayments, setPendingPayments] = useState({});
   const pollRefs = useRef({});
-  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-  const [deleting, setDeleting] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [editLocation, setEditLocation] = useState(false);
+  const [editCoords, setEditCoords] = useState({ lat: -6.7924, lng: 39.2083 });
+  const [savingLocation, setSavingLocation] = useState(false);
 
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth < 768);
@@ -44,20 +46,6 @@ export default function CustomerDashboard() {
     window.addEventListener('resize', check);
     return () => window.removeEventListener('resize', check);
   }, []);
-
-  const handleDeleteAccount = async () => {
-    setDeleting(true);
-    try {
-      await api.deleteAccount();
-      localStorage.clear();
-      navigate('/');
-      toast('Account deleted permanently.', 'info');
-    } catch {
-      toast('Failed to delete account.', 'error');
-    } finally {
-      setDeleting(false);
-    }
-  };
 
   const handlePay = async () => {
     if (!phoneNumber || phoneNumber.length < 10) {
@@ -103,7 +91,7 @@ export default function CustomerDashboard() {
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(
-      pos => setUserLocation([pos.coords.latitude, pos.coords.longitude]),
+      pos => { setUserLocation([pos.coords.latitude, pos.coords.longitude]); setEditCoords({ lat: pos.coords.latitude, lng: pos.coords.longitude }); },
       () => {}
     );
   }, []);
@@ -252,13 +240,48 @@ export default function CustomerDashboard() {
         </div>
 
         <div style={{ marginBottom: 20, borderRadius: 10, overflow: 'hidden', border: '1px solid #eee' }}>
-          <MapComponent
-            height={isMobile ? 240 : 340}
-            userLocation={userLocation}
-            suppliers={filtered}
-            radiusKm={radiusFilter}
-            driverLocation={driverLocation}
-          />
+          {editLocation ? (
+            <>
+              <LocationPicker
+                lat={editCoords.lat}
+                lng={editCoords.lng}
+                height={isMobile ? 240 : 340}
+                onChange={(lat, lng) => setEditCoords({ lat, lng })}
+              />
+              <div style={{ display: 'flex', gap: 8, padding: 10, borderTop: '1px solid #eee', background: '#fff' }}>
+                <button onClick={() => { setEditLocation(false); setEditCoords({ lat: userLocation[0], lng: userLocation[1] }); }} style={{ flex: 1, padding: '8px', borderRadius: 8, border: '1px solid #ddd', background: '#fff', cursor: 'pointer', fontWeight: 500, fontSize: 12 }}>Cancel</button>
+                <button onClick={async () => {
+                  setSavingLocation(true);
+                  try {
+                    await api.updateProfile({ lat: editCoords.lat, lng: editCoords.lng });
+                    const updated = await api.profile();
+                    localStorage.setItem('profile', JSON.stringify(updated));
+                    setUserLocation([editCoords.lat, editCoords.lng]);
+                    setEditLocation(false);
+                    toast('Location updated!', 'success');
+                  } catch { toast('Failed to update location.', 'error'); }
+                  finally { setSavingLocation(false); }
+                }} disabled={savingLocation} style={{ flex: 1, padding: '8px', borderRadius: 8, background: '#0a6e46', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: 12, opacity: savingLocation ? 0.7 : 1 }}>
+                  {savingLocation ? 'Saving...' : 'Save Location'}
+                </button>
+              </div>
+            </>
+          ) : (
+            <>
+              <div style={{ position: 'absolute', top: 8, right: 60, zIndex: 999 }}>
+                <button onClick={() => { setEditCoords({ lat: userLocation[0], lng: userLocation[1] }); setEditLocation(true); }} style={{ padding: '4px 10px', borderRadius: 6, border: '1px solid #ccc', background: 'rgba(255,255,255,0.95)', cursor: 'pointer', fontSize: 11, fontWeight: 600, boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
+                  📍 Update My Location
+                </button>
+              </div>
+              <MapComponent
+                height={isMobile ? 240 : 340}
+                userLocation={userLocation}
+                suppliers={filtered}
+                radiusKm={radiusFilter}
+                driverLocation={driverLocation}
+              />
+            </>
+          )}
         </div>
 
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
@@ -318,27 +341,6 @@ export default function CustomerDashboard() {
           </>
         )}
       </div>
-
-        <div style={{ marginTop: 40, paddingTop: 20, borderTop: '1px solid #eaeaea' }}>
-          <h3 style={{ fontSize: 15, fontWeight: 600, color: '#d32f2f', margin: '0 0 8px' }}>Delete Account</h3>
-          <p style={{ fontSize: 13, color: '#888', marginBottom: 12 }}>Permanently delete your account and all data. This action cannot be undone.</p>
-          <button onClick={() => setShowDeleteConfirm(true)} style={{ padding: '10px 20px', borderRadius: 8, background: '#d32f2f', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: 13 }}>Delete My Account</button>
-        </div>
-
-      {showDeleteConfirm && (
-        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: 16 }} onClick={() => !deleting && setShowDeleteConfirm(false)}>
-          <div style={{ background: '#fff', borderRadius: 16, padding: 24, width: '100%', maxWidth: 400 }} onClick={e => e.stopPropagation()}>
-            <h3 style={{ fontSize: 20, fontWeight: 700, color: '#d32f2f', margin: '0 0 8px' }}>Delete Account?</h3>
-            <p style={{ fontSize: 14, color: '#666', marginBottom: 20 }}>This will permanently delete your account, orders, and all associated data. Are you sure?</p>
-            <div style={{ display: 'flex', gap: 12 }}>
-              <button onClick={() => setShowDeleteConfirm(false)} disabled={deleting} style={{ flex: 1, padding: '12px', borderRadius: 8, border: '1px solid #ddd', background: '#fff', color: '#666', cursor: 'pointer', fontWeight: 600 }}>Cancel</button>
-              <button onClick={handleDeleteAccount} disabled={deleting} style={{ flex: 1, padding: '12px', borderRadius: 8, background: '#d32f2f', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 700, opacity: deleting ? 0.7 : 1 }}>
-                {deleting ? 'Deleting...' : 'Delete Forever'}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
 
       {showPayModal && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: 16 }} onClick={() => !paying && setShowPayModal(null)}>
