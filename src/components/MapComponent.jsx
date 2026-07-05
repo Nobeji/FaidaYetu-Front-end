@@ -29,7 +29,8 @@ function FitBounds({ markers, mapRef }) {
   useEffect(() => {
     const map = mapRef?.getMap();
     if (!map || !markers?.length) return;
-    const bounds = markers.reduce((b, m) => b.extend([m.lng, m.lat]), new maplibregl.LngLatBounds(markers[0].lng, markers[0].lat));
+    const bounds = new maplibregl.LngLatBounds();
+    markers.forEach(m => bounds.extend([m.lng, m.lat]));
     map.fitBounds(bounds, { padding: 50 });
   }, [markers, mapRef]);
   return null;
