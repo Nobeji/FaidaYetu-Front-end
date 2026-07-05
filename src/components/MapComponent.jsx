@@ -3,26 +3,24 @@ import Map, { Marker, Popup, NavigationControl, useMap, Source, Layer } from 're
 import 'maplibre-gl/dist/maplibre-gl.css';
 import maplibregl from 'maplibre-gl';
 
-const key = import.meta.env.VITE_TOMTOM_API_KEY;
-
 const satelliteStyle = {
   version: 8,
   sources: {
     esri: { type: 'raster', tiles: ['https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'], tileSize: 256, attribution: '&copy; Esri' },
-    labels: { type: 'raster', tiles: [`https://api.tomtom.com/map/1/tile/labels/main/{z}/{x}/{y}.png?tileSize=256&key=${key}`], tileSize: 256, attribution: '&copy; TomTom' },
+    labels: { type: 'raster', tiles: ['https://tile.openstreetmap.org/{z}/{x}/{y}.png'], tileSize: 256, attribution: '&copy; OpenStreetMap' },
   },
   layers: [
     { id: 'esri', type: 'raster', source: 'esri' },
-    { id: 'labels', type: 'raster', source: 'labels', paint: { 'raster-opacity': 0.5 } },
+    { id: 'labels', type: 'raster', source: 'labels', paint: { 'raster-opacity': 0.3 } },
   ],
 };
 
 const streetStyle = {
   version: 8,
   sources: {
-    tomtom_street: { type: 'raster', tiles: [`https://api.tomtom.com/map/1/tile/basic/main/{z}/{x}/{y}.png?tileSize=256&key=${key}`], tileSize: 256, attribution: '&copy; TomTom' },
+    osm: { type: 'raster', tiles: ['https://tile.openstreetmap.org/{z}/{x}/{y}.png'], tileSize: 256, attribution: '&copy; OpenStreetMap' },
   },
-  layers: [{ id: 'tomtom-street', type: 'raster', source: 'tomtom_street' }],
+  layers: [{ id: 'osm', type: 'raster', source: 'osm' }],
 };
 
 const markerHtml = (color) => `<svg width="24" height="36" viewBox="0 0 24 36" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 0C5.4 0 0 5.4 0 12c0 9 12 24 12 24s12-15 12-24C24 5.4 18.6 0 12 0z" fill="${color}" stroke="#fff" stroke-width="2"/><circle cx="12" cy="12" r="5" fill="#fff"/></svg>`;
