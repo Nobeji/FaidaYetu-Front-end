@@ -2,12 +2,13 @@ import { useState, useRef } from 'react';
 import Map, { Marker, NavigationControl } from 'react-map-gl/maplibre';
 import 'maplibre-gl/dist/maplibre-gl.css';
 
+const TOKEN = import.meta.env.VITE_MAPBOX_TOKEN || '';
 const style = {
   version: 8,
   sources: {
-    osm: { type: 'raster', tiles: ['https://tile.openstreetmap.org/{z}/{x}/{y}.png'], tileSize: 256, attribution: '&copy; OpenStreetMap' },
+    mapbox: { type: 'raster', tiles: [`https://api.mapbox.com/styles/v1/mapbox/streets-v12/tiles/256/{z}/{x}/{y}@2x?access_token=${TOKEN}`], tileSize: 256, attribution: '&copy; Mapbox &copy; OpenStreetMap' },
   },
-  layers: [{ id: 'osm', type: 'raster', source: 'osm' }],
+  layers: [{ id: 'mapbox', type: 'raster', source: 'mapbox' }],
 };
 
 export default function LocationPicker({ lat = -6.7924, lng = 39.2083, onChange, height = 250 }) {
