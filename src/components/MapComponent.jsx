@@ -3,22 +3,21 @@ import Map, { Marker, Popup, NavigationControl, useMap, Source, Layer } from 're
 import 'maplibre-gl/dist/maplibre-gl.css';
 import maplibregl from 'maplibre-gl';
 
-const TOKEN = import.meta.env.VITE_MAPBOX_TOKEN || '';
-
 const satelliteStyle = {
   version: 8,
-  name: 'Satellite',
   sources: {
     esri: { type: 'raster', tiles: ['https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'], tileSize: 256, attribution: '&copy; Esri' },
   },
-  layers: [{ id: 'esri-sat', type: 'raster', source: 'esri' }],
+  layers: [{ id: 'esri', type: 'raster', source: 'esri' }],
 };
 
-const streetStyle = TOKEN ? {
-  version: 8, name: 'Street',
-  sources: { mb: { type: 'raster', tiles: [`https://api.mapbox.com/styles/v1/mapbox/streets-v12/tiles/256/{z}/{x}/{y}@2x?access_token=${TOKEN}`], tileSize: 256, attribution: '&copy; Mapbox' } },
-  layers: [{ id: 'mb', type: 'raster', source: 'mb' }],
-} : satelliteStyle;
+const streetStyle = {
+  version: 8,
+  sources: {
+    osm: { type: 'raster', tiles: ['https://tile.openstreetmap.org/{z}/{x}/{y}.png'], tileSize: 256, attribution: '&copy; OpenStreetMap' },
+  },
+  layers: [{ id: 'osm', type: 'raster', source: 'osm' }],
+};
 
 const markerHtml = (color) => `<svg width="24" height="36" viewBox="0 0 24 36" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 0C5.4 0 0 5.4 0 12c0 9 12 24 12 24s12-15 12-24C24 5.4 18.6 0 12 0z" fill="${color}" stroke="#fff" stroke-width="2"/><circle cx="12" cy="12" r="5" fill="#fff"/></svg>`;
 
