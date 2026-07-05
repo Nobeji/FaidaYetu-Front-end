@@ -59,9 +59,35 @@ export default function MyOrders() {
     return () => Object.values(pollRefs.current).forEach(clearInterval);
   }, []);
 
+  const checkPaymentStatus = async (orderId) => {
+    try {
+      const res = await api.paymentStatus(orderId);
+      if (res.paid) {
+        setPendingPayments(prev => { const n = {...prev}; delete n[orderId]; return n; });
+        const updated = await api.orders({ customer: customerId });
+        setOrders(updated);
+        toast('Payment confirmed!', 'success');
+      } else if (res.status === 'failed') {
+        setPendingPayments(prev => { const n = {...prev}; delete n[orderId]; return n; });
+        toast('Payment failed. You can try again.', 'error');
+      } else {
+        toast('Still pending. If USSD did not arrive, try paying again.', 'info');
+      }
+    } catch {
+      toast('Could not check payment status.', 'error');
+    }
+  };
+
   const startPolling = (orderId) => {
     if (pollRefs.current[orderId]) return;
+    let attempts = 0;
     pollRefs.current[orderId] = setInterval(async () => {
+      attempts++;
+      if (attempts > 12) {
+        clearInterval(pollRefs.current[orderId]);
+        delete pollRefs.current[orderId];
+        return;
+      }
       try {
         const res = await api.paymentStatus(orderId);
         if (res.paid) {
@@ -77,7 +103,7 @@ export default function MyOrders() {
           toast('Payment failed. You can try again.', 'error');
         }
       } catch {}
-    }, 5000);
+    }, 10000);
   };
 
   const filtered = filter === 'All' ? orders : orders.filter(o => o.status === filter);
@@ -189,7 +215,10 @@ export default function MyOrders() {
                         <button onClick={() => { setShowPayModal(o); setPhoneNumber(''); }} style={{ padding: '6px 14px', borderRadius: 8, background: '#0a6e46', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: 12 }}>Pay Now</button>
                       )}
                       {pendingPayments[o.id] === 'pending' && (
-                        <span style={{ padding: '6px 14px', borderRadius: 8, background: '#fff8e1', color: '#f57f17', fontWeight: 600, fontSize: 12 }}>⌛ Pending</span>
+                        <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap', alignItems: 'center' }}>
+                          <span style={{ padding: '6px 14px', borderRadius: 8, background: '#fff8e1', color: '#f57f17', fontWeight: 600, fontSize: 12 }}>⌛ Pending</span>
+                          <button onClick={() => checkPaymentStatus(o.id)} style={{ padding: '6px 14px', borderRadius: 8, border: '1px solid #f57f17', background: '#fff', color: '#f57f17', cursor: 'pointer', fontWeight: 600, fontSize: 12 }}>Check</button>
+                        </div>
                       )}
                       {o.paid && (
                         <span style={{ padding: '6px 14px', borderRadius: 8, background: '#e8f5e9', color: '#2e7d32', fontWeight: 600, fontSize: 12 }}>✓ Paid</span>
