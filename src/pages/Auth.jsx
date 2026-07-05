@@ -19,7 +19,15 @@ export default function Auth() {
     api.stats().then(setPublicStats).catch(() => {});
   }, []);
   const [signupLoading, setSignupLoading] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -90,36 +98,37 @@ export default function Auth() {
   };
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh' }}>
+    <div style={{ display: 'flex', minHeight: '100vh', flexDirection: isMobile ? 'column' : 'row' }}>
       <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
       <div style={{
-        width: '50%', background: '#0a6e46', display: 'flex',
-        flexDirection: 'column', justifyContent: 'center', padding: 48,
+        width: isMobile ? '100%' : '50%', minHeight: isMobile ? 200 : 'auto',
+        background: '#0a6e46', display: 'flex',
+        flexDirection: 'column', justifyContent: 'center', padding: isMobile ? 24 : 48,
         color: '#fff', position: 'relative', overflow: 'hidden',
       }}>
         <img src="https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?w=800" alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: 0.3, mixBlendMode: 'overlay' }} />
         <div style={{ position: 'relative', zIndex: 1 }}>
-          <h1 style={{ fontSize: 36, fontWeight: 700, lineHeight: 1.2, marginBottom: 20 }}>
+          <h1 style={{ fontSize: isMobile ? 22 : 36, fontWeight: 700, lineHeight: 1.2, marginBottom: 16 }}>
             Powering the Future of <span style={{ color: '#ffdea9' }}>Poultry Logistics</span>
           </h1>
-          <p style={{ fontSize: 16, opacity: 0.9, marginBottom: 28, maxWidth: 440, lineHeight: 1.6 }}>
+          <p style={{ fontSize: isMobile ? 14 : 16, opacity: 0.9, marginBottom: 20, maxWidth: 440, lineHeight: 1.6 }}>
             The integrated platform for suppliers, customers, and delivery personnel.
           </p>
-          <div style={{ display: 'flex', gap: 20 }}>
+          <div style={{ display: 'flex', gap: isMobile ? 12 : 20, flexDirection: isMobile ? 'column' : 'row' }}>
             <div><div style={{ fontSize: 22, fontWeight: 600 }}>{publicStats.dailyDeliveries || '0'}</div><div style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.08em', opacity: 0.7 }}>Orders Delivered</div></div>
-            <div style={{ width: 1, height: 36, background: 'rgba(255,255,255,0.2)' }} />
+            {!isMobile && <div style={{ width: 1, height: 36, background: 'rgba(255,255,255,0.2)' }} />}
             <div><div style={{ fontSize: 22, fontWeight: 600 }}>{publicStats.onTimeRate || '0'}</div><div style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.08em', opacity: 0.7 }}>Trust Rating</div></div>
           </div>
         </div>
       </div>
 
       <div style={{
-        width: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center',
-        padding: 20, background: '#fafafa',
+        width: isMobile ? '100%' : '50%', display: 'flex', alignItems: 'center', justifyContent: 'center',
+        padding: isMobile ? 16 : 20, background: '#fafafa',
       }}>
         <div style={{
           width: '100%', maxWidth: 420, background: '#fff',
-          padding: 28, borderRadius: 12, border: '1px solid #eee',
+          padding: isMobile ? 20 : 28, borderRadius: 12, border: '1px solid #eee',
         }}>
           <div style={{ textAlign: 'center', marginBottom: 20 }}>
             <h2 style={{ fontSize: 22, fontWeight: 800, color: '#0a6e46', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>

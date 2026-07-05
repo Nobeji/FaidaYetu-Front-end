@@ -36,6 +36,14 @@ export default function CustomerDashboard() {
   const pollRefs = useRef({});
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
 
   const handleDeleteAccount = async () => {
     setDeleting(true);
@@ -173,7 +181,7 @@ export default function CustomerDashboard() {
       <div>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 24 }}>
           <div>
-            <h1 style={{ fontSize: 22, fontWeight: 700, color: '#111', margin: 0 }}>Find Poultry</h1>
+            <h1 style={{ fontSize: isMobile ? 18 : 22, fontWeight: 700, color: '#111', margin: 0 }}>Find Poultry</h1>
             <p style={{ fontSize: 13, color: '#888', margin: '4px 0 0' }}>Discover fresh products near you</p>
           </div>
         </div>
@@ -196,13 +204,13 @@ export default function CustomerDashboard() {
           </div>
         )}
 
-        <div style={{ display: 'flex', gap: 12, marginBottom: 16 }}>
+        <div style={{ display: 'flex', gap: 12, marginBottom: 16, flexDirection: isMobile ? 'column' : 'row' }}>
           <div style={{ position: 'relative', flex: 1 }}>
             <span style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: '#ccc', fontSize: 14 }}>🔍</span>
             <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search supplier..." style={{
               width: '100%', padding: '10px 14px 10px 38px', borderRadius: 10,
               border: '1px solid #e0e0e0', background: '#fff',
-              fontSize: 14, color: '#333', boxSizing: 'border-box', outline: 'none',
+              boxSizing: 'border-box', outline: 'none',
             }} />
           </div>
           <select value={radiusFilter} onChange={e => setRadiusFilter(Number(e.target.value))} style={{
@@ -218,7 +226,7 @@ export default function CustomerDashboard() {
 
         <div style={{ marginBottom: 20, borderRadius: 10, overflow: 'hidden', border: '1px solid #eee' }}>
           <MapComponent
-            height={340}
+            height={isMobile ? 240 : 340}
             userLocation={userLocation}
             suppliers={filtered}
             radiusKm={radiusFilter}

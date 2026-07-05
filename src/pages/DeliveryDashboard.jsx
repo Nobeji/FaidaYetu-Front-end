@@ -20,9 +20,17 @@ export default function DeliveryDashboard() {
   const [userLocation, setUserLocation] = useState([-6.7924, 39.2083]);
   const [loading, setLoading] = useState(true);
   const [driverOnline, setDriverOnline] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
   const navigate = useNavigate();
   const toast = useToast();
   const deliveryPersonId = JSON.parse(localStorage.getItem('delivery_person') || '{}').id || 1;
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
 
   useEffect(() => {
     Promise.all([
@@ -89,9 +97,9 @@ export default function DeliveryDashboard() {
       </div>
     }>
       <div>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 24, flexWrap: 'wrap', gap: 12 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: isMobile ? 'stretch' : 'flex-start', marginBottom: 24, flexDirection: isMobile ? 'column' : 'row', gap: 12 }}>
           <div>
-            <h1 style={{ fontSize: 22, fontWeight: 700, color: '#111', margin: 0 }}>Delivery Dashboard</h1>
+            <h1 style={{ fontSize: isMobile ? 20 : 22, fontWeight: 700, color: '#111', margin: 0 }}>Delivery Dashboard</h1>
             <p style={{ fontSize: 13, color: '#888', margin: '4px 0 0' }}>Optimized routes for regional poultry logistics.</p>
           </div>
           <div style={{ display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap' }}>
@@ -109,10 +117,10 @@ export default function DeliveryDashboard() {
           </div>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: 20 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '2fr 1fr', gap: 20 }}>
           <div style={{ borderRadius: 10, overflow: 'hidden', border: '1px solid #eee' }}>
             <MapComponent
-              height={400}
+              height={isMobile ? 260 : 400}
               userLocation={userLocation}
               deliveries={activeDelivery ? [activeDelivery] : []}
               routePoints={
@@ -160,7 +168,7 @@ export default function DeliveryDashboard() {
           )}
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: 20, marginTop: 20 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 2fr', gap: 20, marginTop: 20 }}>
           <div onClick={() => navigate('/delivery/earnings')} style={{ background: '#fff', border: '1px solid #eaeaea', borderRadius: 10, padding: '20px', cursor: 'pointer' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
               <span style={{ fontSize: 11, fontWeight: 600, textTransform: 'uppercase', color: '#888' }}>Earnings Today</span>
