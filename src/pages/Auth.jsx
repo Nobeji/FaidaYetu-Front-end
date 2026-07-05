@@ -32,10 +32,10 @@ export default function Auth() {
 
   const detectFromIP = async () => {
     try {
-      const res = await fetch('https://ipapi.co/json/');
+      const res = await fetch('https://ip-api.com/json/');
       const data = await res.json();
-      if (data.latitude && data.longitude) {
-        setSignupCoords({ lat: data.latitude, lng: data.longitude });
+      if (data.status === 'success' && data.lat && data.lon) {
+        setSignupCoords({ lat: data.lat, lng: data.lon });
         return true;
       }
     } catch {}
