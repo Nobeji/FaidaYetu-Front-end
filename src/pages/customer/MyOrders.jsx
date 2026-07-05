@@ -95,7 +95,7 @@ export default function MyOrders() {
         toast(result.error || 'Payment failed', 'error');
       }
     } catch (e) {
-      toast('Payment failed. Try again.', 'error');
+      toast(e.message || 'Payment failed. Try again.', 'error');
     } finally {
       setPaying(false);
     }

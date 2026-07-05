@@ -70,8 +70,8 @@ export default function CustomerDashboard() {
       } else {
         toast(result.error || 'Payment failed', 'error');
       }
-    } catch {
-      toast('Payment failed. Try again.', 'error');
+    } catch (e) {
+      toast(e.message || 'Payment failed. Try again.', 'error');
     } finally {
       setPaying(false);
     }

@@ -6,7 +6,10 @@ async function request(url, options = {}) {
   if (!options.noJson) headers['Content-Type'] = 'application/json';
   if (token) headers['Authorization'] = `Bearer ${token}`;
   const res = await fetch(`${BASE}${url}`, { ...options, headers });
-  if (!res.ok) throw new Error(`API error: ${res.status}`);
+  if (!res.ok) {
+    const body = await res.text().catch(() => '');
+    throw new Error(body || `API error: ${res.status}`);
+  }
   return res.json();
 }
 
@@ -14,7 +17,10 @@ async function upload(url, data, method = 'POST') {
   const token = localStorage.getItem('token');
   const headers = { Authorization: `Bearer ${token}` };
   const res = await fetch(`${BASE}${url}`, { method, headers, body: data });
-  if (!res.ok) throw new Error(`API error: ${res.status}`);
+  if (!res.ok) {
+    const body = await res.text().catch(() => '');
+    throw new Error(body || `API error: ${res.status}`);
+  }
   return res.json();
 }
 
