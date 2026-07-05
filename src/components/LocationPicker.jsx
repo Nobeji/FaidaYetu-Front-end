@@ -2,13 +2,12 @@ import { useState, useRef } from 'react';
 import Map, { Marker, NavigationControl } from 'react-map-gl/maplibre';
 import 'maplibre-gl/dist/maplibre-gl.css';
 
-const TOKEN = import.meta.env.VITE_MAPBOX_TOKEN || '';
 const style = {
   version: 8,
   sources: {
-    mapbox: { type: 'raster', tiles: [`https://api.mapbox.com/styles/v1/mapbox/streets-v12/tiles/256/{z}/{x}/{y}@2x?access_token=${TOKEN}`], tileSize: 256, attribution: '&copy; Mapbox &copy; OpenStreetMap' },
+    esri: { type: 'raster', tiles: ['https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'], tileSize: 256, attribution: '&copy; Esri' },
   },
-  layers: [{ id: 'mapbox', type: 'raster', source: 'mapbox' }],
+  layers: [{ id: 'esri', type: 'raster', source: 'esri' }],
 };
 
 export default function LocationPicker({ lat = -6.7924, lng = 39.2083, onChange, height = 250 }) {
