@@ -44,10 +44,12 @@ import TrendInsights from './pages/admin/TrendInsights';
 import ModelEvaluation from './pages/admin/ModelEvaluation';
 import WhatIfSimulator from './pages/admin/WhatIfSimulator';
 import NetworkGraph from './pages/admin/NetworkGraph';
+import { ToastProvider } from './components/ToastContext';
 
 export default function App() {
   return (
     <BrowserRouter>
+      <ToastProvider>
       <Routes>
         <Route path="/" element={<Welcome />} />
         <Route path="/auth" element={<Auth />} />
@@ -97,6 +99,7 @@ export default function App() {
           <Route path="network-graph" element={<NetworkGraph />} />
         </Route>
       </Routes>
+      </ToastProvider>
     </BrowserRouter>
   );
 }

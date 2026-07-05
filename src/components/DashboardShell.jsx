@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { ToastProvider } from './ToastContext';
 
 export default function DashboardShell({ brand, brandSub, navItems, profile, children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -91,7 +90,7 @@ export default function DashboardShell({ brand, brandSub, navItems, profile, chi
         </div>
 
         <div style={{ padding: '32px 32px', maxWidth: 1200, margin: '0 auto' }}>
-          <ToastProvider>{children}</ToastProvider>
+          {children}
         </div>
       </div>
 
