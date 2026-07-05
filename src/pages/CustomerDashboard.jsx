@@ -32,10 +32,30 @@ export default function CustomerDashboard() {
   const [showPayModal, setShowPayModal] = useState(null);
   const [phoneNumber, setPhoneNumber] = useState('');
   const [paying, setPaying] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+
+  const handleDeleteAccount = async () => {
+    setDeleting(true);
+    try {
+      await api.deleteAccount();
+      localStorage.clear();
+      navigate('/');
+      toast('Account deleted permanently.', 'info');
+    } catch {
+      toast('Failed to delete account.', 'error');
+    } finally {
+      setDeleting(false);
+    }
+  };
 
   const handlePay = async () => {
     if (!phoneNumber || phoneNumber.length < 10) {
-      toast('Enter a valid phone number (e.g. 0712345678)', 'error');
+      toast('Enter a valid phone number (e.g. 255712345678)', 'error');
+      return;
+    }
+    if (!phoneNumber.startsWith('255')) {
+      toast('Phone number must start with 255 (e.g. 255712345678)', 'error');
       return;
     }
     setPaying(true);
@@ -224,6 +244,27 @@ export default function CustomerDashboard() {
         )}
       </div>
 
+        <div style={{ marginTop: 40, paddingTop: 20, borderTop: '1px solid #eaeaea' }}>
+          <h3 style={{ fontSize: 15, fontWeight: 600, color: '#d32f2f', margin: '0 0 8px' }}>Delete Account</h3>
+          <p style={{ fontSize: 13, color: '#888', marginBottom: 12 }}>Permanently delete your account and all data. This action cannot be undone.</p>
+          <button onClick={() => setShowDeleteConfirm(true)} style={{ padding: '10px 20px', borderRadius: 8, background: '#d32f2f', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: 13 }}>Delete My Account</button>
+        </div>
+
+      {showDeleteConfirm && (
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: 16 }} onClick={() => !deleting && setShowDeleteConfirm(false)}>
+          <div style={{ background: '#fff', borderRadius: 16, padding: 24, width: '100%', maxWidth: 400 }} onClick={e => e.stopPropagation()}>
+            <h3 style={{ fontSize: 20, fontWeight: 700, color: '#d32f2f', margin: '0 0 8px' }}>Delete Account?</h3>
+            <p style={{ fontSize: 14, color: '#666', marginBottom: 20 }}>This will permanently delete your account, orders, and all associated data. Are you sure?</p>
+            <div style={{ display: 'flex', gap: 12 }}>
+              <button onClick={() => setShowDeleteConfirm(false)} disabled={deleting} style={{ flex: 1, padding: '12px', borderRadius: 8, border: '1px solid #ddd', background: '#fff', color: '#666', cursor: 'pointer', fontWeight: 600 }}>Cancel</button>
+              <button onClick={handleDeleteAccount} disabled={deleting} style={{ flex: 1, padding: '12px', borderRadius: 8, background: '#d32f2f', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 700, opacity: deleting ? 0.7 : 1 }}>
+                {deleting ? 'Deleting...' : 'Delete Forever'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {showPayModal && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: 16 }} onClick={() => !paying && setShowPayModal(null)}>
           <div style={{ background: '#fff', borderRadius: 16, padding: 24, width: '100%', maxWidth: 440 }} onClick={e => e.stopPropagation()}>
@@ -233,9 +274,9 @@ export default function CustomerDashboard() {
             </div>
             <p style={{ fontSize: 14, color: '#666', marginBottom: 16 }}>
               Amount: <strong>{Number(showPayModal.total).toLocaleString()} TZS</strong><br />
-              Enter your mobile money number to receive a payment push (M-Pesa, Tigo Pesa, Airtel Money).
+              Enter your mobile money number starting with 255 to receive a payment push.
             </p>
-            <input type="tel" placeholder="e.g. 0712345678" value={phoneNumber} onChange={e => setPhoneNumber(e.target.value)} disabled={paying}
+            <input type="tel" placeholder="e.g. 255712345678" value={phoneNumber} onChange={e => setPhoneNumber(e.target.value)} disabled={paying}
               style={{ width: '100%', padding: '12px 14px', borderRadius: 8, border: '1px solid #ddd', fontSize: 16, boxSizing: 'border-box', marginBottom: 16 }} />
             <div style={{ display: 'flex', gap: 12 }}>
               <button onClick={() => setShowPayModal(null)} disabled={paying} style={{ flex: 1, padding: '12px', borderRadius: 8, border: '1px solid #ddd', background: '#fff', color: '#666', cursor: 'pointer', fontWeight: 600 }}>Cancel</button>

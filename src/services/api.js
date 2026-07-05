@@ -24,6 +24,7 @@ export const api = {
   register: (data) => request('/auth/register/', { method: 'POST', body: JSON.stringify(data) }),
   profile: () => request('/auth/profile/'),
   updateProfile: (data) => request('/auth/profile/', { method: 'PATCH', body: JSON.stringify(data) }),
+  deleteAccount: () => request('/auth/delete-account/', { method: 'DELETE' }),
 
   // Suppliers
   suppliers: (params) => request(`/suppliers/${params ? '?' + new URLSearchParams(params) : ''}`),

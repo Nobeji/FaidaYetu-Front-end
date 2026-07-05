@@ -76,7 +76,11 @@ export default function MyOrders() {
 
   const handlePay = async () => {
     if (!phoneNumber || phoneNumber.length < 10) {
-      toast('Enter a valid phone number (e.g. 0712345678)', 'error');
+      toast('Enter a valid phone number (e.g. 255712345678)', 'error');
+      return;
+    }
+    if (!phoneNumber.startsWith('255')) {
+      toast('Phone number must start with 255 (e.g. 255712345678)', 'error');
       return;
     }
     setPaying(true);
@@ -211,11 +215,11 @@ export default function MyOrders() {
             <p style={{ fontSize: 14, color: '#666', marginBottom: 16 }}>
               Amount: <strong style={{ color: '#000' }}>{Number(showPayModal.total).toLocaleString()} TZS</strong>
               <br />
-              Enter your mobile money phone number to receive a payment push (M-Pesa, Tigo Pesa, Airtel Money).
+              Enter your mobile money number starting with 255 to receive a payment push.
             </p>
             <input
               type="tel"
-              placeholder="e.g. 0712345678"
+              placeholder="e.g. 255712345678"
               value={phoneNumber}
               onChange={e => setPhoneNumber(e.target.value)}
               disabled={paying}
