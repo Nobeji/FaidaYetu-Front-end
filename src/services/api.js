@@ -101,6 +101,11 @@ export const api = {
   initiatePayment: (data) => request('/payments/initiate/', { method: 'POST', body: JSON.stringify(data) }),
   paymentStatus: (orderId) => request(`/payments/status/${orderId}/`),
 
+  // Notifications
+  notifications: (supplierId) => request(`/notifications/${supplierId ? '?supplier_id=' + supplierId : ''}`),
+  markNotificationRead: (id) => request(`/notifications/${id}/read/`, { method: 'PATCH' }),
+  markAllNotificationsRead: () => request('/notifications/read-all/', { method: 'PATCH' }),
+
   // Admin
   adminDashboard: () => request('/admin/dashboard/'),
   adminDemandAnalysis: () => request('/admin/demand-analysis/'),
