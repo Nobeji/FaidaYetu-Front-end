@@ -25,7 +25,7 @@ export default function SupplierPayouts() {
   const fetchPayouts = async () => {
     setLoading(true);
     try {
-      const data = await api.supplierPayouts({ days });
+      const data = await api.adminSupplierPayouts({ days });
       setSuppliers(data.suppliers || []);
     } catch (err) {
       console.error('Failed to load supplier payouts:', err);

@@ -127,4 +127,5 @@ export const api = {
   adminModelEval: () => request('/admin/model-evaluation/'),
   adminWhatIf: (price, promo) => request(`/admin/what-if-simulator/?price_change=${price}&promo_discount=${promo}`),
   adminNetwork: () => request('/admin/network-graph/'),
+  adminSupplierPayouts: (params) => request(`/admin/supplier-payouts/${params ? '?' + new URLSearchParams(params) : ''}`),
 };
