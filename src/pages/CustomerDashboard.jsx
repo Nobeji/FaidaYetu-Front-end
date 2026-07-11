@@ -39,28 +39,7 @@ export default function CustomerDashboard() {
   const [editLocation, setEditLocation] = useState(false);
   const [editCoords, setEditCoords] = useState({ lat: -6.7924, lng: 39.2083 });
   const [savingLocation, setSavingLocation] = useState(false);
-  const [notifications, setNotifications] = useState([]);
-  const [unreadCount, setUnreadCount] = useState(0);
-  const [showNotifications, setShowNotifications] = useState(false);
-  const bellRef = useRef(null);
-  const customerId = JSON.parse(localStorage.getItem('customer') || '{}').id || 1;
 
-  const fetchNotifications = () => {
-    api.customerNotifications(customerId).then(d => {
-      setNotifications(d.notifications || []);
-      setUnreadCount(d.unread_count || 0);
-    }).catch(() => {});
-  };
-
-  useEffect(() => { fetchNotifications(); const i = setInterval(fetchNotifications, 30000); return () => clearInterval(i); }, []);
-
-  useEffect(() => {
-    const handleClick = (e) => {
-      if (bellRef.current && !bellRef.current.contains(e.target)) setShowNotifications(false);
-    };
-    document.addEventListener('mousedown', handleClick);
-    return () => document.removeEventListener('mousedown', handleClick);
-  }, []);
 
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth < 768);
@@ -216,42 +195,9 @@ export default function CustomerDashboard() {
         </div>
       }>
       <div>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 24 }}>
-          <div>
-            <h1 style={{ fontSize: isMobile ? 18 : 22, fontWeight: 700, color: '#111', margin: 0 }}>Find Poultry</h1>
-            <p style={{ fontSize: 13, color: '#888', margin: '4px 0 0' }}>Discover fresh products near you</p>
-          </div>
-          <div ref={bellRef} style={{ position: 'relative' }}>
-            <button onClick={() => setShowNotifications(v => !v)} style={{ position: 'relative', background: 'none', border: 'none', cursor: 'pointer', padding: 8, fontSize: 22, lineHeight: 1 }}>
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={unreadCount > 0 ? '#000' : '#888'} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-              {unreadCount > 0 && (
-                <span style={{ position: 'absolute', top: 2, right: 2, minWidth: 18, height: 18, borderRadius: 9, background: '#d32f2f', color: '#fff', fontSize: 10, fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 4px', boxShadow: '0 1px 3px rgba(0,0,0,0.2)' }}>{unreadCount}</span>
-              )}
-            </button>
-            {showNotifications && (
-              <div style={{ position: 'absolute', top: '100%', right: 0, width: 360, maxHeight: 400, background: '#fff', border: '1px solid #eaeaea', borderRadius: 10, boxShadow: '0 4px 20px rgba(0,0,0,0.1)', overflow: 'hidden', zIndex: 50 }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 16px', borderBottom: '1px solid #f0f0f0' }}>
-                  <span style={{ fontWeight: 600, fontSize: 14, color: '#111' }}>Notifications</span>
-                  {unreadCount > 0 && (
-                    <button onClick={async () => { await api.markCustomerNotificationsRead(customerId); fetchNotifications(); }} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 12, fontWeight: 600, color: '#0a6e46', padding: 0 }}>Mark all as read</button>
-                  )}
-                </div>
-                <div style={{ overflowY: 'auto', maxHeight: 340 }}>
-                  {notifications.length === 0 ? (
-                    <div style={{ padding: 32, textAlign: 'center', color: '#888', fontSize: 13 }}>No notifications yet.</div>
-                  ) : (
-                    notifications.map(n => (
-                      <div key={n.id} onClick={async () => { if (!n.read) { await api.markCustomerNotificationsRead(customerId, n.id); fetchNotifications(); } }} style={{ padding: '12px 16px', borderBottom: '1px solid #f5f5f5', cursor: n.read ? 'default' : 'pointer', background: n.read ? '#fff' : '#f9f9ff', transition: 'background 0.15s' }}>
-                        <div style={{ fontSize: 13, fontWeight: n.read ? 400 : 600, color: '#111', marginBottom: 2 }}>{n.title}</div>
-                        <div style={{ fontSize: 12, color: '#888' }}>{n.message}</div>
-                        <div style={{ fontSize: 11, color: '#aaa', marginTop: 4 }}>{new Date(n.created_at).toLocaleString('sw-TZ', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}</div>
-                      </div>
-                    ))
-                  )}
-                </div>
-              </div>
-            )}
-          </div>
+        <div style={{ marginBottom: 24 }}>
+          <h1 style={{ fontSize: isMobile ? 18 : 22, fontWeight: 700, color: '#111', margin: 0 }}>Find Poultry</h1>
+          <p style={{ fontSize: 13, color: '#888', margin: '4px 0 0' }}>Discover fresh products near you</p>
         </div>
 
         {activeOrder && (

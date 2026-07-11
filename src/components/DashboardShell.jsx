@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import NotificationBell from './NotificationBell';
 
 export default function DashboardShell({ brand, brandSub, navItems, profile, children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -9,6 +10,10 @@ export default function DashboardShell({ brand, brandSub, navItems, profile, chi
   const user = JSON.parse(localStorage.getItem('user') || '{}');
   const userName = user.username || 'User';
   const initials = userName.charAt(0).toUpperCase();
+  const supplierData = JSON.parse(localStorage.getItem('supplier') || '{}');
+  const customerData = JSON.parse(localStorage.getItem('customer') || '{}');
+  const supplierId = supplierData.id || null;
+  const customerId = customerData.id || null;
 
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth < 768);
@@ -79,6 +84,7 @@ export default function DashboardShell({ brand, brandSub, navItems, profile, chi
             <span style={{ fontSize: 14, fontWeight: 600, color: '#111' }}>{brand}</span>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            {(supplierId || customerId) && <NotificationBell supplierId={supplierId} customerId={customerId} />}
             <span style={{ fontSize: 13, fontWeight: 500, color: '#333' }}>{userName}</span>
             <div style={{
               width: 30, height: 30, borderRadius: '50%',

@@ -102,18 +102,9 @@ export const api = {
   paymentStatus: (orderId) => request(`/payments/status/${orderId}/`),
 
   // Notifications
-  notifications: (supplierId) => request(`/notifications/supplier/${supplierId}/`),
-  markNotificationsRead: (supplierId, notificationId) =>
-    request(`/notifications/supplier/${supplierId}/`, {
-      method: 'PATCH',
-      body: JSON.stringify({ notification_id: notificationId || null }),
-    }),
-  customerNotifications: (customerId) => request(`/notifications/customer/${customerId}/`),
-  markCustomerNotificationsRead: (customerId, notificationId) =>
-    request(`/notifications/customer/${customerId}/`, {
-      method: 'PATCH',
-      body: JSON.stringify({ notification_id: notificationId || null }),
-    }),
+  notifications: (params) => request(`/notifications/${params ? '?' + new URLSearchParams(params) : ''}`),
+  markNotificationRead: (id) => request(`/notifications/${id}/read/`, { method: 'PATCH' }),
+  markAllNotificationsRead: () => request('/notifications/read-all/', { method: 'PATCH' }),
 
   // Admin
   adminDashboard: () => request('/admin/dashboard/'),
