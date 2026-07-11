@@ -9,6 +9,8 @@ export default function Auth() {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
+  const [area, setArea] = useState('');
+  const [city, setCity] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
@@ -90,6 +92,7 @@ export default function Auth() {
       try {
         const data = await api.register({
           username, password, email, phone,
+          area, city,
           role,
           lat: signupCoords.lat,
           lng: signupCoords.lng,
@@ -207,6 +210,22 @@ export default function Auth() {
                 <div style={{ marginBottom: 12 }}>
                   <label style={{ display: 'block', fontSize: 13, fontWeight: 600, marginBottom: 8 }}>Phone Number</label>
                   <input type="tel" value={phone} onChange={e => setPhone(e.target.value)} placeholder="+255 7XX XXX XXX" required style={{
+                    width: '100%', padding: '12px 16px', background: '#fafafa',
+                    border: '1px solid #eee', borderRadius: 8,
+                    fontSize: 15, color: '#0a6e46',
+                  }} />
+                </div>
+                <div style={{ marginBottom: 12 }}>
+                  <label style={{ display: 'block', fontSize: 13, fontWeight: 600, marginBottom: 8 }}>Area</label>
+                  <input type="text" value={area} onChange={e => setArea(e.target.value)} placeholder="e.g. Kariakoo, Upanga" required style={{
+                    width: '100%', padding: '12px 16px', background: '#fafafa',
+                    border: '1px solid #eee', borderRadius: 8,
+                    fontSize: 15, color: '#0a6e46',
+                  }} />
+                </div>
+                <div style={{ marginBottom: 12 }}>
+                  <label style={{ display: 'block', fontSize: 13, fontWeight: 600, marginBottom: 8 }}>City</label>
+                  <input type="text" value={city} onChange={e => setCity(e.target.value)} placeholder="e.g. Dar es Salaam" required style={{
                     width: '100%', padding: '12px 16px', background: '#fafafa',
                     border: '1px solid #eee', borderRadius: 8,
                     fontSize: 15, color: '#0a6e46',

@@ -115,6 +115,20 @@ export default function SupplierDashboard() {
                 />
               )}
             </div>
+            <div style={{ background: '#fff', border: '1px solid #eaeaea', borderRadius: 10, padding: 16, marginBottom: 20 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+                <h3 style={{ fontSize: 14, fontWeight: 600, color: '#111', margin: 0 }}>📍 Customer Delivery Locations</h3>
+              </div>
+              <MapComponent
+                height={280}
+                deliveries={data.orders.filter(o => o.delivery_lat && o.delivery_lng)}
+                userLocation={[locationCoords.lat, locationCoords.lng]}
+              />
+              {data.orders.filter(o => o.delivery_lat && o.delivery_lng).length === 0 && (
+                <div style={{ textAlign: 'center', padding: 20, color: '#888', fontSize: 13 }}>No delivery locations yet.</div>
+              )}
+            </div>
+
             <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: 20 }}>
               <div style={{ background: '#fff', border: '1px solid #eaeaea', borderRadius: 10, overflow: 'hidden' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 20px', borderBottom: '1px solid #f0f0f0' }}>

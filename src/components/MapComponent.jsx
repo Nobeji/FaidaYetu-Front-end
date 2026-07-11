@@ -190,7 +190,10 @@ export default function MapComponent({
               )}
               {selected === `dd-${d.id}` && dl && dn && (
                 <Popup longitude={dn} latitude={dl} anchor="top" onClose={() => setSelected(null)}>
-                  <div style={{ fontSize: 13 }}>Dropoff: {d.customer_name || 'Customer'}</div>
+                  <div style={{ fontSize: 13, fontWeight: 600 }}>{d.customer_name || 'Customer'}</div>
+                  {d.delivery_area && <div style={{ fontSize: 12, color: '#666' }}>{d.delivery_area}</div>}
+                  {d.delivery_street && <div style={{ fontSize: 12, color: '#666' }}>{d.delivery_street}</div>}
+                  {d.delivery_city && <div style={{ fontSize: 12, color: '#666' }}>{d.delivery_city}</div>}
                 </Popup>
               )}
             </div>

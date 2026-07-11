@@ -26,6 +26,9 @@ export default function Marketplace() {
   const [activeCat, setActiveCat] = useState('all');
   const [cartItem, setCartItem] = useState(null);
   const [quantity, setQuantity] = useState(1);
+  const [deliveryArea, setDeliveryArea] = useState('');
+  const [deliveryStreet, setDeliveryStreet] = useState('');
+  const [deliveryCity, setDeliveryCity] = useState('');
   const user = JSON.parse(localStorage.getItem('user') || '{}');
   const userName = user.username || 'Customer';
   const initials = userName.charAt(0).toUpperCase();
@@ -41,17 +44,28 @@ export default function Marketplace() {
   const handleAddToCart = (p) => {
     setCartItem(p);
     setQuantity(1);
+    const profile = JSON.parse(localStorage.getItem('profile') || '{}');
+    setDeliveryArea(profile.area || '');
+    setDeliveryStreet('');
+    setDeliveryCity(profile.city || '');
   };
 
   const handleConfirmCart = async () => {
     if (!cartItem) return;
     const customerId = JSON.parse(localStorage.getItem('customer') || '{}').id || 1;
+    const profile = JSON.parse(localStorage.getItem('profile') || '{}');
     try {
       await api.createOrder({
         customer: customerId,
         supplier: cartItem.supplier,
         total: cartItem.price * quantity,
         status: 'new',
+        delivery_lat: profile.lat,
+        delivery_lng: profile.lng,
+        delivery_area: deliveryArea,
+        delivery_street: deliveryStreet,
+        delivery_city: deliveryCity,
+        delivery_address: `${deliveryArea}, ${deliveryStreet}, ${deliveryCity}`.replace(/, , /g, ', ').replace(/^, |, $/g, ''),
         items_data: [{ product: cartItem.id, quantity, price: cartItem.price }],
       });
       setCartItem(null);
@@ -130,6 +144,15 @@ export default function Marketplace() {
 
             <div style={{ textAlign: 'center', fontSize: 14, color: '#888', marginBottom: 16 }}>
               Total: <strong style={{ fontSize: 22, color: '#000' }}>{(cartItem.price * quantity).toLocaleString()} TZS</strong>
+            </div>
+
+            <div style={{ marginBottom: 16 }}>
+              <h4 style={{ fontSize: 14, fontWeight: 700, color: '#000', marginBottom: 8 }}>Delivery Address</h4>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                <input type="text" value={deliveryArea} onChange={e => setDeliveryArea(e.target.value)} placeholder="Area (e.g. Kariakoo)" required style={{ width: '100%', padding: '10px 12px', borderRadius: 8, border: '1px solid #eee', fontSize: 14, boxSizing: 'border-box' }} />
+                <input type="text" value={deliveryStreet} onChange={e => setDeliveryStreet(e.target.value)} placeholder="Street / Landmark" style={{ width: '100%', padding: '10px 12px', borderRadius: 8, border: '1px solid #eee', fontSize: 14, boxSizing: 'border-box' }} />
+                <input type="text" value={deliveryCity} onChange={e => setDeliveryCity(e.target.value)} placeholder="City" required style={{ width: '100%', padding: '10px 12px', borderRadius: 8, border: '1px solid #eee', fontSize: 14, boxSizing: 'border-box' }} />
+              </div>
             </div>
 
             <div style={{ display: 'flex', gap: 12 }}>

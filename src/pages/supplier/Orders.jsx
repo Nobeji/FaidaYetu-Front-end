@@ -156,9 +156,12 @@ export default function SupplierOrders() {
             <div style={{ marginBottom: 16 }}>
               <div style={{ fontSize: 13, color: '#888', marginBottom: 8 }}>Date: {new Date(selectedOrder.created_at).toLocaleString()}</div>
               <div style={{ background: '#fafafa', borderRadius: 8, padding: 12 }}>
-                <div style={{ fontWeight: 600, marginBottom: 4 }}>Customer</div>
-                <div style={{ fontSize: 14, color: '#888' }}>{selectedOrder.customer_name}</div>
-                {selectedOrder.delivery_address && <div style={{ fontSize: 14, color: '#888' }}>📍 {selectedOrder.delivery_address}</div>}
+                  <div style={{ fontWeight: 600, marginBottom: 4 }}>Customer</div>
+                  <div style={{ fontSize: 14, color: '#888' }}>{selectedOrder.customer_name}</div>
+                  {selectedOrder.delivery_address && <div style={{ fontSize: 14, color: '#888' }}>📍 {selectedOrder.delivery_address}</div>}
+                  {selectedOrder.delivery_area && <div style={{ fontSize: 13, color: '#888', marginTop: 4 }}>Area: {selectedOrder.delivery_area}</div>}
+                  {selectedOrder.delivery_street && <div style={{ fontSize: 13, color: '#888' }}>Street: {selectedOrder.delivery_street}</div>}
+                  {selectedOrder.delivery_city && <div style={{ fontSize: 13, color: '#888' }}>City: {selectedOrder.delivery_city}</div>}
               </div>
             </div>
 
