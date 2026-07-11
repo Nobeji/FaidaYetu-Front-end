@@ -33,8 +33,17 @@ export default function SupplierDashboard() {
   const [originalCoords, setOriginalCoords] = useState({ lat: profile.lat || -6.7924, lng: profile.lng || 39.2083 });
 
   useEffect(() => {
-    const sid = JSON.parse(localStorage.getItem('supplier') || '{}').id || 1;
-    api.supplierDashboard(sid).then(d => { setData(d); setLoading(false); }).catch(() => setLoading(false));
+    api.profile().then(profileData => {
+      localStorage.setItem('profile', JSON.stringify(profileData));
+      if (profileData.supplier) {
+        localStorage.setItem('supplier', JSON.stringify(profileData.supplier));
+      }
+      const sid = profileData.supplier?.id || 1;
+      api.supplierDashboard(sid).then(d => { setData(d); setLoading(false); }).catch(() => setLoading(false));
+    }).catch(() => {
+      const sid = JSON.parse(localStorage.getItem('supplier') || '{}').id || 1;
+      api.supplierDashboard(sid).then(d => { setData(d); setLoading(false); }).catch(() => setLoading(false));
+    });
   }, []);
 
   const handleSaveLocation = async () => {

@@ -20,6 +20,7 @@ export default function CustomerDashboard() {
   const [suppliers, setSuppliers] = useState([]);
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [customer, setCustomer] = useState(() => JSON.parse(localStorage.getItem('customer') || '{}'));
   const user = JSON.parse(localStorage.getItem('user') || '{}');
   const profile = JSON.parse(localStorage.getItem('profile') || '{}');
   const initialLat = profile.lat || -6.7924;
@@ -95,6 +96,14 @@ export default function CustomerDashboard() {
   const canCancel = (status) => ['new', 'processing'].includes(status);
 
   useEffect(() => {
+    api.profile().then(profileData => {
+      localStorage.setItem('profile', JSON.stringify(profileData));
+      if (profileData.customer) {
+        localStorage.setItem('customer', JSON.stringify(profileData.customer));
+        setCustomer(profileData.customer);
+      }
+    }).catch(() => {});
+
     const profileData = JSON.parse(localStorage.getItem('profile') || '{}');
     if (!profileData.lat || !profileData.lng) {
       navigator.geolocation.getCurrentPosition(
@@ -105,7 +114,7 @@ export default function CustomerDashboard() {
   }, []);
 
   useEffect(() => {
-    const cid = JSON.parse(localStorage.getItem('customer') || '{}').id || 1;
+    const cid = customer.id || 1;
     Promise.all([
       api.suppliers({ lat: userLocation[0], lng: userLocation[1], radius: radiusFilter }),
       api.orders({ customer: cid }),
@@ -118,7 +127,7 @@ export default function CustomerDashboard() {
       setPendingPayments(pending);
       Object.keys(pending).forEach(id => startPolling(Number(id)));
     }).catch(() => setLoading(false));
-  }, [userLocation, radiusFilter]);
+  }, [userLocation, radiusFilter, customer.id]);
 
   const activeOrder = orders.find(o => ['in_transit', 'assigned', 'picked_up'].includes(o.status));
 

@@ -23,7 +23,8 @@ export default function DeliveryDashboard() {
   const [isMobile, setIsMobile] = useState(false);
   const navigate = useNavigate();
   const toast = useToast();
-  const deliveryPersonId = JSON.parse(localStorage.getItem('delivery_person') || '{}').id || 1;
+  const [deliveryPerson, setDeliveryPerson] = useState(() => JSON.parse(localStorage.getItem('delivery_person') || '{}'));
+  const dpId = deliveryPerson.id || 1;
 
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth < 768);
@@ -33,16 +34,34 @@ export default function DeliveryDashboard() {
   }, []);
 
   useEffect(() => {
-    Promise.all([
-      api.deliveryDashboard(deliveryPersonId),
-      api.deliveries({ delivery_person: deliveryPersonId }),
-      api.profile(),
-    ]).then(([dash, d, p]) => {
-      setDashboardData(dash);
-      setTasks(d);
-      setProfile(p);
-      setLoading(false);
-    }).catch(() => setLoading(false));
+    api.profile().then(profileData => {
+      localStorage.setItem('profile', JSON.stringify(profileData));
+      if (profileData.delivery_person) {
+        localStorage.setItem('delivery_person', JSON.stringify(profileData.delivery_person));
+        setDeliveryPerson(profileData.delivery_person);
+      }
+      const currentDpId = profileData.delivery_person?.id || 1;
+      return Promise.all([
+        api.deliveryDashboard(currentDpId),
+        api.deliveries({ delivery_person: currentDpId }),
+      ]).then(([dash, d]) => {
+        setDashboardData(dash);
+        setTasks(d);
+        setProfile(profileData);
+        setLoading(false);
+      });
+    }).catch(() => {
+      Promise.all([
+        api.deliveryDashboard(dpId),
+        api.deliveries({ delivery_person: dpId }),
+        api.profile(),
+      ]).then(([dash, d, p]) => {
+        setDashboardData(dash);
+        setTasks(d);
+        setProfile(p);
+        setLoading(false);
+      }).catch(() => setLoading(false));
+    });
   }, []);
 
   useEffect(() => {
@@ -61,11 +80,11 @@ export default function DeliveryDashboard() {
     const active = dashboardData?.active_delivery;
     if (!active?.delivery_status) return;
     try {
-      const deliveries = await api.deliveries({ delivery_person: deliveryPersonId });
+      const deliveries = await api.deliveries({ delivery_person: dpId });
       const activeDel = deliveries.find(d => d.status === 'in_transit' || d.status === 'assigned' || d.status === 'picked_up');
       if (activeDel) {
         await api.updateDelivery(activeDel.id, { status: 'completed' });
-        const dash = await api.deliveryDashboard(1);
+        const dash = await api.deliveryDashboard(dpId);
         setDashboardData(dash);
       }
     } catch (e) {
