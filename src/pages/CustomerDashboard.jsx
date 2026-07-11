@@ -187,9 +187,45 @@ export default function CustomerDashboard() {
     }, 10000);
   };
 
+  const calculateDistance = (lat1, lon1, lat2, lon2) => {
+    if (lat1 == null || lon1 == null || lat2 == null || lon2 == null) return null;
+    const R = 6371;
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLon = (lon2 - lon1) * Math.PI / 180;
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+      Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c;
+  };
+
+  const getDistanceStr = (s) => {
+    const sLat = s.profile?.lat || s.lat;
+    const sLng = s.profile?.lng || s.lng;
+    const dist = calculateDistance(userLocation[0], userLocation[1], sLat, sLng);
+    if (dist === null) return "Nearby";
+    if (dist < 1) {
+      return `${Math.round(dist * 1000)} m`;
+    }
+    return `${dist.toFixed(1)} km`;
+  };
+
+  const getDistance = (s) => {
+    const sLat = s.profile?.lat || s.lat;
+    const sLng = s.profile?.lng || s.lng;
+    return calculateDistance(userLocation[0], userLocation[1], sLat, sLng);
+  };
+
   const filtered = search
     ? suppliers.filter(s => s.business_name?.toLowerCase().includes(search.toLowerCase()))
     : suppliers;
+
+  const sortedSuppliers = [...filtered].sort((a, b) => {
+    const distA = getDistance(a) || Infinity;
+    const distB = getDistance(b) || Infinity;
+    return distA - distB;
+  });
 
   return (
     <DashboardShell brand="FaidaYetu" brandSub="Customer Portal" navItems={navItems} profile={
@@ -299,8 +335,8 @@ export default function CustomerDashboard() {
           <div style={{ textAlign: 'center', padding: 40, color: '#888' }}>Loading suppliers...</div>
         ) : (
           <div style={{ display: 'flex', gap: 12, overflowX: 'auto', paddingBottom: 4 }}>
-            {filtered.map(s => (
-              <SupplierCard key={s.id} id={s.id} name={s.business_name} rating={s.rating} distance="Nearby" price="From supplier" img={s.image} />
+            {sortedSuppliers.map(s => (
+              <SupplierCard key={s.id} id={s.id} name={s.business_name} rating={s.rating} distance={getDistanceStr(s)} price="From supplier" img={s.image} />
             ))}
           </div>
         )}
