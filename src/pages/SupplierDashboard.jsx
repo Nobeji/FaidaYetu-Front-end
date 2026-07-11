@@ -28,9 +28,9 @@ export default function SupplierDashboard() {
   const initials = (user.username || 'U').charAt(0).toUpperCase() + ((user.username || '').slice(-1) || '').toUpperCase();
 
   const [editLocation, setEditLocation] = useState(false);
-  const [locationCoords, setLocationCoords] = useState({ lat: -6.7924, lng: 39.2083 });
+  const [locationCoords, setLocationCoords] = useState({ lat: profile.lat || -6.7924, lng: profile.lng || 39.2083 });
   const [savingLocation, setSavingLocation] = useState(false);
-  const [originalCoords, setOriginalCoords] = useState({ lat: -6.7924, lng: 39.2083 });
+  const [originalCoords, setOriginalCoords] = useState({ lat: profile.lat || -6.7924, lng: profile.lng || 39.2083 });
 
   useEffect(() => {
     const sid = JSON.parse(localStorage.getItem('supplier') || '{}').id || 1;

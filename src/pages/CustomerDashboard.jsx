@@ -20,11 +20,15 @@ export default function CustomerDashboard() {
   const [suppliers, setSuppliers] = useState([]);
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [userLocation, setUserLocation] = useState(defaultLocation);
+  const user = JSON.parse(localStorage.getItem('user') || '{}');
+  const profile = JSON.parse(localStorage.getItem('profile') || '{}');
+  const initialLat = profile.lat || -6.7924;
+  const initialLng = profile.lng || 39.2083;
+
+  const [userLocation, setUserLocation] = useState([initialLat, initialLng]);
   const [search, setSearch] = useState('');
   const [radiusFilter, setRadiusFilter] = useState(50);
   const [driverLocation, setDriverLocation] = useState(null);
-  const user = JSON.parse(localStorage.getItem('user') || '{}');
   const userName = user.username || 'Customer';
   const initials = userName.charAt(0).toUpperCase();
   const navigate = useNavigate();
@@ -37,7 +41,7 @@ export default function CustomerDashboard() {
   const pollRefs = useRef({});
   const [isMobile, setIsMobile] = useState(false);
   const [editLocation, setEditLocation] = useState(false);
-  const [editCoords, setEditCoords] = useState({ lat: -6.7924, lng: 39.2083 });
+  const [editCoords, setEditCoords] = useState({ lat: initialLat, lng: initialLng });
   const [savingLocation, setSavingLocation] = useState(false);
 
 
@@ -91,10 +95,13 @@ export default function CustomerDashboard() {
   const canCancel = (status) => ['new', 'processing'].includes(status);
 
   useEffect(() => {
-    navigator.geolocation.getCurrentPosition(
-      pos => { setUserLocation([pos.coords.latitude, pos.coords.longitude]); setEditCoords({ lat: pos.coords.latitude, lng: pos.coords.longitude }); },
-      () => {}
-    );
+    const profileData = JSON.parse(localStorage.getItem('profile') || '{}');
+    if (!profileData.lat || !profileData.lng) {
+      navigator.geolocation.getCurrentPosition(
+        pos => { setUserLocation([pos.coords.latitude, pos.coords.longitude]); setEditCoords({ lat: pos.coords.latitude, lng: pos.coords.longitude }); },
+        () => {}
+      );
+    }
   }, []);
 
   useEffect(() => {
