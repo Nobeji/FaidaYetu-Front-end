@@ -160,7 +160,15 @@ export default function CustomerDashboard() {
         setPendingPayments(prev => { const n = {...prev}; delete n[orderId]; return n; });
         toast('Payment failed. You can try again.', 'error');
       } else {
-        toast('Still pending. If USSD did not arrive, try paying again.', 'info');
+        const verify = await api.verifyPayment(orderId);
+        if (verify.paid) {
+          setPendingPayments(prev => { const n = {...prev}; delete n[orderId]; return n; });
+          const updated = await api.orders({ customer: cid });
+          setOrders(updated);
+          toast('Payment confirmed!', 'success');
+        } else {
+          toast('Still pending. If USSD did not arrive, try paying again.', 'info');
+        }
       }
     } catch {
       toast('Could not check payment status.', 'error');
@@ -178,8 +186,15 @@ export default function CustomerDashboard() {
         return;
       }
       try {
+        let paid = false;
         const res = await api.paymentStatus(orderId);
         if (res.paid) {
+          paid = true;
+        } else if (res.status === 'pending') {
+          const verify = await api.verifyPayment(orderId);
+          paid = verify.paid;
+        }
+        if (paid) {
           clearInterval(pollRefs.current[orderId]);
           delete pollRefs.current[orderId];
           setPendingPayments(prev => { const n = {...prev}; delete n[orderId]; return n; });

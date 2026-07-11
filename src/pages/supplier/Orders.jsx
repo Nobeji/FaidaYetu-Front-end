@@ -72,6 +72,18 @@ export default function SupplierOrders() {
     }
   };
 
+  const handleConfirmPayment = async (orderId) => {
+    try {
+      await api.manualConfirmPayment(orderId);
+      const updated = await api.orders({ supplier: supplierId });
+      setOrders(updated);
+      setSelectedOrder(null);
+      toast('Payment confirmed! Order is now Ready.', 'success');
+    } catch (e) {
+      toast(e.message || 'Failed to confirm payment.', 'error');
+    }
+  };
+
   const handleAssign = async (orderId, driverId) => {
     try {
       await api.assignDelivery(orderId, { delivery_person_id: driverId });
@@ -131,6 +143,9 @@ export default function SupplierOrders() {
                       <td style={{ padding: 12 }}><StatusBadge status={o.status} /></td>
                       <td style={{ padding: 12 }}>
                         <button onClick={() => setSelectedOrder(o)} style={{ padding: '6px 14px', borderRadius: 8, background: '#000', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: 12, marginRight: 4 }}>View</button>
+                        {!o.paid && o.status !== 'cancelled' && o.status !== 'delivered' && (
+                          <button onClick={() => handleConfirmPayment(o.id)} style={{ padding: '6px 14px', borderRadius: 8, background: '#0a6e46', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: 12, marginRight: 4 }}>Confirm Payment</button>
+                        )}
                         {o.status === 'ready' && (
                           <button onClick={() => openAssign(o)} style={{ padding: '6px 14px', borderRadius: 8, background: '#e67e22', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: 12 }}>Assign</button>
                         )}

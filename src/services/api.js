@@ -100,6 +100,8 @@ export const api = {
   // Payments
   initiatePayment: (data) => request('/payments/initiate/', { method: 'POST', body: JSON.stringify(data) }),
   paymentStatus: (orderId) => request(`/payments/status/${orderId}/`),
+  verifyPayment: (orderId) => request(`/payments/verify/${orderId}/`, { method: 'POST' }),
+  manualConfirmPayment: (orderId) => request(`/payments/manual-confirm/${orderId}/`, { method: 'POST' }),
 
   // Notifications
   notifications: (params) => request(`/notifications/${params ? '?' + new URLSearchParams(params) : ''}`),
