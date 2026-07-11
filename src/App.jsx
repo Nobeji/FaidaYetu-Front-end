@@ -36,6 +36,7 @@ import AdminSuppliers from './pages/admin/Suppliers';
 import AdminCustomers from './pages/admin/Customers';
 import AdminOrders from './pages/admin/Orders';
 import AdminDeliveries from './pages/admin/Deliveries';
+import SupplierPayouts from './pages/admin/SupplierPayouts';
 import CustomerSegmentation from './pages/admin/CustomerSegmentation';
 import ChurnPrediction from './pages/admin/ChurnPrediction';
 import AnomalyDetection from './pages/admin/AnomalyDetection';
@@ -91,6 +92,7 @@ export default function App() {
           <Route path="customers" element={<AdminCustomers />} />
           <Route path="orders" element={<AdminOrders />} />
           <Route path="deliveries" element={<AdminDeliveries />} />
+          <Route path="supplier-payouts" element={<SupplierPayouts />} />
           <Route path="customer-segmentation" element={<CustomerSegmentation />} />
           <Route path="churn-prediction" element={<ChurnPrediction />} />
           <Route path="anomaly-detection" element={<AnomalyDetection />} />

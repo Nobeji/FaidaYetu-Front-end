@@ -31,15 +31,16 @@ const sidebarSections = [
       { label: 'Network Graph', icon: '🔗', nav: '/admin/network-graph' },
     ],
   },
-  {
-    label: 'DATA',
-    items: [
-      { label: 'Suppliers', icon: '🏪', nav: '/admin/suppliers' },
-      { label: 'Customers', icon: '👥', nav: '/admin/customers' },
-      { label: 'Orders', icon: '🛒', nav: '/admin/orders' },
-      { label: 'Deliveries', icon: '🚚', nav: '/admin/deliveries' },
-    ],
-  },
+{
+        label: 'DATA',
+        items: [
+          { label: 'Suppliers', icon: '🏪', nav: '/admin/suppliers' },
+          { label: 'Customers', icon: '👥', nav: '/admin/customers' },
+          { label: 'Orders', icon: '🛒', nav: '/admin/orders' },
+          { label: 'Deliveries', icon: '🚚', nav: '/admin/deliveries' },
+          { label: 'Supplier Payouts', icon: '💰', nav: '/admin/supplier-payouts' },
+        ],
+      },
 ];
 
 export default function AdminDashboard() {
