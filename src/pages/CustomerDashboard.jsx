@@ -123,10 +123,28 @@ export default function CustomerDashboard() {
 
   useEffect(() => {
     const cid = customer.id || 1;
+    const cacheKey = `customer_dashboard_${cid}`;
+    const cached = sessionStorage.getItem(cacheKey);
+    if (cached) {
+      try {
+        const { suppliers: s, orders: o, timestamp } = JSON.parse(cached);
+        if (Date.now() - timestamp < 2 * 60 * 1000) { // 2 min cache
+          setSuppliers(s);
+          setOrders(o);
+          setLoading(false);
+        }
+      } catch {}
+    }
     Promise.all([
       api.suppliers({ lat: userLocation[0], lng: userLocation[1], radius: radiusFilter }),
       api.orders({ customer: cid }),
     ]).then(([s, o]) => {
+      setSuppliers(s);
+      setOrders(o);
+      setLoading(false);
+      sessionStorage.setItem(cacheKey, JSON.stringify({ suppliers: s, orders: o, timestamp: Date.now() }));
+    }).catch(() => setLoading(false));
+  }, [customer.id, userLocation, radiusFilter]);
       setSuppliers(s);
       setOrders(o);
       setLoading(false);

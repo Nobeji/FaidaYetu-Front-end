@@ -35,17 +35,23 @@ export default function SupplierDashboard() {
   const [originalCoords, setOriginalCoords] = useState({ lat: profile.lat || -6.7924, lng: profile.lng || 39.2083 });
 
   useEffect(() => {
-    api.profile().then(profileData => {
-      localStorage.setItem('profile', JSON.stringify(profileData));
-      if (profileData.supplier) {
-        localStorage.setItem('supplier', JSON.stringify(profileData.supplier));
-      }
-      const sid = profileData.supplier?.id || 1;
-      api.supplierDashboard(sid).then(d => { setData(d); setLoading(false); }).catch(() => setLoading(false));
-    }).catch(() => {
-      const sid = JSON.parse(localStorage.getItem('supplier') || '{}').id || 1;
-      api.supplierDashboard(sid).then(d => { setData(d); setLoading(false); }).catch(() => setLoading(false));
-    });
+    const sid = JSON.parse(localStorage.getItem('supplier') || '{}').id || 1;
+    const cacheKey = `supplier_dashboard_${sid}`;
+    const cached = sessionStorage.getItem(cacheKey);
+    if (cached) {
+      try {
+        const { data: d, timestamp } = JSON.parse(cached);
+        if (Date.now() - timestamp < 2 * 60 * 1000) {
+          setData(d);
+          setLoading(false);
+        }
+      } catch {}
+    }
+    api.supplierDashboard(sid).then(d => {
+      setData(d);
+      setLoading(false);
+      sessionStorage.setItem(cacheKey, JSON.stringify({ data: d, timestamp: Date.now() }));
+    }).catch(() => setLoading(false));
   }, []);
 
   const handleSaveLocation = async () => {
