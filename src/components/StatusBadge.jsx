@@ -3,6 +3,7 @@ const statusColors = {
   Paid: { bg: '#e8f5e9', text: '#2e7d32' },
   Processing: { bg: '#fff3e0', text: '#e65100' },
   Ready: { bg: '#000', text: '#fff' },
+  Cancelled: { bg: '#fef2f2', text: '#d32f2f' },
 };
 
 export default function StatusBadge({ status }) {

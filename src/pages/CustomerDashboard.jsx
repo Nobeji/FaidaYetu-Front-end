@@ -86,7 +86,8 @@ export default function CustomerDashboard() {
   const handleCancelOrder = async (id) => {
     try {
       await api.updateOrder(id, { status: 'cancelled' });
-      const updated = await api.orders({ customer: id });
+      const cid = customer.id || JSON.parse(localStorage.getItem('customer') || '{}').id || 1;
+      const updated = await api.orders({ customer: cid });
       setOrders(updated);
     } catch {
       toast('Failed to cancel order.', 'error');
@@ -128,6 +129,19 @@ export default function CustomerDashboard() {
       Object.keys(pending).forEach(id => startPolling(Number(id)));
     }).catch(() => setLoading(false));
   }, [userLocation, radiusFilter, customer.id]);
+
+  useEffect(() => {
+    const cid = customer.id || JSON.parse(localStorage.getItem('customer') || '{}').id || 1;
+    const interval = setInterval(() => {
+      api.orders({ customer: cid }).then(o => {
+        setOrders(o);
+        const pending = {};
+        o.forEach(ord => { if (ord.payment_status === 'pending') pending[ord.id] = 'pending'; });
+        setPendingPayments(pending);
+      }).catch(() => {});
+    }, 30000);
+    return () => clearInterval(interval);
+  }, [customer.id]);
 
   const activeOrder = orders.find(o => ['in_transit', 'assigned', 'picked_up'].includes(o.status));
 
@@ -394,6 +408,7 @@ export default function CustomerDashboard() {
                       </div>
                     )}
                     {o.paid && <span style={{ padding: '6px 12px', borderRadius: 8, background: '#e8f5e9', color: '#2e7d32', fontWeight: 600, fontSize: 11 }}>✓ Paid</span>}
+                    {o.status === 'cancelled' && <span style={{ padding: '6px 12px', borderRadius: 8, background: '#fef2f2', color: '#d32f2f', fontWeight: 600, fontSize: 11 }}>✕ Cancelled</span>}
                     {canCancel(o.status) && (
                       <button onClick={() => handleCancelOrder(o.id)} style={{ padding: '6px 12px', borderRadius: 8, background: '#fef2f2', color: '#d32f2f', border: 'none', cursor: 'pointer', fontWeight: 500, fontSize: 11 }}>Cancel</button>
                     )}
