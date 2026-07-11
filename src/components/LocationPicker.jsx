@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import Map, { Marker, NavigationControl } from 'react-map-gl/maplibre';
 import 'maplibre-gl/dist/maplibre-gl.css';
 
@@ -16,7 +16,21 @@ const style = {
 
 export default function LocationPicker({ lat = -6.7924, lng = 39.2083, onChange, height = 250 }) {
   const markerRef = useRef(null);
+  const mapRef = useRef(null);
   const [pos, setPos] = useState({ lat, lng });
+
+  useEffect(() => {
+    setPos({ lat, lng });
+    if (mapRef.current) {
+      const map = mapRef.current.getMap();
+      const currentCenter = map.getCenter();
+      // Calculate distance to avoid map flying/snapping back during minor user drags
+      const dist = Math.sqrt(Math.pow(currentCenter.lat - lat, 2) + Math.pow(currentCenter.lng - lng, 2));
+      if (dist > 0.001) {
+        map.flyTo({ center: [lng, lat], zoom: 14 });
+      }
+    }
+  }, [lat, lng]);
 
   const handleDrag = (evt) => {
     const p = evt.target.getLngLat();
@@ -33,6 +47,7 @@ export default function LocationPicker({ lat = -6.7924, lng = 39.2083, onChange,
   return (
     <div style={{ height, borderRadius: 10, overflow: 'hidden', border: '1px solid #ddd' }}>
       <Map
+        ref={mapRef}
         initialViewState={{ latitude: pos.lat, longitude: pos.lng, zoom: 14 }}
         mapStyle={style}
         style={{ width: '100%', height: '100%' }}
