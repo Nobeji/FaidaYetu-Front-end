@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { api } from '../services/api';
+import LocationPicker from '../components/LocationPicker';
 
 export default function Auth() {
   const [searchParams] = useSearchParams();
@@ -230,6 +231,18 @@ export default function Auth() {
                     border: '1px solid #eee', borderRadius: 8,
                     fontSize: 15, color: '#0a6e46',
                   }} />
+                </div>
+                <div style={{ marginBottom: 12 }}>
+                  <label style={{ display: 'block', fontSize: 13, fontWeight: 600, marginBottom: 8 }}>Pinpoint Your Location on Map</label>
+                  <LocationPicker
+                    lat={signupCoords.lat}
+                    lng={signupCoords.lng}
+                    height={200}
+                    onChange={(lat, lng) => setSignupCoords({ lat, lng })}
+                  />
+                  <span style={{ fontSize: 11, color: '#666', marginTop: 4, display: 'block' }}>
+                    Tafadhali vuta alama ya bluu (marker) kuweka eneo lako sahihi.
+                  </span>
                 </div>
               </>
             )}
