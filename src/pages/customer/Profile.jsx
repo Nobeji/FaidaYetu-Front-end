@@ -8,6 +8,7 @@ const navItems = [
   { icon: '🏠', label: 'Explore', nav: '/customer' },
   { icon: '🛒', label: 'Marketplace', nav: '/customer/marketplace' },
   { icon: '📋', label: 'My Orders', nav: '/customer/orders' },
+  { icon: '🔔', label: 'Notifications', nav: '/customer/notifications' },
   { icon: '👤', label: 'Profile', nav: '/customer/profile' },
 ];
 

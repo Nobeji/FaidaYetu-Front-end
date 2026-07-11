@@ -3,11 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import DashboardShell from '../../components/DashboardShell';
 import { api } from '../../services/api';
 import { useToast } from '../../components/ToastContext';
+import Spinner from '../../components/Spinner';
 
 const navItems = [
   { icon: '🏠', label: 'Explore', nav: '/customer' },
   { icon: '🛒', label: 'Marketplace', nav: '/customer/marketplace' },
   { icon: '📋', label: 'My Orders', nav: '/customer/orders' },
+  { icon: '🔔', label: 'Notifications', nav: '/customer/notifications' },
   { icon: '👤', label: 'Profile', nav: '/customer/profile' },
 ];
 
@@ -34,6 +36,7 @@ export default function Marketplace() {
   const initials = userName.charAt(0).toUpperCase();
   const navigate = useNavigate();
   const toast = useToast();
+  const [placingOrder, setPlacingOrder] = useState(false);
 
   useEffect(() => {
     api.products().then(p => { setProducts(p); setLoading(false); }).catch(() => setLoading(false));
@@ -52,6 +55,7 @@ export default function Marketplace() {
 
   const handleConfirmCart = async () => {
     if (!cartItem) return;
+    setPlacingOrder(true);
     const customerId = JSON.parse(localStorage.getItem('customer') || '{}').id || 1;
     const profile = JSON.parse(localStorage.getItem('profile') || '{}');
     try {
@@ -73,6 +77,8 @@ export default function Marketplace() {
       navigate('/customer/orders');
     } catch (e) {
       toast('Failed to create order. Please try again.', 'error');
+    } finally {
+      setPlacingOrder(false);
     }
   };
 
@@ -156,7 +162,10 @@ export default function Marketplace() {
             </div>
 
             <div style={{ display: 'flex', gap: 12 }}>
-              <button onClick={handleConfirmCart} style={{ flex: 1, padding: '12px', borderRadius: 8, background: '#000', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 700 }}>Add to Cart</button>
+              <button onClick={handleConfirmCart} disabled={placingOrder} style={{ flex: 1, padding: '12px', borderRadius: 8, background: '#000', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 700, opacity: placingOrder ? 0.7 : 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
+                {placingOrder && <Spinner size={14} color="#fff" />}
+                {placingOrder ? 'Ordering...' : 'Add to Cart'}
+              </button>
               <button onClick={() => setCartItem(null)} style={{ flex: 1, padding: '12px', borderRadius: 8, background: 'none', border: `1px solid ${'#eee'}`, cursor: 'pointer', fontWeight: 600 }}>Cancel</button>
             </div>
           </div>

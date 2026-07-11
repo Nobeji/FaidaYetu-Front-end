@@ -7,11 +7,13 @@ import ProgressBar from '../components/ProgressBar';
 import MapComponent from '../components/MapComponent';
 import LocationPicker from '../components/LocationPicker';
 import { api } from '../services/api';
+import Spinner from '../components/Spinner';
 
 const navItems = [
   { icon: '📊', label: 'Dashboard', nav: '/supplier' },
   { icon: '📦', label: 'Inventory', nav: '/supplier/inventory' },
   { icon: '🛒', label: 'Orders', nav: '/supplier/orders' },
+  { icon: '🔔', label: 'Notifications', nav: '/supplier/notifications' },
   { icon: '📈', label: 'Analytics', nav: '/supplier/analytics' },
   { icon: '📉', label: 'Statistics', nav: '/supplier/statistics' },
   { icon: '⚙️', label: 'Settings', nav: '/supplier/settings' },
@@ -112,7 +114,8 @@ export default function SupplierDashboard() {
                   />
                   <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
                     <button onClick={() => { setEditLocation(false); setLocationCoords(originalCoords); }} style={{ flex: 1, padding: '8px', borderRadius: 8, border: '1px solid #ddd', background: '#fff', cursor: 'pointer', fontWeight: 500, fontSize: 12 }}>Cancel</button>
-                    <button onClick={handleSaveLocation} disabled={savingLocation} style={{ flex: 1, padding: '8px', borderRadius: 8, background: '#0a6e46', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: 12, opacity: savingLocation ? 0.7 : 1 }}>
+                    <button onClick={handleSaveLocation} disabled={savingLocation} style={{ flex: 1, padding: '8px', borderRadius: 8, background: '#0a6e46', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: 12, opacity: savingLocation ? 0.7 : 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
+                      {savingLocation && <Spinner size={12} color="#fff" />}
                       {savingLocation ? 'Saving...' : 'Save Location'}
                     </button>
                   </div>

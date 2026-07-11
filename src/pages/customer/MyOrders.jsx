@@ -4,11 +4,13 @@ import DashboardShell from '../../components/DashboardShell';
 import StatusBadge from '../../components/StatusBadge';
 import { api } from '../../services/api';
 import { useToast } from '../../components/ToastContext';
+import Spinner from '../../components/Spinner';
 
 const navItems = [
   { icon: '🏠', label: 'Explore', nav: '/customer' },
   { icon: '🛒', label: 'Marketplace', nav: '/customer/marketplace' },
   { icon: '📋', label: 'My Orders', nav: '/customer/orders' },
+  { icon: '🔔', label: 'Notifications', nav: '/customer/notifications' },
   { icon: '👤', label: 'Profile', nav: '/customer/profile' },
 ];
 
@@ -36,6 +38,8 @@ export default function MyOrders() {
   const [paying, setPaying] = useState(false);
   const [pendingPayments, setPendingPayments] = useState({});
   const pollRefs = useRef({});
+  const [checkingPayments, setCheckingPayments] = useState({});
+  const [cancellingOrders, setCancellingOrders] = useState({});
   const user = JSON.parse(localStorage.getItem('user') || '{}');
   const userName = user.username || 'Customer';
   const initials = userName.charAt(0).toUpperCase();
@@ -60,6 +64,7 @@ export default function MyOrders() {
   }, []);
 
   const checkPaymentStatus = async (orderId) => {
+    setCheckingPayments(prev => ({ ...prev, [orderId]: true }));
     try {
       const res = await api.paymentStatus(orderId);
       if (res.paid) {
@@ -75,6 +80,8 @@ export default function MyOrders() {
       }
     } catch {
       toast('Could not check payment status.', 'error');
+    } finally {
+      setCheckingPayments(prev => ({ ...prev, [orderId]: false }));
     }
   };
 
@@ -217,7 +224,10 @@ export default function MyOrders() {
                       {pendingPayments[o.id] === 'pending' && (
                         <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap', alignItems: 'center' }}>
                           <span style={{ padding: '6px 14px', borderRadius: 8, background: '#fff8e1', color: '#f57f17', fontWeight: 600, fontSize: 12 }}>⌛ Pending</span>
-                          <button onClick={() => checkPaymentStatus(o.id)} style={{ padding: '6px 14px', borderRadius: 8, border: '1px solid #f57f17', background: '#fff', color: '#f57f17', cursor: 'pointer', fontWeight: 600, fontSize: 12 }}>Check</button>
+                          <button onClick={() => checkPaymentStatus(o.id)} disabled={checkingPayments[o.id]} style={{ padding: '6px 14px', borderRadius: 8, border: '1px solid #f57f17', background: '#fff', color: '#f57f17', cursor: 'pointer', fontWeight: 600, fontSize: 12, display: 'flex', alignItems: 'center', gap: 4 }}>
+                            {checkingPayments[o.id] && <Spinner size={10} color="#f57f17" />}
+                            Check
+                          </button>
                         </div>
                       )}
                       {o.paid && (
@@ -295,7 +305,8 @@ export default function MyOrders() {
             />
             <div style={{ display: 'flex', gap: 12 }}>
               <button onClick={() => setShowPayModal(null)} disabled={paying} style={{ flex: 1, padding: '12px', borderRadius: 8, border: '1px solid #ddd', background: '#fff', color: '#666', cursor: 'pointer', fontWeight: 600 }}>Cancel</button>
-              <button onClick={handlePay} disabled={paying} style={{ flex: 1, padding: '12px', borderRadius: 8, background: '#0a6e46', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 700, opacity: paying ? 0.7 : 1 }}>
+              <button onClick={handlePay} disabled={paying} style={{ flex: 1, padding: '12px', borderRadius: 8, background: '#0a6e46', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 700, opacity: paying ? 0.7 : 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
+                {paying && <Spinner size={14} color="#fff" />}
                 {paying ? 'Sending...' : `Pay ${Number(showPayModal.total).toLocaleString()} TZS`}
               </button>
             </div>

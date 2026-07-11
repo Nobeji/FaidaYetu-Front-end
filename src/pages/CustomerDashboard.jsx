@@ -6,11 +6,13 @@ import MapComponent from '../components/MapComponent';
 import LocationPicker from '../components/LocationPicker';
 import { api } from '../services/api';
 import { useToast } from '../components/ToastContext';
+import Spinner from '../components/Spinner';
 
 const navItems = [
   { icon: '🏠', label: 'Explore', nav: '/customer' },
   { icon: '🛒', label: 'Marketplace', nav: '/customer/marketplace' },
   { icon: '📋', label: 'My Orders', nav: '/customer/orders' },
+  { icon: '🔔', label: 'Notifications', nav: '/customer/notifications' },
   { icon: '👤', label: 'Profile', nav: '/customer/profile' },
 ];
 
@@ -44,6 +46,8 @@ export default function CustomerDashboard() {
   const [editLocation, setEditLocation] = useState(false);
   const [editCoords, setEditCoords] = useState({ lat: initialLat, lng: initialLng });
   const [savingLocation, setSavingLocation] = useState(false);
+  const [checkingPayments, setCheckingPayments] = useState({});
+  const [cancellingOrders, setCancellingOrders] = useState({});
 
 
   useEffect(() => {
@@ -84,6 +88,7 @@ export default function CustomerDashboard() {
   };
 
   const handleCancelOrder = async (id) => {
+    setCancellingOrders(prev => ({ ...prev, [id]: true }));
     try {
       await api.updateOrder(id, { status: 'cancelled' });
       const cid = customer.id || JSON.parse(localStorage.getItem('customer') || '{}').id || 1;
@@ -91,6 +96,8 @@ export default function CustomerDashboard() {
       setOrders(updated);
     } catch {
       toast('Failed to cancel order.', 'error');
+    } finally {
+      setCancellingOrders(prev => ({ ...prev, [id]: false }));
     }
   };
 
@@ -162,6 +169,7 @@ export default function CustomerDashboard() {
   }, []);
 
   const checkPaymentStatus = async (orderId) => {
+    setCheckingPayments(prev => ({ ...prev, [orderId]: true }));
     const cid = JSON.parse(localStorage.getItem('customer') || '{}').id || 1;
     try {
       const res = await api.paymentStatus(orderId);
@@ -186,6 +194,8 @@ export default function CustomerDashboard() {
       }
     } catch {
       toast('Could not check payment status.', 'error');
+    } finally {
+      setCheckingPayments(prev => ({ ...prev, [orderId]: false }));
     }
   };
 
@@ -341,7 +351,8 @@ export default function CustomerDashboard() {
                     toast('Location updated!', 'success');
                   } catch { toast('Failed to update location.', 'error'); }
                   finally { setSavingLocation(false); }
-                }} disabled={savingLocation} style={{ flex: 1, padding: '8px', borderRadius: 8, background: '#0a6e46', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: 12, opacity: savingLocation ? 0.7 : 1 }}>
+                }} disabled={savingLocation} style={{ flex: 1, padding: '8px', borderRadius: 8, background: '#0a6e46', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: 12, opacity: savingLocation ? 0.7 : 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
+                  {savingLocation && <Spinner size={12} color="#fff" />}
                   {savingLocation ? 'Saving...' : 'Save Location'}
                 </button>
               </div>
@@ -404,13 +415,19 @@ export default function CustomerDashboard() {
                     {pendingPayments[o.id] === 'pending' && (
                       <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap', alignItems: 'center' }}>
                         <span style={{ padding: '6px 12px', borderRadius: 8, background: '#fff8e1', color: '#f57f17', fontWeight: 600, fontSize: 11 }}>⌛ Pending</span>
-                        <button onClick={() => checkPaymentStatus(o.id)} style={{ padding: '6px 12px', borderRadius: 8, border: '1px solid #f57f17', background: '#fff', color: '#f57f17', cursor: 'pointer', fontWeight: 600, fontSize: 11 }}>Check</button>
+                        <button onClick={() => checkPaymentStatus(o.id)} disabled={checkingPayments[o.id]} style={{ padding: '6px 12px', borderRadius: 8, border: '1px solid #f57f17', background: '#fff', color: '#f57f17', cursor: 'pointer', fontWeight: 600, fontSize: 11, display: 'flex', alignItems: 'center', gap: 4 }}>
+                          {checkingPayments[o.id] && <Spinner size={10} color="#f57f17" />}
+                          Check
+                        </button>
                       </div>
                     )}
                     {o.paid && <span style={{ padding: '6px 12px', borderRadius: 8, background: '#e8f5e9', color: '#2e7d32', fontWeight: 600, fontSize: 11 }}>✓ Paid</span>}
                     {o.status === 'cancelled' && <span style={{ padding: '6px 12px', borderRadius: 8, background: '#fef2f2', color: '#d32f2f', fontWeight: 600, fontSize: 11 }}>✕ Cancelled</span>}
                     {canCancel(o.status) && (
-                      <button onClick={() => handleCancelOrder(o.id)} style={{ padding: '6px 12px', borderRadius: 8, background: '#fef2f2', color: '#d32f2f', border: 'none', cursor: 'pointer', fontWeight: 500, fontSize: 11 }}>Cancel</button>
+                      <button onClick={() => handleCancelOrder(o.id)} disabled={cancellingOrders[o.id]} style={{ padding: '6px 12px', borderRadius: 8, background: '#fef2f2', color: '#d32f2f', border: 'none', cursor: 'pointer', fontWeight: 500, fontSize: 11, display: 'flex', alignItems: 'center', gap: 4 }}>
+                        {cancellingOrders[o.id] && <Spinner size={10} color="#d32f2f" />}
+                        Cancel
+                      </button>
                     )}
                     {o.status === 'in_transit' && (
                       <button onClick={() => navigate('/customer')} style={{ padding: '6px 12px', borderRadius: 8, background: '#000', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 500, fontSize: 11 }}>Track</button>
@@ -438,7 +455,8 @@ export default function CustomerDashboard() {
               style={{ width: '100%', padding: '12px 14px', borderRadius: 8, border: '1px solid #ddd', fontSize: 16, boxSizing: 'border-box', marginBottom: 16 }} />
             <div style={{ display: 'flex', gap: 12 }}>
               <button onClick={() => setShowPayModal(null)} disabled={paying} style={{ flex: 1, padding: '12px', borderRadius: 8, border: '1px solid #ddd', background: '#fff', color: '#666', cursor: 'pointer', fontWeight: 600 }}>Cancel</button>
-              <button onClick={handlePay} disabled={paying} style={{ flex: 1, padding: '12px', borderRadius: 8, background: '#0a6e46', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 700, opacity: paying ? 0.7 : 1 }}>
+              <button onClick={handlePay} disabled={paying} style={{ flex: 1, padding: '12px', borderRadius: 8, background: '#0a6e46', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 700, opacity: paying ? 0.7 : 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
+                {paying && <Spinner size={14} color="#fff" />}
                 {paying ? 'Sending...' : `Pay ${Number(showPayModal.total).toLocaleString()} TZS`}
               </button>
             </div>

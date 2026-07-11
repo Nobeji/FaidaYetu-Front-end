@@ -5,11 +5,13 @@ import DashboardShell from '../../components/DashboardShell';
 import StatusBadge from '../../components/StatusBadge';
 import { api } from '../../services/api';
 import { useToast } from '../../components/ToastContext';
+import Spinner from '../../components/Spinner';
 
 const navItems = [
   { icon: '📊', label: 'Dashboard', nav: '/supplier' },
   { icon: '📦', label: 'Inventory', nav: '/supplier/inventory' },
   { icon: '🛒', label: 'Orders', nav: '/supplier/orders' },
+  { icon: '🔔', label: 'Notifications', nav: '/supplier/notifications' },
   { icon: '📈', label: 'Analytics', nav: '/supplier/analytics' },
   { icon: '📉', label: 'Statistics', nav: '/supplier/statistics' },
   { icon: '⚙️', label: 'Settings', nav: '/supplier/settings' },
@@ -36,6 +38,8 @@ export default function SupplierOrders() {
   const supplierId = JSON.parse(localStorage.getItem('supplier') || '{}').id || 1;
   const navigate = useNavigate();
   const toast = useToast();
+  const [confirmingPayments, setConfirmingPayments] = useState({});
+  const [assigningDrivers, setAssigningDrivers] = useState({});
 
   useEffect(() => {
     api.orders({ supplier: supplierId }).then(o => { setOrders(o); setLoading(false); }).catch(() => setLoading(false));
@@ -73,6 +77,7 @@ export default function SupplierOrders() {
   };
 
   const handleConfirmPayment = async (orderId) => {
+    setConfirmingPayments(prev => ({ ...prev, [orderId]: true }));
     try {
       await api.manualConfirmPayment(orderId);
       const updated = await api.orders({ supplier: supplierId });
@@ -81,10 +86,13 @@ export default function SupplierOrders() {
       toast('Payment confirmed! Order is now Ready.', 'success');
     } catch (e) {
       toast(e.message || 'Failed to confirm payment.', 'error');
+    } finally {
+      setConfirmingPayments(prev => ({ ...prev, [orderId]: false }));
     }
   };
 
   const handleAssign = async (orderId, driverId) => {
+    setAssigningDrivers(prev => ({ ...prev, [driverId]: true }));
     try {
       await api.assignDelivery(orderId, { delivery_person_id: driverId });
       const updated = await api.orders({ supplier: supplierId });
@@ -92,6 +100,8 @@ export default function SupplierOrders() {
       setShowAssign(null);
     } catch (e) {
       toast(e.message || 'Failed to assign delivery.', 'error');
+    } finally {
+      setAssigningDrivers(prev => ({ ...prev, [driverId]: false }));
     }
   };
 
@@ -144,7 +154,10 @@ export default function SupplierOrders() {
                       <td style={{ padding: 12 }}>
                         <button onClick={() => setSelectedOrder(o)} style={{ padding: '6px 14px', borderRadius: 8, background: '#000', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: 12, marginRight: 4 }}>View</button>
                         {!o.paid && o.status !== 'cancelled' && o.status !== 'delivered' && (
-                          <button onClick={() => handleConfirmPayment(o.id)} style={{ padding: '6px 14px', borderRadius: 8, background: '#0a6e46', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: 12, marginRight: 4 }}>Confirm Payment</button>
+                          <button onClick={() => handleConfirmPayment(o.id)} disabled={confirmingPayments[o.id]} style={{ padding: '6px 14px', borderRadius: 8, background: '#0a6e46', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: 12, marginRight: 4, display: 'flex', alignItems: 'center', gap: 4 }}>
+                            {confirmingPayments[o.id] && <Spinner size={10} color="#fff" />}
+                            Confirm Payment
+                          </button>
                         )}
                         {o.status === 'ready' && (
                           <button onClick={() => openAssign(o)} style={{ padding: '6px 14px', borderRadius: 8, background: '#e67e22', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: 12 }}>Assign</button>
@@ -199,7 +212,10 @@ export default function SupplierOrders() {
                 <button onClick={() => { setSelectedOrder(null); openAssign(selectedOrder); }} style={{ padding: '10px 20px', borderRadius: 8, background: '#e67e22', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 700, flex: 1 }}>Assign Driver</button>
               )}
               {['new', 'ready'].includes(selectedOrder.status) && (
-                <button onClick={() => handleStatusUpdate(selectedOrder.id, 'cancelled')} style={{ padding: '10px 20px', borderRadius: 8, background: '#fef2f2', color: '#d32f2f', border: '1px solid #fecaca', cursor: 'pointer', fontWeight: 600 }}>Cancel</button>
+                <button onClick={() => handleStatusUpdate(selectedOrder.id, 'cancelled')} disabled={confirmingPayments[selectedOrder.id]} style={{ padding: '10px 20px', borderRadius: 8, background: '#fef2f2', color: '#d32f2f', border: '1px solid #fecaca', cursor: 'pointer', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 4 }}>
+                  {confirmingPayments[selectedOrder.id] && <Spinner size={12} color="#d32f2f" />}
+                  Cancel
+                </button>
               )}
               <button onClick={() => setSelectedOrder(null)} style={{ padding: '10px 20px', borderRadius: 8, background: 'none', border: `1px solid ${'#eee'}`, cursor: 'pointer', fontWeight: 600 }}>Close</button>
             </div>
@@ -231,7 +247,10 @@ export default function SupplierOrders() {
                         {d.vehicle_type} • ⭐ {d.rating || 'N/A'} • {d.total_routes || 0} routes
                       </div>
                     </div>
-                    <button onClick={() => handleAssign(showAssign.id, d.id)} style={{ padding: '8px 16px', borderRadius: 8, background: '#000', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: 13 }}>Assign</button>
+                    <button onClick={() => handleAssign(showAssign.id, d.id)} disabled={assigningDrivers[d.id]} style={{ padding: '8px 16px', borderRadius: 8, background: '#000', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: 13, display: 'flex', alignItems: 'center', gap: 4 }}>
+                      {assigningDrivers[d.id] && <Spinner size={10} color="#fff" />}
+                      Assign
+                    </button>
                   </div>
                 ))}
               </div>

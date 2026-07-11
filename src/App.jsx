@@ -10,6 +10,7 @@ import CustomerDashboard from './pages/CustomerDashboard';
 import Marketplace from './pages/customer/Marketplace';
 import MyOrders from './pages/customer/MyOrders';
 import CustomerProfile from './pages/customer/Profile';
+import CustomerNotifications from './pages/customer/Notifications';
 
 import SupplierDashboard from './pages/SupplierDashboard';
 import SupplierInventory from './pages/supplier/Inventory';
@@ -18,6 +19,7 @@ import SupplierAnalytics from './pages/supplier/Analytics';
 import SupplierStatistics from './pages/supplier/Statistics';
 import SupplierSettings from './pages/supplier/Settings';
 import SupplierSupport from './pages/supplier/Support';
+import SupplierNotifications from './pages/supplier/Notifications';
 
 import DeliveryDashboard from './pages/DeliveryDashboard';
 import RouteHistory from './pages/delivery/RouteHistory';
@@ -61,11 +63,13 @@ export default function App() {
         <Route path="/customer" element={<CustomerDashboard />} />
         <Route path="/customer/marketplace" element={<Marketplace />} />
         <Route path="/customer/orders" element={<MyOrders />} />
+        <Route path="/customer/notifications" element={<CustomerNotifications />} />
         <Route path="/customer/profile" element={<CustomerProfile />} />
 
         <Route path="/supplier" element={<SupplierDashboard />} />
         <Route path="/supplier/inventory" element={<SupplierInventory />} />
         <Route path="/supplier/orders" element={<SupplierOrders />} />
+        <Route path="/supplier/notifications" element={<SupplierNotifications />} />
         <Route path="/supplier/analytics" element={<SupplierAnalytics />} />
         <Route path="/supplier/statistics" element={<SupplierStatistics />} />
         <Route path="/supplier/settings" element={<SupplierSettings />} />
