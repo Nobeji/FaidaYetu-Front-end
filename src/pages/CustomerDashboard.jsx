@@ -145,15 +145,6 @@ export default function CustomerDashboard() {
       sessionStorage.setItem(cacheKey, JSON.stringify({ suppliers: s, orders: o, timestamp: Date.now() }));
     }).catch(() => setLoading(false));
   }, [customer.id, userLocation, radiusFilter]);
-      setSuppliers(s);
-      setOrders(o);
-      setLoading(false);
-      const pending = {};
-      o.forEach(ord => { if (ord.payment_status === 'pending') pending[ord.id] = 'pending'; });
-      setPendingPayments(pending);
-      Object.keys(pending).forEach(id => startPolling(Number(id)));
-    }).catch(() => setLoading(false));
-  }, [userLocation, radiusFilter, customer.id]);
 
   useEffect(() => {
     const cid = customer.id || JSON.parse(localStorage.getItem('customer') || '{}').id || 1;
