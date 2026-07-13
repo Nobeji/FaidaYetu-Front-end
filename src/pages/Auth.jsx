@@ -19,6 +19,11 @@ export default function Auth() {
   const [publicStats, setPublicStats] = useState({});
 
   useEffect(() => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('refresh');
+  }, []);
+
+  useEffect(() => {
     api.stats().then(setPublicStats).catch(() => {});
   }, []);
   const [signupLoading, setSignupLoading] = useState(false);

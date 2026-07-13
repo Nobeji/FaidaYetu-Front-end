@@ -4,6 +4,12 @@ const CACHE_TTL = 5 * 60 * 1000;
 let isRefreshing = false;
 let failedQueue = [];
 
+const PUBLIC_ENDPOINTS = ['/auth/login/', '/auth/register/', '/auth/refresh/', '/stats/', '/suppliers/', '/products/'];
+
+function isPublicEndpoint(url) {
+  return PUBLIC_ENDPOINTS.some(ep => url.startsWith(ep));
+}
+
 function processQueue(error, token) {
   failedQueue.forEach(({ resolve, reject }) => {
     if (error) reject(error);
@@ -49,7 +55,7 @@ async function request(url, options = {}, isRetry = false) {
   const token = localStorage.getItem('token');
   const headers = { ...options.headers };
   if (!options.noJson) headers['Content-Type'] = 'application/json';
-  if (token) headers['Authorization'] = `Bearer ${token}`;
+  if (token && !isPublicEndpoint(url)) headers['Authorization'] = `Bearer ${token}`;
   const method = (options.method || 'GET').toUpperCase();
   const cacheKey = getCacheKey(method, url);
 
@@ -62,7 +68,17 @@ async function request(url, options = {}, isRetry = false) {
 
   const res = await fetch(`${BASE}${url}`, { ...options, headers });
 
-  if (res.status === 401 && !isRetry && !url.includes('/auth/login/') && !url.includes('/auth/register/') && !url.includes('/auth/refresh/')) {
+  if (res.status === 401 && !isRetry) {
+    if (isPublicEndpoint(url)) {
+      if (token) {
+        localStorage.removeItem('token');
+        localStorage.removeItem('refresh');
+        return request(url, options, true);
+      }
+      const body = await res.text().catch(() => '');
+      throw new Error(body || `API error: ${res.status}`);
+    }
+
     if (isRefreshing) {
       return new Promise((resolve, reject) => {
         failedQueue.push({ resolve, reject });
@@ -108,7 +124,8 @@ async function request(url, options = {}, isRetry = false) {
 
 async function upload(url, data, method = 'POST', isRetry = false) {
   const token = localStorage.getItem('token');
-  const headers = { Authorization: `Bearer ${token}` };
+  const headers = {};
+  if (token && !isPublicEndpoint(url)) headers['Authorization'] = `Bearer ${token}`;
   const res = await fetch(`${BASE}${url}`, { method, headers, body: data });
 
   if (res.status === 401 && !isRetry && !url.includes('/auth/')) {
