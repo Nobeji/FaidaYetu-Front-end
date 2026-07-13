@@ -1,12 +1,51 @@
 const BASE = import.meta.env.VITE_API_URL || '/api';
 const cache = new Map();
 const CACHE_TTL = 5 * 60 * 1000;
+let isRefreshing = false;
+let failedQueue = [];
+
+function processQueue(error, token) {
+  failedQueue.forEach(({ resolve, reject }) => {
+    if (error) reject(error);
+    else resolve(token);
+  });
+  failedQueue = [];
+}
 
 function getCacheKey(method, url) {
   return `${method}:${url}`;
 }
 
-async function request(url, options = {}) {
+async function tryRefreshToken() {
+  const refresh = localStorage.getItem('refresh');
+  if (!refresh) return null;
+  try {
+    const res = await fetch(`${BASE}/auth/refresh/`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ refresh }),
+    });
+    if (!res.ok) return null;
+    const data = await res.json();
+    localStorage.setItem('token', data.access);
+    if (data.refresh) localStorage.setItem('refresh', data.refresh);
+    return data.access;
+  } catch {
+    return null;
+  }
+}
+
+function clearAuth() {
+  localStorage.removeItem('token');
+  localStorage.removeItem('refresh');
+  localStorage.removeItem('user');
+  localStorage.removeItem('profile');
+  localStorage.removeItem('customer');
+  localStorage.removeItem('supplier');
+  localStorage.removeItem('delivery_person');
+}
+
+async function request(url, options = {}, isRetry = false) {
   const token = localStorage.getItem('token');
   const headers = { ...options.headers };
   if (!options.noJson) headers['Content-Type'] = 'application/json';
@@ -22,6 +61,35 @@ async function request(url, options = {}) {
   }
 
   const res = await fetch(`${BASE}${url}`, { ...options, headers });
+
+  if (res.status === 401 && !isRetry && !url.includes('/auth/login/') && !url.includes('/auth/register/') && !url.includes('/auth/refresh/')) {
+    if (isRefreshing) {
+      return new Promise((resolve, reject) => {
+        failedQueue.push({ resolve, reject });
+      }).then(newToken => {
+        const retryHeaders = { ...headers, Authorization: `Bearer ${newToken}` };
+        return fetch(`${BASE}${url}`, { ...options, headers: retryHeaders }).then(r => {
+          if (!r.ok) return r.text().then(b => { throw new Error(b || `API error: ${r.status}`); });
+          return r.json();
+        });
+      });
+    }
+
+    isRefreshing = true;
+    const newToken = await tryRefreshToken();
+    isRefreshing = false;
+
+    if (newToken) {
+      processQueue(null, newToken);
+      return request(url, options, true);
+    }
+
+    processQueue(new Error('Token refresh failed'), null);
+    clearAuth();
+    window.location.href = '/auth';
+    throw new Error('Session expired. Please log in again.');
+  }
+
   if (!res.ok) {
     const body = await res.text().catch(() => '');
     throw new Error(body || `API error: ${res.status}`);
@@ -38,10 +106,19 @@ async function request(url, options = {}) {
   return data;
 }
 
-async function upload(url, data, method = 'POST') {
+async function upload(url, data, method = 'POST', isRetry = false) {
   const token = localStorage.getItem('token');
   const headers = { Authorization: `Bearer ${token}` };
   const res = await fetch(`${BASE}${url}`, { method, headers, body: data });
+
+  if (res.status === 401 && !isRetry && !url.includes('/auth/')) {
+    const newToken = await tryRefreshToken();
+    if (newToken) return upload(url, data, method, true);
+    clearAuth();
+    window.location.href = '/auth';
+    throw new Error('Session expired. Please log in again.');
+  }
+
   if (!res.ok) {
     const body = await res.text().catch(() => '');
     throw new Error(body || `API error: ${res.status}`);
@@ -54,6 +131,7 @@ export const api = {
   // Auth
   login: (data) => request('/auth/login/', { method: 'POST', body: JSON.stringify(data) }),
   register: (data) => request('/auth/register/', { method: 'POST', body: JSON.stringify(data) }),
+  logout: () => { clearAuth(); window.location.href = '/auth'; },
   profile: () => request('/auth/profile/'),
   updateProfile: (data) => request('/auth/profile/', { method: 'PATCH', body: JSON.stringify(data) }),
   deleteAccount: () => request('/auth/delete-account/', { method: 'DELETE' }),

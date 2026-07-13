@@ -68,6 +68,7 @@ export default function Auth() {
       try {
         const data = await api.login({ username, password });
         localStorage.setItem('token', data.access);
+        localStorage.setItem('refresh', data.refresh);
         localStorage.setItem('user', JSON.stringify(data.user));
         localStorage.setItem('profile', JSON.stringify(data.profile));
         if (data.customer) localStorage.setItem('customer', JSON.stringify(data.customer));
@@ -99,6 +100,7 @@ export default function Auth() {
           lng: signupCoords.lng,
         });
         localStorage.setItem('token', data.access);
+        localStorage.setItem('refresh', data.refresh);
         localStorage.setItem('user', JSON.stringify(data.user));
         localStorage.setItem('profile', JSON.stringify(data.profile));
         if (data.customer) localStorage.setItem('customer', JSON.stringify(data.customer));
