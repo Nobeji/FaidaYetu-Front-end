@@ -45,7 +45,7 @@ export default function LocationPicker({ lat = -6.7924, lng = 39.2083, onChange,
   };
 
   return (
-    <div style={{ height, borderRadius: 10, overflow: 'hidden', border: '1px solid #ddd' }}>
+    <div style={{ height, borderRadius: 12, overflow: 'hidden', border: '1px solid rgba(255,255,255,0.15)' }}>
       <Map
         ref={mapRef}
         initialViewState={{ latitude: pos.lat, longitude: pos.lng, zoom: 14 }}

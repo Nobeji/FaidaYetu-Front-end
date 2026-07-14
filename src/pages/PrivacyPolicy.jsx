@@ -1,27 +1,32 @@
 import { useNavigate } from 'react-router-dom';
 
+const bgGradient = 'linear-gradient(160deg, #011208 0%, #021a0e 30%, #032e1a 60%, #044a2b 100%)';
+
 export default function PrivacyPolicy() {
   const navigate = useNavigate();
 
   return (
-    <div style={{ minHeight: '100vh', background: '#fafafa' }}>
+    <div style={{ minHeight: '100vh', background: bgGradient, color: '#e8fff0' }}>
       <header style={{
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-        padding: '0 20px', height: 64, borderBottom: '1px solid #eee',
-        background: '#fafafa', position: 'sticky', top: 0, zIndex: 10,
+        padding: '0 24px', height: 64,
+        background: 'rgba(2,26,14,0.8)', backdropFilter: 'blur(16px)',
+        borderBottom: '1px solid rgba(255,255,255,0.06)',
+        position: 'sticky', top: 0, zIndex: 10,
       }}>
-        <span style={{ fontSize: 20, fontWeight: 800, color: '#000', cursor: 'pointer' }} onClick={() => navigate('/')}>FaidaYetu</span>
+        <span style={{ fontSize: 20, fontWeight: 800, color: '#fff', cursor: 'pointer' }} onClick={() => navigate('/')}>FaidaYetu</span>
         <button onClick={() => navigate(-1)} style={{
-          padding: '8px 16px', borderRadius: 8, border: '1px solid #eee',
-          background: 'none', cursor: 'pointer', fontWeight: 600, fontSize: 14, color: '#888',
+          padding: '8px 16px', borderRadius: 10,
+          border: '1px solid rgba(255,255,255,0.12)', background: 'rgba(255,255,255,0.06)',
+          cursor: 'pointer', fontWeight: 600, fontSize: 14, color: 'rgba(255,255,255,0.6)',
         }}>← Back</button>
       </header>
 
       <main style={{ maxWidth: 800, margin: '0 auto', padding: 28 }}>
-        <h1 style={{ fontSize: 32, fontWeight: 700, color: '#111', marginBottom: 8 }}>Privacy Policy</h1>
-        <p style={{ fontSize: 14, color: '#888', marginBottom: 28 }}>Last updated: June 2026</p>
+        <h1 style={{ fontSize: 32, fontWeight: 700, color: '#fff', marginBottom: 8 }}>Privacy Policy</h1>
+        <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.4)', marginBottom: 28 }}>Last updated: June 2026</p>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
           {[
             {
               title: 'Information We Collect',
@@ -49,15 +54,18 @@ export default function PrivacyPolicy() {
             },
           ].map(s => (
             <div key={s.title}>
-              <h2 style={{ fontSize: 20, fontWeight: 700, color: '#000', marginBottom: 8 }}>{s.title}</h2>
-              <p style={{ fontSize: 15, color: '#888', lineHeight: 1.7 }}>{s.content}</p>
+              <h2 style={{ fontSize: 20, fontWeight: 700, color: '#fff', marginBottom: 8 }}>{s.title}</h2>
+              <p style={{ fontSize: 15, color: 'rgba(255,255,255,0.5)', lineHeight: 1.7 }}>{s.content}</p>
             </div>
           ))}
         </div>
 
-        <div style={{ marginTop: 28, padding: 20, background: '#fff', borderRadius: 12, border: '1px solid #eee' }}>
-          <h3 style={{ fontWeight: 700, fontSize: 16, marginBottom: 8, color: '#111' }}>Contact Us</h3>
-          <p style={{ fontSize: 14, color: '#888' }}>If you have questions about this policy, please contact us at <strong style={{ color: '#000' }}>privacy@faidayetu.co.tz</strong></p>
+        <div style={{
+          marginTop: 28, padding: 20, background: 'rgba(255,255,255,0.06)',
+          borderRadius: 14, border: '1px solid rgba(255,255,255,0.08)',
+        }}>
+          <h3 style={{ fontWeight: 700, fontSize: 16, marginBottom: 8, color: '#fff' }}>Contact Us</h3>
+          <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.45)' }}>If you have questions about this policy, please contact us at <strong style={{ color: '#4caf7d' }}>privacy@faidayetu.co.tz</strong></p>
         </div>
       </main>
     </div>

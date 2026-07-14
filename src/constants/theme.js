@@ -36,6 +36,30 @@ export const colors = {
   white: '#ffffff',
 };
 
+export const glass = {
+  bgLight: 'rgba(255, 255, 255, 0.12)',
+  bgMedium: 'rgba(255, 255, 255, 0.18)',
+  bgSolid: 'rgba(255, 255, 255, 0.25)',
+  bgWhite: 'rgba(255, 255, 255, 0.85)',
+  borderLight: 'rgba(255, 255, 255, 0.18)',
+  borderMedium: 'rgba(255, 255, 255, 0.28)',
+  blur: 'blur(20px)',
+  blurHeavy: 'blur(40px)',
+  shadow: '0 8px 32px rgba(0, 0, 0, 0.12)',
+  shadowLg: '0 16px 48px rgba(0, 0, 0, 0.2)',
+};
+
+export const gradient = {
+  hero: 'linear-gradient(135deg, #021a0e 0%, #044a2b 30%, #0a6e46 60%, #044a2b 100%)',
+  heroAlt: 'linear-gradient(160deg, #011208 0%, #032e1a 25%, #0a6e46 55%, #2d8a5e 80%, #0a6e46 100%)',
+  accent: 'linear-gradient(135deg, #0a6e46 0%, #2d8a5e 50%, #4caf7d 100%)',
+  accentHover: 'linear-gradient(135deg, #0d8557 0%, #34a06e 50%, #5ec493 100%)',
+  warm: 'linear-gradient(135deg, #0a6e46 0%, #ffdea9 100%)',
+  card: 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%)',
+  sidebar: 'linear-gradient(180deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 100%)',
+  darkCard: 'linear-gradient(135deg, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.1) 100%)',
+};
+
 export const spacing = {
   xs: 4,
   sm: 8,
@@ -50,6 +74,7 @@ export const radius = {
   md: 8,
   lg: 12,
   xl: 16,
+  xxl: 24,
   round: 9999,
 };
 

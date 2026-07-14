@@ -23,9 +23,11 @@ export function ToastProvider({ children }) {
         {toasts.map(t => (
           <div key={t.id} className="toast-enter" style={{
             padding: '12px 20px', borderRadius: 10,
-            background: t.type === 'error' ? '#d32f2f' : t.type === 'success' ? '#2e7d32' : '#111',
+            background: t.type === 'error' ? 'rgba(211,47,47,0.9)' : t.type === 'success' ? 'rgba(10,110,70,0.9)' : 'rgba(255,255,255,0.12)',
             color: '#fff', fontSize: 14, fontWeight: 500,
-            boxShadow: '0 4px 12px rgba(0,0,0,0.2)',
+            boxShadow: '0 4px 16px rgba(0,0,0,0.3)',
+            backdropFilter: 'blur(16px)',
+            border: '1px solid rgba(255,255,255,0.1)',
             display: 'flex', alignItems: 'center', gap: 8,
             animation: 'slideIn 0.3s ease',
           }}>

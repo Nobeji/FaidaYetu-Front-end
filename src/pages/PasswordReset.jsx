@@ -12,48 +12,84 @@ export default function PasswordReset() {
   };
 
   return (
-    <div style={{ minHeight: '100vh', background: '#fafafa', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
-      <div style={{ width: '100%', maxWidth: 440 }}>
+    <div style={{
+      minHeight: '100vh', width: '100%', position: 'relative', overflow: 'hidden',
+      background: 'linear-gradient(135deg, #011208 0%, #032e1a 25%, #0a6e46 55%, #2d8a5e 80%, #0a6e46 100%)',
+      display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20,
+    }}>
+      <style>{`
+        @keyframes float { 0%,100%{transform:translateY(0) rotate(0deg)} 50%{transform:translateY(-20px) rotate(3deg)} }
+        @keyframes floatSlow { 0%,100%{transform:translateY(0) scale(1)} 50%{transform:translateY(-10px) scale(1.02)} }
+        @keyframes slideIn { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+      `}</style>
+
+      {/* Decorative blobs */}
+      <div style={{ position: 'absolute', top: '-10%', left: '-5%', width: 500, height: 500, borderRadius: '50%', background: 'radial-gradient(circle, rgba(10,110,70,0.3) 0%, transparent 70%)', filter: 'blur(60px)', animation: 'float 8s ease-in-out infinite', pointerEvents: 'none' }} />
+      <div style={{ position: 'absolute', bottom: '-15%', right: '-10%', width: 400, height: 400, borderRadius: '50%', background: 'radial-gradient(circle, rgba(45,138,94,0.25) 0%, transparent 70%)', filter: 'blur(80px)', animation: 'floatSlow 10s ease-in-out infinite', pointerEvents: 'none' }} />
+
+      <div style={{
+        position: 'relative', zIndex: 2,
+        width: '100%', maxWidth: 440,
+        background: 'rgba(255,255,255,0.08)',
+        backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)',
+        border: '1px solid rgba(255,255,255,0.15)',
+        borderRadius: 24, padding: '36px 40px',
+        boxShadow: '0 8px 32px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.1)',
+        animation: 'slideIn 0.5s ease-out',
+      }}>
         <div style={{ textAlign: 'center', marginBottom: 28 }}>
-          <div style={{ fontSize: 32, fontWeight: 800, color: '#000', cursor: 'pointer' }} onClick={() => navigate('/')}>FaidaYetu</div>
+          <div
+            style={{
+              display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+              width: 52, height: 52, borderRadius: 16,
+              background: 'linear-gradient(135deg, #0a6e46, #2d8a5e)',
+              marginBottom: 14, boxShadow: '0 4px 16px rgba(10,110,70,0.4)',
+              cursor: 'pointer',
+            }}
+            onClick={() => navigate('/')}
+          >
+            <span style={{ fontSize: 24 }}>🐔</span>
+          </div>
+          <h1 style={{ fontSize: 24, fontWeight: 800, color: '#fff' }}>Reset Password</h1>
+          <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.5)', marginTop: 4 }}>We'll send you a reset link.</p>
         </div>
 
-        <div style={{ background: '#fff', borderRadius: 12, border: '1px solid #eee', padding: 28 }}>
-          {!sent ? (
-            <>
-              <h1 style={{ fontSize: 24, fontWeight: 700, color: '#111', marginBottom: 8 }}>Reset Password</h1>
-              <p style={{ fontSize: 14, color: '#888', marginBottom: 20 }}>Enter your email address and we'll send you a reset link.</p>
-
-              <form onSubmit={handleSubmit}>
-                <div style={{ marginBottom: 20 }}>
-                  <label style={{ fontSize: 13, fontWeight: 600, color: '#111', display: 'block', marginBottom: 6 }}>Email Address</label>
-                  <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="you@example.com" required style={{
-                    width: '100%', padding: '12px 16px', borderRadius: 8, border: '1px solid #eee',
-                    fontSize: 15, color: '#111', background: '#fafafa',
-                    outline: 'none', boxSizing: 'border-box',
-                  }} />
-                </div>
-                <button type="submit" style={{
-                  width: '100%', padding: '14px', borderRadius: 8, background: '#000', color: '#fff',
-                  border: 'none', cursor: 'pointer', fontSize: 16, fontWeight: 700,
-                }}>Send Reset Link</button>
-              </form>
-            </>
-          ) : (
-            <div style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: 48, marginBottom: 12 }}>📧</div>
-              <h2 style={{ fontSize: 22, fontWeight: 700, color: '#111', marginBottom: 8 }}>Check Your Email</h2>
-              <p style={{ fontSize: 14, color: '#888', marginBottom: 20 }}>We've sent a password reset link to <strong style={{ color: '#000' }}>{email}</strong></p>
-              <button onClick={() => setSent(false)} style={{
-                padding: '12px 32px', borderRadius: 8, background: '#000', color: '#fff',
-                border: 'none', cursor: 'pointer', fontWeight: 700, fontSize: 14,
-              }}>Resend Email</button>
+        {!sent ? (
+          <form onSubmit={handleSubmit}>
+            <div style={{ marginBottom: 20 }}>
+              <label style={{ fontSize: 13, fontWeight: 600, color: 'rgba(255,255,255,0.7)', display: 'block', marginBottom: 8 }}>Email Address</label>
+              <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="you@example.com" required className="glass-input" />
             </div>
-          )}
-
-          <div style={{ textAlign: 'center', marginTop: 20 }}>
-            <Link to="/auth" style={{ fontSize: 14, color: '#000', fontWeight: 600, textDecoration: 'none' }}>Back to Login</Link>
+            <button type="submit" style={{
+              width: '100%', padding: '14px', borderRadius: 12,
+              background: 'linear-gradient(135deg, #0a6e46 0%, #2d8a5e 50%, #4caf7d 100%)',
+              color: '#fff', border: 'none', cursor: 'pointer', fontSize: 15, fontWeight: 700,
+              boxShadow: '0 4px 20px rgba(10,110,70,0.4)',
+            }}>Send Reset Link</button>
+          </form>
+        ) : (
+          <div style={{ textAlign: 'center' }}>
+            <div style={{
+              width: 64, height: 64, borderRadius: '50%',
+              background: 'rgba(10,110,70,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center',
+              margin: '0 auto 16px', fontSize: 28,
+            }}>📧</div>
+            <h2 style={{ fontSize: 20, fontWeight: 700, color: '#fff', marginBottom: 8 }}>Check Your Email</h2>
+            <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.5)', marginBottom: 20 }}>
+              We've sent a reset link to <strong style={{ color: '#fff' }}>{email}</strong>
+            </p>
+            <button onClick={() => setSent(false)} style={{
+              padding: '12px 32px', borderRadius: 12,
+              background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.15)',
+              color: '#fff', cursor: 'pointer', fontWeight: 600, fontSize: 14,
+            }}>Resend Email</button>
           </div>
+        )}
+
+        <div style={{ textAlign: 'center', marginTop: 20 }}>
+          <Link to="/auth" style={{ fontSize: 14, color: 'rgba(255,222,169,0.8)', fontWeight: 600, textDecoration: 'none' }}>
+            Back to Login
+          </Link>
         </div>
       </div>
     </div>

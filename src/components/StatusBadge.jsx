@@ -1,17 +1,20 @@
 const statusColors = {
-  New: { bg: '#f0f0f0', text: '#000' },
-  Paid: { bg: '#e8f5e9', text: '#2e7d32' },
-  Processing: { bg: '#fff3e0', text: '#e65100' },
-  Ready: { bg: '#000', text: '#fff' },
-  Cancelled: { bg: '#fef2f2', text: '#d32f2f' },
+  New: { bg: 'rgba(255,255,255,0.1)', text: 'rgba(255,255,255,0.8)' },
+  Paid: { bg: 'rgba(76,175,125,0.2)', text: '#4caf7d' },
+  Processing: { bg: 'rgba(255,183,77,0.2)', text: '#ffb74d' },
+  Ready: { bg: 'linear-gradient(135deg, #0a6e46, #2d8a5e)', text: '#fff' },
+  Cancelled: { bg: 'rgba(211,47,47,0.15)', text: '#ff8a80' },
+  Delivered: { bg: 'rgba(76,175,125,0.2)', text: '#4caf7d' },
+  Active: { bg: 'rgba(76,175,125,0.2)', text: '#4caf7d' },
+  Pending: { bg: 'rgba(255,183,77,0.15)', text: '#ffb74d' },
 };
 
 export default function StatusBadge({ status }) {
-  const c = statusColors[status] || { bg: '#f5f5f5', text: '#666' };
+  const c = statusColors[status] || { bg: 'rgba(255,255,255,0.08)', text: 'rgba(255,255,255,0.5)' };
   return (
     <span style={{
       display: 'inline-flex', alignItems: 'center', gap: 4,
-      padding: '2px 10px', borderRadius: 999,
+      padding: '3px 12px', borderRadius: 999,
       fontSize: 11, fontWeight: 600, letterSpacing: '0.01em',
       background: c.bg, color: c.text,
     }}>

@@ -123,196 +123,216 @@ export default function Auth() {
     }
   };
 
+  const bgGradient = 'linear-gradient(135deg, #011208 0%, #032e1a 25%, #0a6e46 55%, #2d8a5e 80%, #0a6e46 100%)';
+
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', flexDirection: isMobile ? 'column' : 'row' }}>
-      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+    <div style={{
+      minHeight: '100vh', width: '100%', position: 'relative', overflow: 'hidden',
+      background: bgGradient, display: 'flex', alignItems: 'center', justifyContent: 'center',
+      padding: isMobile ? 16 : 24,
+    }}>
+      <style>{`
+        @keyframes float { 0%,100%{transform:translateY(0) rotate(0deg)} 50%{transform:translateY(-20px) rotate(3deg)} }
+        @keyframes floatSlow { 0%,100%{transform:translateY(0) scale(1)} 50%{transform:translateY(-10px) scale(1.02)} }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        @keyframes slideIn { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+        @keyframes pulse-glow { 0%,100%{box-shadow:0 0 20px rgba(10,110,70,0.3)} 50%{box-shadow:0 0 40px rgba(10,110,70,0.6)} }
+      `}</style>
+
+      {/* Decorative floating blobs */}
+      <div style={{ position: 'absolute', top: '-10%', left: '-5%', width: isMobile ? 300 : 500, height: isMobile ? 300 : 500, borderRadius: '50%', background: 'radial-gradient(circle, rgba(10,110,70,0.3) 0%, transparent 70%)', filter: 'blur(60px)', animation: 'float 8s ease-in-out infinite', pointerEvents: 'none' }} />
+      <div style={{ position: 'absolute', bottom: '-15%', right: '-10%', width: isMobile ? 250 : 400, height: isMobile ? 250 : 400, borderRadius: '50%', background: 'radial-gradient(circle, rgba(45,138,94,0.25) 0%, transparent 70%)', filter: 'blur(80px)', animation: 'floatSlow 10s ease-in-out infinite', pointerEvents: 'none' }} />
+      <div style={{ position: 'absolute', top: '30%', right: '15%', width: 200, height: 200, borderRadius: '50%', background: 'radial-gradient(circle, rgba(255,222,169,0.12) 0%, transparent 70%)', filter: 'blur(50px)', animation: 'float 12s ease-in-out infinite 2s', pointerEvents: 'none' }} />
+
+      {/* Glass card */}
       <div style={{
-        width: isMobile ? '100%' : '50%', minHeight: isMobile ? 200 : 'auto',
-        background: '#0a6e46', display: 'flex',
-        flexDirection: 'column', justifyContent: 'center', padding: isMobile ? 24 : 48,
-        color: '#fff', position: 'relative', overflow: 'hidden',
+        position: 'relative', zIndex: 2,
+        width: '100%', maxWidth: isMobile ? '100%' : 480,
+        background: 'rgba(255,255,255,0.08)',
+        backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)',
+        border: '1px solid rgba(255,255,255,0.15)',
+        borderRadius: isMobile ? 20 : 24,
+        padding: isMobile ? 28 : '36px 40px',
+        boxShadow: '0 8px 32px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.1)',
+        animation: 'slideIn 0.5s ease-out',
+        maxHeight: '90vh', overflowY: 'auto',
       }}>
-        <img src="https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?w=800" alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: 0.3, mixBlendMode: 'overlay' }} />
-        <div style={{ position: 'relative', zIndex: 1 }}>
-          <h1 style={{ fontSize: isMobile ? 22 : 36, fontWeight: 700, lineHeight: 1.2, marginBottom: 16 }}>
-            Powering the Future of <span style={{ color: '#ffdea9' }}>Poultry Logistics</span>
-          </h1>
-          <p style={{ fontSize: isMobile ? 14 : 16, opacity: 0.9, marginBottom: 20, maxWidth: 440, lineHeight: 1.6 }}>
-            The integrated platform for suppliers, customers, and delivery personnel.
+        {/* Brand */}
+        <div style={{ textAlign: 'center', marginBottom: 28 }}>
+          <div style={{
+            display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+            width: 52, height: 52, borderRadius: 16,
+            background: 'linear-gradient(135deg, #0a6e46, #2d8a5e)',
+            marginBottom: 14, boxShadow: '0 4px 16px rgba(10,110,70,0.4)',
+          }}>
+            <span style={{ fontSize: 24 }}>🐔</span>
+          </div>
+          <h1 style={{ fontSize: 26, fontWeight: 800, color: '#fff', letterSpacing: '-0.02em' }}>FaidaYetu</h1>
+          <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.5)', marginTop: 4 }}>
+            {tab === 'login' ? 'Welcome back. Sign in to your account.' : 'Join the poultry supply network.'}
           </p>
-          <div style={{ display: 'flex', gap: isMobile ? 12 : 20, flexDirection: isMobile ? 'column' : 'row' }}>
-            <div><div style={{ fontSize: 22, fontWeight: 600 }}>{publicStats.dailyDeliveries || '0'}</div><div style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.08em', opacity: 0.7 }}>Orders Delivered</div></div>
-            {!isMobile && <div style={{ width: 1, height: 36, background: 'rgba(255,255,255,0.2)' }} />}
-            <div><div style={{ fontSize: 22, fontWeight: 600 }}>{publicStats.onTimeRate || '0'}</div><div style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.08em', opacity: 0.7 }}>Trust Rating</div></div>
-          </div>
         </div>
-      </div>
 
-      <div style={{
-        width: isMobile ? '100%' : '50%', display: 'flex', alignItems: 'center', justifyContent: 'center',
-        padding: isMobile ? 16 : 20, background: '#fafafa',
-      }}>
+        {/* Tabs */}
         <div style={{
-          width: '100%', maxWidth: 420, background: '#fff',
-          padding: isMobile ? 20 : 28, borderRadius: 12, border: '1px solid #eee',
+          display: 'flex', borderRadius: 12, padding: 4,
+          background: 'rgba(255,255,255,0.06)', marginBottom: 24,
         }}>
-          <div style={{ textAlign: 'center', marginBottom: 20 }}>
-            <h2 style={{ fontSize: 22, fontWeight: 800, color: '#0a6e46', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
-              FaidaYetu
-            </h2>
-            <p style={{ fontSize: 13, color: '#888', marginTop: 4 }}>
-              {tab === 'login' ? 'Welcome back. Please enter your details.' : 'Create your account.'}
-            </p>
-          </div>
+          {['login', 'signup'].map(t => (
+            <button key={t} onClick={() => { setTab(t); setError(''); }} style={{
+              flex: 1, padding: '10px 0', borderRadius: 10, fontSize: 14, fontWeight: tab === t ? 700 : 500,
+              color: tab === t ? '#fff' : 'rgba(255,255,255,0.45)',
+              background: tab === t ? 'rgba(10,110,70,0.6)' : 'transparent',
+              border: 'none', cursor: 'pointer',
+              transition: 'all 0.25s ease',
+            }}>
+              {t === 'login' ? 'Log In' : 'Sign Up'}
+            </button>
+          ))}
+        </div>
 
-          <div style={{ display: 'flex', borderBottom: '1px solid #eee', marginBottom: 20 }}>
-            {['login', 'signup'].map(t => (
-              <button key={t} onClick={() => setTab(t)} style={{
-                flex: 1, padding: 12, textAlign: 'center', fontSize: 14, fontWeight: tab === t ? 700 : 500,
-                color: tab === t ? '#0a6e46' : '#888',
-                borderBottom: tab === t ? '2px solid #000' : '2px solid transparent',
-                background: 'none', cursor: 'pointer',
-              }}>
-                {t === 'login' ? 'Log In' : 'Sign Up'}
-              </button>
-            ))}
-          </div>
+        {error && (
+          <div style={{
+            padding: '12px 16px', borderRadius: 12, marginBottom: 16,
+            background: 'rgba(211,47,47,0.15)', border: '1px solid rgba(211,47,47,0.3)',
+            color: '#ff8a80', fontSize: 13, fontWeight: 600,
+          }}>{error}</div>
+        )}
 
-          {error && (
-            <div style={{ padding: 12, background: '#fef2f2', borderRadius: 8, color: '#d32f2f', fontSize: 13, fontWeight: 600, marginBottom: 12 }}>{error}</div>
+        <form onSubmit={handleSubmit} style={{ animation: 'slideIn 0.3s ease-out' }}>
+          {tab === 'signup' && (
+            <div style={{ marginBottom: 14 }}>
+              <label style={{ display: 'block', fontSize: 13, fontWeight: 600, marginBottom: 8, color: 'rgba(255,255,255,0.7)' }}>I am a...</label>
+              <select value={role} onChange={e => setRole(e.target.value)} className="glass-select">
+                <option value="customer">Customer</option>
+                <option value="supplier">Supplier</option>
+                <option value="delivery">Delivery Personnel</option>
+              </select>
+            </div>
           )}
 
-          <form onSubmit={handleSubmit}>
-            {tab === 'signup' && (
-              <div style={{ marginBottom: 12 }}>
-                <label style={{ display: 'block', fontSize: 13, fontWeight: 600, marginBottom: 8 }}>I am a...</label>
-                <select value={role} onChange={e => setRole(e.target.value)} style={{
-                  width: '100%', padding: '12px 16px', background: '#fafafa',
-                  border: '1px solid #eee', borderRadius: 8,
-                  fontSize: 15, color: '#0a6e46',
-                }}>
-                  <option value="customer">Customer</option>
-                  <option value="supplier">Supplier</option>
-                  <option value="delivery">Delivery Personnel</option>
-                </select>
+          <div style={{ marginBottom: 14 }}>
+            <label style={{ display: 'block', fontSize: 13, fontWeight: 600, marginBottom: 8, color: 'rgba(255,255,255,0.7)' }}>Username</label>
+            <input type="text" value={username} onChange={e => setUsername(e.target.value)} placeholder="Enter your username" required className="glass-input" />
+          </div>
+
+          {tab === 'signup' && (
+            <>
+              <div style={{ marginBottom: 14 }}>
+                <label style={{ display: 'block', fontSize: 13, fontWeight: 600, marginBottom: 8, color: 'rgba(255,255,255,0.7)' }}>Email</label>
+                <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="email@example.com" required className="glass-input" />
               </div>
-            )}
-            <div style={{ marginBottom: 12 }}>
-              <label style={{ display: 'block', fontSize: 13, fontWeight: 600, marginBottom: 8 }}>Username</label>
-              <input type="text" value={username} onChange={e => setUsername(e.target.value)} placeholder="username" required style={{
-                width: '100%', padding: '12px 16px', background: '#fafafa',
-                border: '1px solid #eee', borderRadius: 8,
-                fontSize: 15, color: '#0a6e46',
-              }} />
-            </div>
-            {tab === 'signup' && (
-              <>
-                <div style={{ marginBottom: 12 }}>
-                  <label style={{ display: 'block', fontSize: 13, fontWeight: 600, marginBottom: 8 }}>Email</label>
-                  <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="email@example.com" required style={{
-                    width: '100%', padding: '12px 16px', background: '#fafafa',
-                    border: '1px solid #eee', borderRadius: 8,
-                    fontSize: 15, color: '#0a6e46',
-                  }} />
+              <div style={{ marginBottom: 14 }}>
+                <label style={{ display: 'block', fontSize: 13, fontWeight: 600, marginBottom: 8, color: 'rgba(255,255,255,0.7)' }}>Phone Number</label>
+                <input type="tel" value={phone} onChange={e => setPhone(e.target.value)} placeholder="+255 7XX XXX XXX" required className="glass-input" />
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 14 }}>
+                <div>
+                  <label style={{ display: 'block', fontSize: 13, fontWeight: 600, marginBottom: 8, color: 'rgba(255,255,255,0.7)' }}>Area</label>
+                  <input type="text" value={area} onChange={e => setArea(e.target.value)} placeholder="Kariakoo" required className="glass-input" />
                 </div>
-                <div style={{ marginBottom: 12 }}>
-                  <label style={{ display: 'block', fontSize: 13, fontWeight: 600, marginBottom: 8 }}>Phone Number</label>
-                  <input type="tel" value={phone} onChange={e => setPhone(e.target.value)} placeholder="+255 7XX XXX XXX" required style={{
-                    width: '100%', padding: '12px 16px', background: '#fafafa',
-                    border: '1px solid #eee', borderRadius: 8,
-                    fontSize: 15, color: '#0a6e46',
-                  }} />
+                <div>
+                  <label style={{ display: 'block', fontSize: 13, fontWeight: 600, marginBottom: 8, color: 'rgba(255,255,255,0.7)' }}>City</label>
+                  <input type="text" value={city} onChange={e => setCity(e.target.value)} placeholder="Dar es Salaam" required className="glass-input" />
                 </div>
-                <div style={{ marginBottom: 12 }}>
-                  <label style={{ display: 'block', fontSize: 13, fontWeight: 600, marginBottom: 8 }}>Area</label>
-                  <input type="text" value={area} onChange={e => setArea(e.target.value)} placeholder="e.g. Kariakoo, Upanga" required style={{
-                    width: '100%', padding: '12px 16px', background: '#fafafa',
-                    border: '1px solid #eee', borderRadius: 8,
-                    fontSize: 15, color: '#0a6e46',
-                  }} />
-                </div>
-                <div style={{ marginBottom: 12 }}>
-                  <label style={{ display: 'block', fontSize: 13, fontWeight: 600, marginBottom: 8 }}>City</label>
-                  <input type="text" value={city} onChange={e => setCity(e.target.value)} placeholder="e.g. Dar es Salaam" required style={{
-                    width: '100%', padding: '12px 16px', background: '#fafafa',
-                    border: '1px solid #eee', borderRadius: 8,
-                    fontSize: 15, color: '#0a6e46',
-                  }} />
-                </div>
-                <div style={{ marginBottom: 12 }}>
-                  <label style={{ display: 'block', fontSize: 13, fontWeight: 600, marginBottom: 8 }}>Pinpoint Your Location on Map</label>
+              </div>
+              <div style={{ marginBottom: 14 }}>
+                <label style={{ display: 'block', fontSize: 13, fontWeight: 600, marginBottom: 8, color: 'rgba(255,255,255,0.7)' }}>Pinpoint Your Location on Map</label>
+                <div style={{
+                  borderRadius: 12, overflow: 'hidden',
+                  border: '1px solid rgba(255,255,255,0.15)',
+                }}>
                   <LocationPicker
                     lat={signupCoords.lat}
                     lng={signupCoords.lng}
-                    height={200}
+                    height={180}
                     onChange={(lat, lng) => setSignupCoords({ lat, lng })}
                   />
-                  <span style={{ fontSize: 11, color: '#666', marginTop: 4, display: 'block' }}>
-                    Tafadhali vuta alama ya bluu (marker) kuweka eneo lako sahihi.
-                  </span>
                 </div>
-              </>
-            )}
+                <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.4)', marginTop: 6, display: 'block' }}>
+                  Drag the marker to set your exact location.
+                </span>
+              </div>
+            </>
+          )}
 
-            <div style={{ marginBottom: 12 }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
-                <label style={{ fontSize: 13, fontWeight: 600 }}>Password</label>
-                {tab === 'login' && <a href="/password-reset" style={{ fontSize: 12, color: '#0a6e46', textDecoration: 'none' }}>Forgot password?</a>}
-              </div>
-              <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="••••••••" required style={{
-                width: '100%', padding: '12px 16px', background: '#fafafa',
-                border: '1px solid #eee', borderRadius: 8,
-                fontSize: 15, color: '#0a6e46',
-              }} />
-            </div>
-            {tab === 'signup' && (
-              <div style={{ marginBottom: 12 }}>
-                <label style={{ display: 'block', fontSize: 13, fontWeight: 600, marginBottom: 8 }}>Confirm Password</label>
-                <input type="password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} placeholder="••••••••" required style={{
-                  width: '100%', padding: '12px 16px', background: '#fafafa',
-                  border: '1px solid #eee', borderRadius: 8,
-                  fontSize: 15, color: '#0a6e46',
-                }} />
-              </div>
-            )}
-            <button type="submit" disabled={loginLoading || signupLoading} style={{
-              width: '100%', padding: '14px', borderRadius: 8,
-              background: loginLoading || signupLoading ? '#f5f5f5' : '#0a6e46',
-              color: loginLoading || signupLoading ? '#999' : '#fff',
-              border: 'none',
-              cursor: loginLoading || signupLoading ? 'not-allowed' : 'pointer',
-              fontSize: 15, fontWeight: 600, marginTop: 8,
-              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
-            }}>
-              {loginLoading ? (
-                <><div style={{ width: 18, height: 18, border: '2px solid rgba(0,0,0,0.15)', borderTopColor: '#0a6e46', borderRadius: '50%', animation: 'spin 0.6s linear infinite', display: 'inline-block' }} /> Logging in...</>
-              ) : signupLoading ? (
-                <><div style={{ width: 18, height: 18, border: '2px solid rgba(0,0,0,0.15)', borderTopColor: '#0a6e46', borderRadius: '50%', animation: 'spin 0.6s linear infinite', display: 'inline-block' }} /> Creating account...</>
-              ) : (
-                tab === 'login' ? 'Log In' : 'Create Account'
+          <div style={{ marginBottom: 14 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+              <label style={{ fontSize: 13, fontWeight: 600, color: 'rgba(255,255,255,0.7)' }}>Password</label>
+              {tab === 'login' && (
+                <a href="/password-reset" style={{ fontSize: 12, color: 'rgba(255,222,169,0.8)', textDecoration: 'none', fontWeight: 500 }}>
+                  Forgot password?
+                </a>
               )}
-            </button>
-
-            <div style={{ display: 'flex', alignItems: 'center', gap: 12, margin: '16px 0' }}>
-              <div style={{ flex: 1, height: 1, background: '#eee' }} />
-              <span style={{ fontSize: 12, color: '#888' }}>or continue with</span>
-              <div style={{ flex: 1, height: 1, background: '#eee' }} />
             </div>
-
-            <button type="button" style={{
-              width: '100%', padding: '12px', borderRadius: 8,
-              border: '1px solid #eee', background: '#fff', cursor: 'pointer',
-              fontSize: 14, fontWeight: 600, color: '#333',
-              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
-            }}>
-              <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-              Continue with Google
-            </button>
-          </form>
-
-          <div style={{ marginTop: 20, paddingTop: 20, borderTop: '1px solid #eee', textAlign: 'center' }}>
-            <p style={{ fontSize: 12, color: '#888' }}>&copy; 2026 FaidaYetu. All rights reserved.</p>
+            <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="••••••••" required className="glass-input" />
           </div>
+
+          {tab === 'signup' && (
+            <div style={{ marginBottom: 14 }}>
+              <label style={{ display: 'block', fontSize: 13, fontWeight: 600, marginBottom: 8, color: 'rgba(255,255,255,0.7)' }}>Confirm Password</label>
+              <input type="password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} placeholder="••••••••" required className="glass-input" />
+            </div>
+          )}
+
+          <button type="submit" disabled={loginLoading || signupLoading} style={{
+            width: '100%', padding: '14px', borderRadius: 12,
+            background: loginLoading || signupLoading
+              ? 'rgba(255,255,255,0.1)'
+              : 'linear-gradient(135deg, #0a6e46 0%, #2d8a5e 50%, #4caf7d 100%)',
+            color: '#fff', border: 'none',
+            cursor: loginLoading || signupLoading ? 'not-allowed' : 'pointer',
+            fontSize: 15, fontWeight: 700, marginTop: 8,
+            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
+            boxShadow: loginLoading || signupLoading ? 'none' : '0 4px 20px rgba(10,110,70,0.4)',
+            transition: 'all 0.3s ease',
+          }}>
+            {loginLoading ? (
+              <><div style={{ width: 18, height: 18, border: '2px solid rgba(255,255,255,0.2)', borderTopColor: '#fff', borderRadius: '50%', animation: 'spin 0.6s linear infinite', display: 'inline-block' }} /> Signing in...</>
+            ) : signupLoading ? (
+              <><div style={{ width: 18, height: 18, border: '2px solid rgba(255,255,255,0.2)', borderTopColor: '#fff', borderRadius: '50%', animation: 'spin 0.6s linear infinite', display: 'inline-block' }} /> Creating account...</>
+            ) : (
+              tab === 'login' ? 'Sign In' : 'Create Account'
+            )}
+          </button>
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12, margin: '20px 0' }}>
+            <div style={{ flex: 1, height: 1, background: 'rgba(255,255,255,0.1)' }} />
+            <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.35)' }}>or continue with</span>
+            <div style={{ flex: 1, height: 1, background: 'rgba(255,255,255,0.1)' }} />
+          </div>
+
+          <button type="button" style={{
+            width: '100%', padding: '12px', borderRadius: 12,
+            border: '1px solid rgba(255,255,255,0.12)', background: 'rgba(255,255,255,0.06)',
+            cursor: 'pointer', fontSize: 14, fontWeight: 600, color: 'rgba(255,255,255,0.8)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
+            transition: 'all 0.2s ease',
+          }}>
+            <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+            Continue with Google
+          </button>
+        </form>
+
+        {/* Stats at bottom */}
+        <div style={{
+          display: 'flex', justifyContent: 'center', gap: isMobile ? 20 : 32,
+          marginTop: 24, paddingTop: 20,
+          borderTop: '1px solid rgba(255,255,255,0.08)',
+        }}>
+          <div style={{ textAlign: 'center' }}>
+            <div style={{ fontSize: 18, fontWeight: 700, color: '#fff' }}>{publicStats.dailyDeliveries || '0'}</div>
+            <div style={{ fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'rgba(255,255,255,0.4)' }}>Deliveries</div>
+          </div>
+          <div style={{ width: 1, height: 32, background: 'rgba(255,255,255,0.1)' }} />
+          <div style={{ textAlign: 'center' }}>
+            <div style={{ fontSize: 18, fontWeight: 700, color: '#fff' }}>{publicStats.onTimeRate || '0'}</div>
+            <div style={{ fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'rgba(255,255,255,0.4)' }}>On-time</div>
+          </div>
+        </div>
+
+        <div style={{ textAlign: 'center', marginTop: 16 }}>
+          <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.3)' }}>&copy; 2026 FaidaYetu. All rights reserved.</p>
         </div>
       </div>
     </div>
