@@ -21,6 +21,7 @@ export default function TAMSurvey() {
   });
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     if (isAdmin) {
@@ -32,10 +33,13 @@ export default function TAMSurvey() {
 
   const handleSubmit = async () => {
     setSubmitting(true);
+    setError('');
     try {
       await api.submitTAMSurvey(form);
       setSubmitted(true);
-    } catch (e) {}
+    } catch (e) {
+      setError(e.message || 'Failed to submit. Please try again.');
+    }
     setSubmitting(false);
   };
 
@@ -176,6 +180,11 @@ export default function TAMSurvey() {
               {submitting ? 'Submitting...' : 'Submit Survey'}
             </button>
           </div>
+          {error && (
+            <div style={{ marginTop: 12, padding: '10px 16px', background: '#fef2f2', border: '1px solid #fecaca', borderRadius: 8, color: '#d32f2f', fontSize: 13 }}>
+              {error}
+            </div>
+          )}
         </div>
       )}
 
