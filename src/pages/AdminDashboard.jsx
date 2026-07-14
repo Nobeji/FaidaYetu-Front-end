@@ -23,6 +23,16 @@ const sidebarSections = [
     ],
   },
   {
+    label: 'IMPACT & TRACKING',
+    items: [
+      { label: 'Enhanced Performance', icon: '📊', nav: '/admin/enhanced-performance' },
+      { label: 'Cold Chain Tracking', icon: '🌡️', nav: '/admin/cold-chain' },
+      { label: 'Route Comparison', icon: '⚡', nav: '/admin/route-comparison' },
+      { label: 'Usability Metrics', icon: '👥', nav: '/admin/usability-metrics' },
+      { label: 'System Impact', icon: '🎯', nav: '/admin/system-impact' },
+    ],
+  },
+  {
     label: 'REPORTS & AI',
     items: [
       { label: 'Reports', icon: '📋', nav: '/admin/reports' },

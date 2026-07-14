@@ -223,4 +223,10 @@ export const api = {
   adminWhatIf: (price, promo) => request(`/admin/what-if-simulator/?price_change=${price}&promo_discount=${promo}`),
   adminNetwork: () => request('/admin/network-graph/'),
   adminSupplierPayouts: (params) => request(`/admin/supplier-payouts/${params ? '?' + new URLSearchParams(params) : ''}`),
+  adminEnhancedPerformance: (days) => request(`/admin/enhanced-performance/?days=${days || 30}`),
+  adminColdChain: (deliveryId) => request(`/admin/cold-chain/${deliveryId ? '?delivery_id=' + deliveryId : ''}`),
+  adminRouteComparison: () => request('/admin/route-comparison/'),
+  adminUsabilityMetrics: (days) => request(`/admin/usability-metrics/?days=${days || 30}`),
+  adminSystemImpact: () => request('/admin/system-impact/'),
+  logUsability: (data) => request('/admin/usability-metrics/', { method: 'POST', body: JSON.stringify(data) }),
 };
