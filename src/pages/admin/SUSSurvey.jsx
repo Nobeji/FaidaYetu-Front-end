@@ -19,7 +19,11 @@ export default function SUSSurvey() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
-  const [form, setForm] = useState({ q1:3,q2:3,q3:3,q4:3,q5:3,q6:3,q7:3,q8:3,q9:3,q10:3, user_role: 'customer' });
+  const [form, setForm] = useState(() => {
+    const profile = JSON.parse(localStorage.getItem('profile') || '{}');
+    const role = profile.role || 'customer';
+    return { q1:3,q2:3,q3:3,q4:3,q5:3,q6:3,q7:3,q8:3,q9:3,q10:3, user_role: role };
+  });
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [myScore, setMyScore] = useState(null);
@@ -151,7 +155,9 @@ export default function SUSSurvey() {
 
       {data?.total === 0 && (
         <div style={{ background: '#fff', borderRadius: 16, border: '1px solid #eaeaea', padding: 48, textAlign: 'center', color: '#888' }}>
-          No SUS survey responses yet. Click "Take Survey" to submit the first response.
+          <div style={{ fontSize: 32, marginBottom: 12 }}>📋</div>
+          <div style={{ fontSize: 15, fontWeight: 600, marginBottom: 4 }}>Rate FaidaYetu's Usability</div>
+          <div>Click "Take Survey" above to complete the 10-question System Usability Scale.</div>
         </div>
       )}
     </div>

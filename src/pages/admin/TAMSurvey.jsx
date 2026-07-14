@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { api } from '../../services/api';
 
 const SCALE_LABELS = ['Strongly Disagree', 'Disagree', 'Neutral', 'Agree', 'Strongly Agree'];
@@ -7,7 +8,13 @@ export default function TAMSurvey() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
-  const [form, setForm] = useState({ perceived_usefulness: 3, perceived_ease_of_use: 3, behavioral_intention: 3, actual_usage: 3, comments: '', user_role: 'customer' });
+  const location = useLocation();
+  const isDashboard = location.pathname.includes('/customer') || location.pathname.includes('/supplier') || location.pathname.includes('/delivery');
+  const [form, setForm] = useState(() => {
+    const profile = JSON.parse(localStorage.getItem('profile') || '{}');
+    const role = profile.role || 'customer';
+    return { perceived_usefulness: 3, perceived_ease_of_use: 3, behavioral_intention: 3, actual_usage: 3, comments: '', user_role: role };
+  });
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
@@ -33,7 +40,7 @@ export default function TAMSurvey() {
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 24 }}>
         <div>
           <h1 style={{ fontSize: 28, fontWeight: 700, margin: '0 0 4px' }}>Technology Acceptance Model Survey</h1>
-          <p style={{ fontSize: 15, color: '#666', margin: 0 }}>Perceived usefulness, ease of use, and behavioral intention (Davis, 1989)</p>
+          <p style={{ fontSize: 15, color: '#666', margin: 0 }}>{isDashboard ? 'Help us improve FaidaYetu by sharing your experience' : 'Perceived usefulness, ease of use, and behavioral intention (Davis, 1989)'}</p>
         </div>
         <button onClick={() => setShowForm(!showForm)} style={{ padding: '10px 20px', background: '#1976d2', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 600, cursor: 'pointer' }}>
           {showForm ? 'Hide Form' : '+ Take Survey'}
@@ -67,6 +74,7 @@ export default function TAMSurvey() {
               <option value="customer">Customer</option>
               <option value="supplier">Supplier</option>
               <option value="driver">Delivery Person</option>
+              <option value="admin">Admin</option>
             </select>
           </div>
           <div style={{ marginBottom: 16 }}>
@@ -148,7 +156,9 @@ export default function TAMSurvey() {
 
       {data?.total === 0 && (
         <div style={{ background: '#fff', borderRadius: 16, border: '1px solid #eaeaea', padding: 48, textAlign: 'center', color: '#888' }}>
-          No TAM survey responses yet. Click "Take Survey" to submit the first response.
+          <div style={{ fontSize: 32, marginBottom: 12 }}>📝</div>
+          <div style={{ fontSize: 15, fontWeight: 600, marginBottom: 4 }}>Share Your Experience</div>
+          <div>Click "Take Survey" above to tell us how FaidaYetu works for you.</div>
         </div>
       )}
     </div>

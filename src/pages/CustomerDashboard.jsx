@@ -14,6 +14,8 @@ const navItems = [
   { icon: '📋', label: 'My Orders', nav: '/customer/orders' },
   { icon: '🔔', label: 'Notifications', nav: '/customer/notifications' },
   { icon: '👤', label: 'Profile', nav: '/customer/profile' },
+  { icon: '📝', label: 'TAM Survey', nav: '/customer/tam-survey' },
+  { icon: '📋', label: 'SUS Survey', nav: '/customer/sus-survey' },
 ];
 
 const defaultLocation = [-6.7924, 39.2083];

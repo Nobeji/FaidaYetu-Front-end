@@ -11,6 +11,8 @@ const navItems = [
   { icon: '💰', label: 'Earnings', nav: '/delivery/earnings' },
   { icon: '⚙️', label: 'Settings', nav: '/delivery/settings' },
   { icon: '❓', label: 'Support', nav: '/delivery/support' },
+  { icon: '📝', label: 'TAM Survey', nav: '/delivery/tam-survey' },
+  { icon: '📋', label: 'SUS Survey', nav: '/delivery/sus-survey' },
 ];
 
 export default function DeliveryDashboard() {

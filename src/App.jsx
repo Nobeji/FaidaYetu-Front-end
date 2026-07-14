@@ -74,6 +74,8 @@ export default function App() {
         <Route path="/customer/orders" element={<MyOrders />} />
         <Route path="/customer/notifications" element={<CustomerNotifications />} />
         <Route path="/customer/profile" element={<CustomerProfile />} />
+        <Route path="/customer/tam-survey" element={<TAMSurvey />} />
+        <Route path="/customer/sus-survey" element={<SUSSurvey />} />
 
         <Route path="/supplier" element={<SupplierDashboard />} />
         <Route path="/supplier/inventory" element={<SupplierInventory />} />
@@ -83,12 +85,16 @@ export default function App() {
         <Route path="/supplier/statistics" element={<SupplierStatistics />} />
         <Route path="/supplier/settings" element={<SupplierSettings />} />
         <Route path="/supplier/support" element={<SupplierSupport />} />
+        <Route path="/supplier/tam-survey" element={<TAMSurvey />} />
+        <Route path="/supplier/sus-survey" element={<SUSSurvey />} />
 
         <Route path="/delivery" element={<DeliveryDashboard />} />
         <Route path="/delivery/route-history" element={<RouteHistory />} />
         <Route path="/delivery/earnings" element={<DeliveryEarnings />} />
         <Route path="/delivery/settings" element={<DeliverySettings />} />
         <Route path="/delivery/support" element={<DeliverySupport />} />
+        <Route path="/delivery/tam-survey" element={<TAMSurvey />} />
+        <Route path="/delivery/sus-survey" element={<SUSSurvey />} />
 
         <Route path="/admin" element={<AdminDashboard />}>
           <Route index element={<Navigate to="/admin/demand-analysis" replace />} />

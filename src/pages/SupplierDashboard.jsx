@@ -18,6 +18,8 @@ const navItems = [
   { icon: '📉', label: 'Statistics', nav: '/supplier/statistics' },
   { icon: '⚙️', label: 'Settings', nav: '/supplier/settings' },
   { icon: '❓', label: 'Support', nav: '/supplier/support' },
+  { icon: '📝', label: 'TAM Survey', nav: '/supplier/tam-survey' },
+  { icon: '📋', label: 'SUS Survey', nav: '/supplier/sus-survey' },
 ];
 
 export default function SupplierDashboard() {
