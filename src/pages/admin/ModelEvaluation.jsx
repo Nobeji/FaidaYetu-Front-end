@@ -16,7 +16,7 @@ export default function ModelEvaluation() {
     <div className="fade-in">
       <h1 style={{ fontSize: 28, fontWeight: 700, margin: '0 0 4px' }}>📐 Model Evaluation</h1>
       <p style={{ fontSize: 15, color: '#666', marginBottom: 24 }}>Prophet forecast accuracy metrics against actuals</p>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: 12, marginBottom: 24 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: 12, marginBottom: 24 }}>
         <div style={{ background: '#fff', borderRadius: 12, padding: 16, border: '1px solid #eaeaea' }}>
           <div style={{ fontSize: 12, fontWeight: 700, color: '#888', textTransform: 'uppercase' }}>Accuracy</div>
           <div style={{ fontSize: 32, fontWeight: 800, color: (data?.accuracy || 0) > 80 ? '#2e7d32' : '#e65100' }}>{data?.accuracy || 0}%</div>
@@ -28,6 +28,10 @@ export default function ModelEvaluation() {
         <div style={{ background: '#fff', borderRadius: 12, padding: 16, border: '1px solid #eaeaea' }}>
           <div style={{ fontSize: 12, fontWeight: 700, color: '#888', textTransform: 'uppercase' }}>MAPE</div>
           <div style={{ fontSize: 32, fontWeight: 800 }}>{data?.mape || 0}%</div>
+        </div>
+        <div style={{ background: '#fff', borderRadius: 12, padding: 16, border: '1px solid #eaeaea' }}>
+          <div style={{ fontSize: 12, fontWeight: 700, color: '#888', textTransform: 'uppercase' }}>RMSE</div>
+          <div style={{ fontSize: 32, fontWeight: 800, color: (data?.rmse || 0) > 5 ? '#e65100' : '#1976d2' }}>{data?.rmse || 0}</div>
         </div>
         <div style={{ background: '#fff', borderRadius: 12, padding: 16, border: '1px solid #eaeaea' }}>
           <div style={{ fontSize: 12, fontWeight: 700, color: '#888', textTransform: 'uppercase' }}>Data Points</div>

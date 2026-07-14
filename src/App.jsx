@@ -52,6 +52,9 @@ import ColdChainTracking from './pages/admin/ColdChainTracking';
 import RouteComparison from './pages/admin/RouteComparison';
 import UsabilityMetrics from './pages/admin/UsabilityMetrics';
 import SystemImpact from './pages/admin/SystemImpact';
+import TAMSurvey from './pages/admin/TAMSurvey';
+import SUSSurvey from './pages/admin/SUSSurvey';
+import SpatialAccuracy from './pages/admin/SpatialAccuracy';
 import { ToastProvider } from './components/ToastContext';
 
 export default function App() {
@@ -111,8 +114,11 @@ export default function App() {
           <Route path="enhanced-performance" element={<EnhancedPerformance />} />
           <Route path="cold-chain" element={<ColdChainTracking />} />
           <Route path="route-comparison" element={<RouteComparison />} />
+          <Route path="spatial-accuracy" element={<SpatialAccuracy />} />
           <Route path="usability-metrics" element={<UsabilityMetrics />} />
           <Route path="system-impact" element={<SystemImpact />} />
+          <Route path="tam-survey" element={<TAMSurvey />} />
+          <Route path="sus-survey" element={<SUSSurvey />} />
         </Route>
       </Routes>
       </ToastProvider>

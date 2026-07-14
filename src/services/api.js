@@ -228,5 +228,10 @@ export const api = {
   adminRouteComparison: () => request('/admin/route-comparison/'),
   adminUsabilityMetrics: (days) => request(`/admin/usability-metrics/?days=${days || 30}`),
   adminSystemImpact: () => request('/admin/system-impact/'),
+  adminTAMSurvey: () => request('/admin/tam-survey/'),
+  submitTAMSurvey: (data) => request('/admin/tam-survey/', { method: 'POST', body: JSON.stringify(data) }),
+  adminSUSSurvey: () => request('/admin/sus-survey/'),
+  submitSUSSurvey: (data) => request('/admin/sus-survey/', { method: 'POST', body: JSON.stringify(data) }),
+  adminSpatialAccuracy: () => request('/admin/spatial-accuracy/'),
   logUsability: (data) => request('/admin/usability-metrics/', { method: 'POST', body: JSON.stringify(data) }),
 };
