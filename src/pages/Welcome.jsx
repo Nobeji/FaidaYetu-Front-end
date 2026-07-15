@@ -82,12 +82,12 @@ export default function Welcome() {
                 backdropFilter: 'blur(8px)',
               }}>View Live Map</button>
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 32, flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: isMobile ? 12 : 32, flexWrap: 'wrap' }}>
               {[{ v: stats.activeFarmers || '--', l: 'Active Farmers' }, { v: stats.dailyDeliveries || '--', l: 'Daily Deliveries' }, { v: stats.onTimeRate || '--', l: 'On-time Rate' }].map((s, i) => (
-                <div key={s.l} style={{ display: 'flex', alignItems: 'center', gap: 32 }}>
-                  <div style={{ padding: '16px 24px', borderRadius: 16, background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.06)', backdropFilter: 'blur(8px)' }}>
-                    <div style={{ fontSize: 26, fontWeight: 700, color: '#fff' }}>{s.v}</div>
-                    <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.4)', marginTop: 2 }}>{s.l}</div>
+                <div key={s.l} style={{ display: 'flex', alignItems: 'center', gap: isMobile ? 12 : 32 }}>
+                  <div style={{ padding: isMobile ? '12px 16px' : '16px 24px', borderRadius: 16, background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.06)', backdropFilter: 'blur(8px)' }}>
+                    <div style={{ fontSize: isMobile ? 22 : 26, fontWeight: 700, color: '#fff' }}>{s.v}</div>
+                    <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.4)', marginTop: 2 }}>{s.l}</div>
                   </div>
                   {i < 2 && !isMobile && <div style={{ width: 1, height: 36, background: 'rgba(255,255,255,0.06)' }} />}
                 </div>
@@ -112,7 +112,7 @@ export default function Welcome() {
           <h2 style={{ fontSize: isMobile ? 26 : 32, fontWeight: 700, marginBottom: 8 }}>Supplier Network Overview</h2>
           <p style={{ fontSize: 16, color: 'rgba(255,255,255,0.4)', marginBottom: 24 }}>Explore all poultry suppliers across Dar es Salaam</p>
           <div style={{ borderRadius: 20, overflow: 'hidden', border: '1px solid rgba(255,255,255,0.08)', boxShadow: '0 8px 32px rgba(0,0,0,0.3)' }}>
-            <MapComponent height={420} suppliers={suppliers} />
+            <MapComponent height={isMobile ? 280 : 420} suppliers={suppliers} />
           </div>
         </section>
 
@@ -121,7 +121,7 @@ export default function Welcome() {
           <div style={{ position: 'relative', zIndex: 1, maxWidth: 600, margin: '0 auto' }}>
             <h2 style={{ fontSize: isMobile ? 28 : 36, fontWeight: 800, color: '#fff', marginBottom: 16, letterSpacing: '-0.02em' }}>Ready to Digitalize Your Supply Chain?</h2>
             <p style={{ fontSize: 16, color: 'rgba(255,255,255,0.45)', maxWidth: 480, margin: '0 auto 32px', lineHeight: 1.6 }}>Join the most advanced poultry network in Tanzania. Start optimizing your operations today with FaidaYetu.</p>
-            <button onClick={() => navigate('/auth')} style={{ padding: '16px 56px', borderRadius: 14, background: 'linear-gradient(135deg, #1e40af 0%, #2563eb 50%, #3b82f6 100%)', color: '#fff', border: 'none', cursor: 'pointer', fontSize: 16, fontWeight: 700, boxShadow: '0 4px 24px rgba(30,64,175,0.4)' }}>Get Started Now</button>
+            <button onClick={() => navigate('/auth')} style={{ padding: isMobile ? '14px 32px' : '16px 56px', borderRadius: 14, background: 'linear-gradient(135deg, #1e40af 0%, #2563eb 50%, #3b82f6 100%)', color: '#fff', border: 'none', cursor: 'pointer', fontSize: isMobile ? 15 : 16, fontWeight: 700, boxShadow: '0 4px 24px rgba(30,64,175,0.4)' }}>Get Started Now</button>
           </div>
         </section>
 

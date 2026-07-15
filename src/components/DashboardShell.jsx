@@ -111,8 +111,9 @@ export default function DashboardShell({ brand, brandSub, navItems, profile, chi
               display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2,
               padding: '6px 12px', cursor: 'pointer', fontSize: 10, fontWeight: 500,
               color: location.pathname === (item.nav || '/') ? '#60a5fa' : 'rgba(255,255,255,0.3)',
+              padding: '8px 14px',
             }}>
-              <span style={{ fontSize: 18 }}>{item.icon}</span>{item.label}
+              <span style={{ fontSize: 20 }}>{item.icon}</span>{item.label}
             </div>
           ))}
         </nav>

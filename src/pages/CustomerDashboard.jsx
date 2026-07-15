@@ -370,9 +370,9 @@ export default function CustomerDashboard() {
             </>
           ) : (
             <>
-              <div style={{ position: 'absolute', top: 8, right: 60, zIndex: 999 }}>
-                <button onClick={() => { setEditCoords({ lat: userLocation[0], lng: userLocation[1] }); setEditLocation(true); }} style={{ padding: '4px 10px', borderRadius: 6, border: '1px solid #ccc', background: 'rgba(255,255,255,0.95)', cursor: 'pointer', fontSize: 11, fontWeight: 600, boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
-                  📍 Update My Location
+              <div style={{ position: 'absolute', top: 8, right: 8, zIndex: 999 }}>
+                <button onClick={() => { setEditCoords({ lat: userLocation[0], lng: userLocation[1] }); setEditLocation(true); }} style={{ padding: '6px 12px', borderRadius: 8, border: '1px solid rgba(255,255,255,0.15)', background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(8px)', cursor: 'pointer', fontSize: 11, fontWeight: 600, color: '#fff', boxShadow: '0 2px 8px rgba(0,0,0,0.3)' }}>
+                  📍 {isMobile ? 'Update' : 'Update My Location'}
                 </button>
               </div>
               <MapComponent

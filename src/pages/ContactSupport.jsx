@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const BG = 'linear-gradient(160deg, #020617 0%, #0a1628 30%, #0f1d32 60%, #1e3a5f 100%)';
@@ -7,6 +7,8 @@ export default function ContactSupport() {
   const [name, setName] = useState(''); const [email, setEmail] = useState('');
   const [subject, setSubject] = useState(''); const [message, setMessage] = useState('');
   const [sent, setSent] = useState(false); const navigate = useNavigate();
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  useEffect(() => { const c = () => setIsMobile(window.innerWidth < 768); window.addEventListener('resize', c); return () => window.removeEventListener('resize', c); }, []);
   const handleSubmit = (e) => { e.preventDefault(); setSent(true); };
 
   return (
@@ -20,7 +22,7 @@ export default function ContactSupport() {
           <h1 style={{ fontSize: 32, fontWeight: 700, color: '#fff', marginBottom: 8 }}>Contact Support</h1>
           <p style={{ fontSize: 15, color: 'rgba(255,255,255,0.4)' }}>We're here to help. Reach out to us anytime.</p>
         </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12, marginBottom: 28 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)', gap: 12, marginBottom: 28 }}>
           {[{ icon: '📧', label: 'Email', val: 'support@faidayetu.co.tz' }, { icon: '📞', label: 'Phone', val: 'Coming soon' }, { icon: '💬', label: 'Live Chat', val: 'Coming soon' }].map(c => (
             <div key={c.label} style={{ background: 'rgba(255,255,255,0.05)', borderRadius: 14, border: '1px solid rgba(255,255,255,0.07)', padding: 20, textAlign: 'center' }}>
               <div style={{ fontSize: 28, marginBottom: 8 }}>{c.icon}</div>
@@ -34,7 +36,7 @@ export default function ContactSupport() {
             <>
               <h2 style={{ fontSize: 22, fontWeight: 700, color: '#fff', marginBottom: 20 }}>Send us a Message</h2>
               <form onSubmit={handleSubmit}>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 12 }}>
+                <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: 12, marginBottom: 12 }}>
                   <div><label style={{ fontSize: 13, fontWeight: 600, color: 'rgba(255,255,255,0.65)', display: 'block', marginBottom: 6 }}>Full Name</label><input type="text" value={name} onChange={e => setName(e.target.value)} placeholder="John Doe" required className="glass-input" /></div>
                   <div><label style={{ fontSize: 13, fontWeight: 600, color: 'rgba(255,255,255,0.65)', display: 'block', marginBottom: 6 }}>Email</label><input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="you@example.com" required className="glass-input" /></div>
                 </div>

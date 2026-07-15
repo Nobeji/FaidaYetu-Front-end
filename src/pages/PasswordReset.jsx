@@ -20,7 +20,7 @@ export default function PasswordReset() {
       <div style={{
         position: 'relative', zIndex: 2, width: '100%', maxWidth: 440,
         background: 'rgba(255,255,255,0.06)', backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)',
-        border: '1px solid rgba(255,255,255,0.1)', borderRadius: 24, padding: '36px 40px',
+        border: '1px solid rgba(255,255,255,0.1)', borderRadius: 24, padding: window.innerWidth < 768 ? '28px 24px' : '36px 40px',
         boxShadow: '0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.08)',
         animation: 'slideIn 0.5s ease-out',
       }}>
