@@ -2,8 +2,8 @@
 html { scroll-behavior: smooth; }
 body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  background: #021a0e;
-  color: #e8fff0;
+  background: #020617;
+  color: #f1f5f9;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
 }
@@ -34,8 +34,8 @@ table { border-collapse: collapse; width: 100%; }
   50% { transform: translateY(-10px) scale(1.02); }
 }
 @keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 20px rgba(10, 110, 70, 0.3); }
-  50% { box-shadow: 0 0 40px rgba(10, 110, 70, 0.6); }
+  0%, 100% { box-shadow: 0 0 20px rgba(30, 64, 175, 0.3); }
+  50% { box-shadow: 0 0 40px rgba(30, 64, 175, 0.6); }
 }
 @keyframes spin {
   to { transform: rotate(360deg); }
@@ -46,47 +46,31 @@ table { border-collapse: collapse; width: 100%; }
 
 ::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 6px; }
-::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.25); }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); border-radius: 6px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
 
 .glass-input {
   width: 100%;
   padding: 13px 16px;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 12px;
   font-size: 15px;
   color: #fff;
   transition: all 0.2s ease;
 }
-.glass-input::placeholder { color: rgba(255, 255, 255, 0.35); }
+.glass-input::placeholder { color: rgba(255, 255, 255, 0.3); }
 .glass-input:focus {
-  background: rgba(255, 255, 255, 0.12);
-  border-color: rgba(10, 110, 70, 0.6);
-  box-shadow: 0 0 0 3px rgba(10, 110, 70, 0.15);
-}
-.glass-input-dark {
-  width: 100%;
-  padding: 13px 16px;
-  background: rgba(0, 0, 0, 0.04);
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  border-radius: 12px;
-  font-size: 15px;
-  color: #002114;
-  transition: all 0.2s ease;
-}
-.glass-input-dark::placeholder { color: rgba(0, 33, 20, 0.35); }
-.glass-input-dark:focus {
-  background: rgba(0, 0, 0, 0.06);
-  border-color: rgba(10, 110, 70, 0.5);
-  box-shadow: 0 0 0 3px rgba(10, 110, 70, 0.1);
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(30, 64, 175, 0.6);
+  box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.15);
 }
 
 .glass-select {
   width: 100%;
   padding: 13px 16px;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 12px;
   font-size: 15px;
   color: #fff;
@@ -95,11 +79,11 @@ table { border-collapse: collapse; width: 100%; }
   cursor: pointer;
 }
 .glass-select:focus {
-  background: rgba(255, 255, 255, 0.12);
-  border-color: rgba(10, 110, 70, 0.6);
-  box-shadow: 0 0 0 3px rgba(10, 110, 70, 0.15);
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(30, 64, 175, 0.6);
+  box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.15);
 }
-.glass-select option { background: #044a2b; color: #fff; }
+.glass-select option { background: #0f172a; color: #fff; }
 
 @media (max-width: 768px) {
   .sidebar-link { display: none; }
