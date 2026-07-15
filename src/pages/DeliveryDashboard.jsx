@@ -15,6 +15,9 @@ const navItems = [
   { icon: '📋', label: 'SUS Survey', nav: '/delivery/sus-survey' },
 ];
 
+const GLASS = 'rgba(255,255,255,0.05)';
+const GLASS_BORDER = '1px solid rgba(255,255,255,0.08)';
+
 export default function DeliveryDashboard() {
   const [dashboardData, setDashboardData] = useState(null);
   const [tasks, setTasks] = useState([]);
@@ -96,7 +99,7 @@ export default function DeliveryDashboard() {
 
   if (loading) return (
     <DashboardShell brand="FaidaYetu" brandSub="Delivery Portal" navItems={navItems}>
-      <div style={{ textAlign: 'center', padding: 60, color: '#888' }}>Loading dashboard...</div>
+      <div style={{ textAlign: 'center', padding: 60, color: 'rgba(255,255,255,0.5)' }}>Loading dashboard...</div>
     </DashboardShell>
   );
 
@@ -109,29 +112,29 @@ export default function DeliveryDashboard() {
 
   return (
     <DashboardShell brand="FaidaYetu" brandSub="Delivery Portal" navItems={navItems} profile={
-      <div style={{ display: 'flex', alignItems: 'center', gap: 10, background: '#f9f9f9', padding: '8px 12px', borderRadius: 10 }}>
-        <div style={{ width: 36, height: 36, borderRadius: '50%', background: '#f0f0f0', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#000', fontWeight: 700, fontSize: 13 }}>{initials}</div>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10, background: 'rgba(255,255,255,0.06)', padding: '8px 12px', borderRadius: 10, border: '1px solid rgba(255,255,255,0.06)' }}>
+        <div style={{ width: 36, height: 36, borderRadius: '50%', background: 'linear-gradient(135deg, #1e40af, #3b82f6)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 700, fontSize: 13, boxShadow: '0 2px 8px rgba(30,64,175,0.3)' }}>{initials}</div>
         <div>
-          <div style={{ fontWeight: 600, fontSize: 13 }}>{name}</div>
-          <div style={{ fontSize: 11, color: '#888' }}>ID: {dp.id || 'N/A'}-PD</div>
+          <div style={{ fontWeight: 600, fontSize: 13, color: '#fff' }}>{name}</div>
+          <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.45)' }}>ID: {dp.id || 'N/A'}-PD</div>
         </div>
       </div>
     }>
       <div>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: isMobile ? 'stretch' : 'flex-start', marginBottom: 24, flexDirection: isMobile ? 'column' : 'row', gap: 12 }}>
           <div>
-            <h1 style={{ fontSize: isMobile ? 20 : 22, fontWeight: 700, color: '#111', margin: 0 }}>Delivery Dashboard</h1>
-            <p style={{ fontSize: 13, color: '#888', margin: '4px 0 0' }}>Optimized routes for regional poultry logistics.</p>
+            <h1 style={{ fontSize: isMobile ? 20 : 22, fontWeight: 700, color: '#fff', margin: 0 }}>Delivery Dashboard</h1>
+            <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.5)', margin: '4px 0 0' }}>Optimized routes for regional poultry logistics.</p>
           </div>
           <div style={{ display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap' }}>
-            <div onClick={() => setDriverOnline(!driverOnline)} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '8px 16px', background: '#fff', borderRadius: 20, border: '1px solid #e0e0e0', cursor: 'pointer' }}>
-              <span style={{ width: 8, height: 8, borderRadius: '50%', background: driverOnline ? '#111' : '#ccc' }} />
-              <span style={{ fontSize: 13, fontWeight: 500, color: '#555' }}>{driverOnline ? 'Online' : 'Offline'}</span>
+            <div onClick={() => setDriverOnline(!driverOnline)} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '8px 16px', background: 'rgba(255,255,255,0.05)', borderRadius: 20, border: '1px solid rgba(255,255,255,0.08)', cursor: 'pointer' }}>
+              <span style={{ width: 8, height: 8, borderRadius: '50%', background: driverOnline ? '#4ade80' : 'rgba(255,255,255,0.25)' }} />
+              <span style={{ fontSize: 13, fontWeight: 500, color: '#fff' }}>{driverOnline ? 'Online' : 'Offline'}</span>
             </div>
             <button onClick={() => navigate('/delivery/route-history')} style={{
               display: 'flex', alignItems: 'center', gap: 6,
-              padding: '10px 20px', borderRadius: 8, background: '#000', color: '#fff',
-              border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: 13,
+              padding: '10px 20px', borderRadius: 8, background: 'linear-gradient(135deg, #1e40af, #2563eb)', color: '#fff',
+              border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: 13, boxShadow: '0 2px 8px rgba(30,64,175,0.3)',
             }}>
               ▶ Start Route
             </button>
@@ -139,7 +142,7 @@ export default function DeliveryDashboard() {
         </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '2fr 1fr', gap: 20 }}>
-          <div style={{ borderRadius: 10, overflow: 'hidden', border: '1px solid #eee' }}>
+          <div style={{ borderRadius: 10, overflow: 'hidden', border: '1px solid rgba(255,255,255,0.08)' }}>
             <MapComponent
               height={isMobile ? 260 : 400}
               userLocation={userLocation}
@@ -154,70 +157,70 @@ export default function DeliveryDashboard() {
           </div>
 
           {activeDelivery ? (
-            <div style={{ background: '#fff', border: '1px solid #eaeaea', borderRadius: 10, padding: '20px', display: 'flex', flexDirection: 'column' }}>
+            <div style={{ background: GLASS, border: GLASS_BORDER, borderRadius: 10, padding: '20px', display: 'flex', flexDirection: 'column', backdropFilter: 'blur(12px)' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-                <span style={{ fontSize: 11, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#888' }}>Active Delivery</span>
-                <span style={{ padding: '3px 10px', background: '#f0f0f0', color: '#000', fontSize: 11, fontWeight: 600, borderRadius: 20 }}>In Progress</span>
+                <span style={{ fontSize: 11, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.06em', color: 'rgba(255,255,255,0.5)' }}>Active Delivery</span>
+                <span style={{ padding: '3px 10px', background: 'rgba(30,64,175,0.25)', color: '#60a5fa', fontSize: 11, fontWeight: 600, borderRadius: 20, border: '1px solid rgba(30,64,175,0.2)' }}>In Progress</span>
               </div>
               <div style={{ display: 'flex', gap: 12, marginBottom: 12 }}>
-                <span style={{ fontSize: 16, color: '#888' }}>📍</span>
+                <span style={{ fontSize: 16 }}>📍</span>
                 <div>
-                  <div style={{ fontSize: 11, color: '#888', textTransform: 'uppercase', fontWeight: 600 }}>Pickup</div>
-                  <div style={{ fontSize: 14, fontWeight: 600 }}>{activeDelivery.supplier_name || 'Supplier'}</div>
-                  <div style={{ fontSize: 12, color: '#888' }}>Order #{activeDelivery.id}</div>
+                  <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', fontWeight: 600 }}>Pickup</div>
+                  <div style={{ fontSize: 14, fontWeight: 600, color: '#fff' }}>{activeDelivery.supplier_name || 'Supplier'}</div>
+                  <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.5)' }}>Order #{activeDelivery.id}</div>
                 </div>
               </div>
               <div style={{ display: 'flex', gap: 12, marginBottom: 16 }}>
-                <span style={{ fontSize: 16, color: '#000' }}>📍</span>
+                <span style={{ fontSize: 16 }}>📍</span>
                 <div>
-                  <div style={{ fontSize: 11, color: '#888', textTransform: 'uppercase', fontWeight: 600 }}>Drop-off</div>
-                  <div style={{ fontSize: 14, fontWeight: 600 }}>{activeDelivery.customer_name || 'Customer'}</div>
-                  <div style={{ fontSize: 12, color: '#888' }}>{activeDelivery.delivery_address || 'N/A'}</div>
+                  <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', fontWeight: 600 }}>Drop-off</div>
+                  <div style={{ fontSize: 14, fontWeight: 600, color: '#fff' }}>{activeDelivery.customer_name || 'Customer'}</div>
+                  <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.5)' }}>{activeDelivery.delivery_address || 'N/A'}</div>
                 </div>
               </div>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginTop: 'auto', paddingTop: 16, borderTop: '1px solid #f0f0f0' }}>
-                <button onClick={() => toast('Contact supplier at support@faidayetu.co.tz', 'info')} style={{ padding: '10px', borderRadius: 8, border: '1px solid #e0e0e0', background: '#fff', color: '#555', cursor: 'pointer', fontWeight: 600, fontSize: 12 }}>Contact</button>
-                <button onClick={handleComplete} style={{ padding: '10px', borderRadius: 8, background: '#000', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: 12 }}>Complete</button>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginTop: 'auto', paddingTop: 16, borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+                <button onClick={() => toast('Contact supplier at support@faidayetu.co.tz', 'info')} style={{ padding: '10px', borderRadius: 8, border: '1px solid rgba(255,255,255,0.12)', background: 'rgba(255,255,255,0.05)', color: '#fff', cursor: 'pointer', fontWeight: 600, fontSize: 12 }}>Contact</button>
+                <button onClick={handleComplete} style={{ padding: '10px', borderRadius: 8, background: 'linear-gradient(135deg, #1e40af, #2563eb)', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: 12, boxShadow: '0 2px 8px rgba(30,64,175,0.3)' }}>Complete</button>
               </div>
             </div>
           ) : (
-            <div style={{ background: '#fff', border: '1px solid #eaeaea', borderRadius: 10, padding: 20, display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: 12 }}>
+            <div style={{ background: GLASS, border: GLASS_BORDER, borderRadius: 10, padding: 20, display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: 12, backdropFilter: 'blur(12px)' }}>
               <span style={{ fontSize: 40 }}>📭</span>
-              <div style={{ fontWeight: 700, fontSize: 16, color: '#111' }}>No Active Deliveries</div>
-              <p style={{ fontSize: 13, color: '#888', textAlign: 'center', margin: 0 }}>You're all caught up! Awaiting new task assignments.</p>
+              <div style={{ fontWeight: 700, fontSize: 16, color: '#fff' }}>No Active Deliveries</div>
+              <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.5)', textAlign: 'center', margin: 0 }}>You're all caught up! Awaiting new task assignments.</p>
             </div>
           )}
         </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 2fr', gap: 20, marginTop: 20 }}>
-          <div onClick={() => navigate('/delivery/earnings')} style={{ background: '#fff', border: '1px solid #eaeaea', borderRadius: 10, padding: '20px', cursor: 'pointer' }}>
+          <div onClick={() => navigate('/delivery/earnings')} style={{ background: GLASS, border: GLASS_BORDER, borderRadius: 10, padding: '20px', cursor: 'pointer', backdropFilter: 'blur(12px)' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
-              <span style={{ fontSize: 11, fontWeight: 600, textTransform: 'uppercase', color: '#888' }}>Earnings Today</span>
-              <span style={{ color: '#000', fontSize: 16 }}>📈</span>
+              <span style={{ fontSize: 11, fontWeight: 600, textTransform: 'uppercase', color: 'rgba(255,255,255,0.5)' }}>Earnings Today</span>
+              <span style={{ fontSize: 16 }}>📈</span>
             </div>
             <div style={{ display: 'flex', alignItems: 'baseline', gap: 8 }}>
-              <span style={{ fontSize: 24, fontWeight: 700, color: '#111' }}>{stats.earnings_today || '$0.00'}</span>
+              <span style={{ fontSize: 24, fontWeight: 700, color: '#fff' }}>{stats.earnings_today || '$0.00'}</span>
             </div>
           </div>
 
-          <div style={{ background: '#fff', border: '1px solid #eaeaea', borderRadius: 10, padding: '20px' }}>
+          <div style={{ background: GLASS, border: GLASS_BORDER, borderRadius: 10, padding: '20px', backdropFilter: 'blur(12px)' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-              <span style={{ fontSize: 11, fontWeight: 600, textTransform: 'uppercase', color: '#888' }}>Task Queue</span>
-              <span onClick={() => navigate('/delivery/route-history')} style={{ fontSize: 12, fontWeight: 600, color: '#000', cursor: 'pointer' }}>View All</span>
+              <span style={{ fontSize: 11, fontWeight: 600, textTransform: 'uppercase', color: 'rgba(255,255,255,0.5)' }}>Task Queue</span>
+              <span onClick={() => navigate('/delivery/route-history')} style={{ fontSize: 12, fontWeight: 600, color: '#60a5fa', cursor: 'pointer' }}>View All</span>
             </div>
             {tasks.slice(0, 3).map(t => (
               <div key={t.id} onClick={() => navigate('/delivery/route-history')} style={{
                 display: 'flex', alignItems: 'center', gap: 12,
                 padding: '12px', borderRadius: 8, marginBottom: 6, cursor: 'pointer',
-                background: '#fafafa',
+                background: 'rgba(255,255,255,0.03)',
               }}>
-                <div style={{ width: 40, height: 40, borderRadius: 8, background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18, border: '1px solid #eee', flexShrink: 0 }}>📦</div>
+                <div style={{ width: 40, height: 40, borderRadius: 8, background: 'rgba(255,255,255,0.06)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18, border: '1px solid rgba(255,255,255,0.06)', flexShrink: 0 }}>📦</div>
                 <div style={{ flex: 1 }}>
-                  <div style={{ fontWeight: 600, fontSize: 13 }}>Delivery #{t.id}</div>
-                  <div style={{ fontSize: 12, color: '#888' }}>{t.status} • {t.distance_km || 'N/A'} km</div>
+                  <div style={{ fontWeight: 600, fontSize: 13, color: '#fff' }}>Delivery #{t.id}</div>
+                  <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.5)' }}>{t.status} • {t.distance_km || 'N/A'} km</div>
                 </div>
                 <div style={{ textAlign: 'right' }}>
-                  <div style={{ fontWeight: 600, fontSize: 13, color: '#111' }}>${t.earnings || '0.00'}</div>
+                  <div style={{ fontWeight: 600, fontSize: 13, color: '#fff' }}>${t.earnings || '0.00'}</div>
                 </div>
               </div>
             ))}

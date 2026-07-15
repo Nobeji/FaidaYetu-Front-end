@@ -19,6 +19,8 @@ const navItems = [
 ];
 
 const defaultLocation = [-6.7924, 39.2083];
+const GLASS = 'rgba(255,255,255,0.05)';
+const GLASS_BORDER = '1px solid rgba(255,255,255,0.08)';
 
 export default function CustomerDashboard() {
   const [suppliers, setSuppliers] = useState([]);
@@ -130,7 +132,7 @@ export default function CustomerDashboard() {
     if (cached) {
       try {
         const { suppliers: s, orders: o, timestamp } = JSON.parse(cached);
-        if (Date.now() - timestamp < 2 * 60 * 1000) { // 2 min cache
+        if (Date.now() - timestamp < 2 * 60 * 1000) {
           setSuppliers(s);
           setOrders(o);
           setLoading(false);
@@ -288,50 +290,50 @@ export default function CustomerDashboard() {
 
   return (
     <DashboardShell brand="FaidaYetu" brandSub="Customer Portal" navItems={navItems} profile={
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10, background: '#f9f9f9', padding: '8px 12px', borderRadius: 10 }}>
-          <div style={{ width: 36, height: 36, borderRadius: '50%', background: '#f0f0f0', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#000', fontWeight: 700, fontSize: 13 }}>{initials}</div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, background: 'rgba(255,255,255,0.06)', padding: '8px 12px', borderRadius: 10, border: '1px solid rgba(255,255,255,0.06)' }}>
+          <div style={{ width: 36, height: 36, borderRadius: '50%', background: 'linear-gradient(135deg, #1e40af, #3b82f6)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 700, fontSize: 13, boxShadow: '0 2px 8px rgba(30,64,175,0.3)' }}>{initials}</div>
           <div>
-            <div style={{ fontWeight: 600, fontSize: 13 }}>{userName}</div>
-            <div style={{ fontSize: 11, color: '#888' }}>Customer Portal</div>
+            <div style={{ fontWeight: 600, fontSize: 13, color: '#fff' }}>{userName}</div>
+            <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.45)' }}>Customer Portal</div>
           </div>
         </div>
       }>
       <div>
         <div style={{ marginBottom: 24 }}>
-          <h1 style={{ fontSize: isMobile ? 18 : 22, fontWeight: 700, color: '#111', margin: 0 }}>Find Poultry</h1>
-          <p style={{ fontSize: 13, color: '#888', margin: '4px 0 0' }}>Discover fresh products near you</p>
+          <h1 style={{ fontSize: isMobile ? 18 : 22, fontWeight: 700, color: '#fff', margin: 0 }}>Find Poultry</h1>
+          <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.5)', margin: '4px 0 0' }}>Discover fresh products near you</p>
         </div>
 
         {activeOrder && (
           <div style={{
             display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-            padding: '10px 20px', background: '#f5f5f5', border: '1px solid #eaeaea',
-            borderRadius: 10, marginBottom: 20, flexWrap: 'wrap', gap: 8,
+            padding: '10px 20px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)',
+            borderRadius: 10, marginBottom: 20, flexWrap: 'wrap', gap: 8, backdropFilter: 'blur(12px)',
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
               <span>🚚</span>
-              <span style={{ fontSize: 13, color: '#333' }}>Active Order: <strong>In transit</strong></span>
+              <span style={{ fontSize: 13, color: '#fff' }}>Active Order: <strong>In transit</strong></span>
             </div>
             <button onClick={() => navigate('/customer/orders')} style={{
               fontSize: 12, fontWeight: 600, padding: '6px 16px',
-              border: '1px solid #ddd', borderRadius: 20,
-              background: '#fff', color: '#333', cursor: 'pointer',
+              border: '1px solid rgba(255,255,255,0.15)', borderRadius: 20,
+              background: 'rgba(255,255,255,0.05)', color: '#fff', cursor: 'pointer',
             }}>Track Live</button>
           </div>
         )}
 
         <div style={{ display: 'flex', gap: 12, marginBottom: 16, flexDirection: isMobile ? 'column' : 'row' }}>
           <div style={{ position: 'relative', flex: 1 }}>
-            <span style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: '#ccc', fontSize: 14 }}>🔍</span>
-            <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search supplier..." style={{
+            <span style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: 'rgba(255,255,255,0.4)', fontSize: 14 }}>🔍</span>
+            <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search supplier..." className="glass-input" style={{
               width: '100%', padding: '10px 14px 10px 38px', borderRadius: 10,
-              border: '1px solid #e0e0e0', background: '#fff',
-              boxSizing: 'border-box', outline: 'none',
+              border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.06)',
+              boxSizing: 'border-box', outline: 'none', color: '#fff', fontSize: 13,
             }} />
           </div>
-          <select value={radiusFilter} onChange={e => setRadiusFilter(Number(e.target.value))} style={{
-            padding: '10px 14px', borderRadius: 10, border: '1px solid #e0e0e0',
-            background: '#fff', fontSize: 13, fontWeight: 500, color: '#333', outline: 'none',
+          <select value={radiusFilter} onChange={e => setRadiusFilter(Number(e.target.value))} className="glass-select" style={{
+            padding: '10px 14px', borderRadius: 10, border: '1px solid rgba(255,255,255,0.1)',
+            background: 'rgba(255,255,255,0.06)', fontSize: 13, fontWeight: 500, color: '#fff', outline: 'none',
           }}>
             <option value={10}>10 km</option>
             <option value={25}>25 km</option>
@@ -340,7 +342,7 @@ export default function CustomerDashboard() {
           </select>
         </div>
 
-        <div style={{ marginBottom: 20, borderRadius: 10, overflow: 'hidden', border: '1px solid #eee' }}>
+        <div style={{ marginBottom: 20, borderRadius: 10, overflow: 'hidden', border: '1px solid rgba(255,255,255,0.08)' }}>
           {editLocation ? (
             <>
               <LocationPicker
@@ -349,8 +351,8 @@ export default function CustomerDashboard() {
                 height={isMobile ? 240 : 340}
                 onChange={(lat, lng) => setEditCoords({ lat, lng })}
               />
-              <div style={{ display: 'flex', gap: 8, padding: 10, borderTop: '1px solid #eee', background: '#fff' }}>
-                <button onClick={() => { setEditLocation(false); setEditCoords({ lat: userLocation[0], lng: userLocation[1] }); }} style={{ flex: 1, padding: '8px', borderRadius: 8, border: '1px solid #ddd', background: '#fff', cursor: 'pointer', fontWeight: 500, fontSize: 12 }}>Cancel</button>
+              <div style={{ display: 'flex', gap: 8, padding: 10, borderTop: '1px solid rgba(255,255,255,0.06)', background: 'rgba(255,255,255,0.05)' }}>
+                <button onClick={() => { setEditLocation(false); setEditCoords({ lat: userLocation[0], lng: userLocation[1] }); }} style={{ flex: 1, padding: '8px', borderRadius: 8, border: '1px solid rgba(255,255,255,0.15)', background: 'rgba(255,255,255,0.05)', cursor: 'pointer', fontWeight: 500, fontSize: 12, color: '#fff' }}>Cancel</button>
                 <button onClick={async () => {
                   setSavingLocation(true);
                   try {
@@ -362,7 +364,7 @@ export default function CustomerDashboard() {
                     toast('Location updated!', 'success');
                   } catch { toast('Failed to update location.', 'error'); }
                   finally { setSavingLocation(false); }
-                }} disabled={savingLocation} style={{ flex: 1, padding: '8px', borderRadius: 8, background: '#0a6e46', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: 12, opacity: savingLocation ? 0.7 : 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
+                }} disabled={savingLocation} style={{ flex: 1, padding: '8px', borderRadius: 8, background: 'linear-gradient(135deg, #1e40af, #2563eb)', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: 12, opacity: savingLocation ? 0.7 : 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, boxShadow: '0 2px 8px rgba(30,64,175,0.3)' }}>
                   {savingLocation && <Spinner size={12} color="#fff" />}
                   {savingLocation ? 'Saving...' : 'Save Location'}
                 </button>
@@ -387,12 +389,12 @@ export default function CustomerDashboard() {
         </div>
 
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-          <h3 style={{ fontSize: 15, fontWeight: 600, color: '#111', margin: 0 }}>Recommended Near You</h3>
-          <span onClick={() => navigate('/customer/marketplace')} style={{ fontSize: 12, fontWeight: 600, color: '#000', cursor: 'pointer' }}>View All →</span>
+          <h3 style={{ fontSize: 15, fontWeight: 600, color: '#fff', margin: 0 }}>Recommended Near You</h3>
+          <span onClick={() => navigate('/customer/marketplace')} style={{ fontSize: 12, fontWeight: 600, color: '#60a5fa', cursor: 'pointer' }}>View All →</span>
         </div>
 
         {loading ? (
-          <div style={{ textAlign: 'center', padding: 40, color: '#888' }}>Loading suppliers...</div>
+          <div style={{ textAlign: 'center', padding: 40, color: 'rgba(255,255,255,0.5)' }}>Loading suppliers...</div>
         ) : (
           <div style={{ display: 'flex', gap: 12, overflowX: 'auto', paddingBottom: 4 }}>
             {sortedSuppliers.map(s => (
@@ -404,44 +406,44 @@ export default function CustomerDashboard() {
         {orders.length > 0 && (
           <>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12, marginTop: 32 }}>
-              <h3 style={{ fontSize: 15, fontWeight: 600, color: '#111', margin: 0 }}>Recent Orders</h3>
-              <span onClick={() => navigate('/customer/orders')} style={{ fontSize: 12, fontWeight: 600, color: '#000', cursor: 'pointer' }}>View All →</span>
+              <h3 style={{ fontSize: 15, fontWeight: 600, color: '#fff', margin: 0 }}>Recent Orders</h3>
+              <span onClick={() => navigate('/customer/orders')} style={{ fontSize: 12, fontWeight: 600, color: '#60a5fa', cursor: 'pointer' }}>View All →</span>
             </div>
-            <div style={{ background: '#fff', border: '1px solid #eaeaea', borderRadius: 10, overflow: 'hidden' }}>
+            <div style={{ background: GLASS, border: GLASS_BORDER, borderRadius: 10, overflow: 'hidden', backdropFilter: 'blur(12px)' }}>
               {orders.slice(0, 5).map((o, i) => (
                 <div key={o.id} style={{
                   display: 'flex', alignItems: 'center', justifyContent: 'space-between',
                   padding: '14px 20px',
-                  borderBottom: i < orders.slice(0, 5).length - 1 ? '1px solid #f0f0f0' : 'none',
+                  borderBottom: i < orders.slice(0, 5).length - 1 ? '1px solid rgba(255,255,255,0.04)' : 'none',
                 }}>
                   <div>
-                    <div style={{ fontWeight: 600, fontSize: 13, color: '#111' }}>{o.supplier_name || `Order #${o.id}`}</div>
-                    <div style={{ fontSize: 12, color: '#888' }}>{Number(o.total).toLocaleString()} TZS • {o.status}</div>
+                    <div style={{ fontWeight: 600, fontSize: 13, color: '#fff' }}>{o.supplier_name || `Order #${o.id}`}</div>
+                    <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.5)' }}>{Number(o.total).toLocaleString()} TZS • {o.status}</div>
                   </div>
                   <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-                    <button onClick={() => navigate('/customer/orders')} style={{ padding: '6px 12px', borderRadius: 8, border: '1px solid #e0e0e0', background: '#fff', cursor: 'pointer', fontWeight: 500, fontSize: 11, color: '#555' }}>Details</button>
+                    <button onClick={() => navigate('/customer/orders')} style={{ padding: '6px 12px', borderRadius: 8, border: '1px solid rgba(255,255,255,0.12)', background: 'rgba(255,255,255,0.05)', cursor: 'pointer', fontWeight: 500, fontSize: 11, color: '#fff' }}>Details</button>
                     {o.status === 'new' && !o.paid && !pendingPayments[o.id] && (
-                      <button onClick={() => { setShowPayModal(o); setPhoneNumber(''); }} style={{ padding: '6px 12px', borderRadius: 8, background: '#0a6e46', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: 11 }}>Pay Now</button>
+                      <button onClick={() => { setShowPayModal(o); setPhoneNumber(''); }} style={{ padding: '6px 12px', borderRadius: 8, background: 'linear-gradient(135deg, #1e40af, #2563eb)', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: 11, boxShadow: '0 2px 6px rgba(30,64,175,0.3)' }}>Pay Now</button>
                     )}
                     {pendingPayments[o.id] === 'pending' && (
                       <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap', alignItems: 'center' }}>
-                        <span style={{ padding: '6px 12px', borderRadius: 8, background: '#fff8e1', color: '#f57f17', fontWeight: 600, fontSize: 11 }}>⌛ Pending</span>
-                        <button onClick={() => checkPaymentStatus(o.id)} disabled={checkingPayments[o.id]} style={{ padding: '6px 12px', borderRadius: 8, border: '1px solid #f57f17', background: '#fff', color: '#f57f17', cursor: 'pointer', fontWeight: 600, fontSize: 11, display: 'flex', alignItems: 'center', gap: 4 }}>
-                          {checkingPayments[o.id] && <Spinner size={10} color="#f57f17" />}
+                        <span style={{ padding: '6px 12px', borderRadius: 8, background: 'rgba(251,191,36,0.12)', color: '#fbbf24', fontWeight: 600, fontSize: 11 }}>⌛ Pending</span>
+                        <button onClick={() => checkPaymentStatus(o.id)} disabled={checkingPayments[o.id]} style={{ padding: '6px 12px', borderRadius: 8, border: '1px solid rgba(251,191,36,0.3)', background: 'rgba(251,191,36,0.08)', color: '#fbbf24', cursor: 'pointer', fontWeight: 600, fontSize: 11, display: 'flex', alignItems: 'center', gap: 4 }}>
+                          {checkingPayments[o.id] && <Spinner size={10} color="#fbbf24" />}
                           Check
                         </button>
                       </div>
                     )}
-                    {o.paid && <span style={{ padding: '6px 12px', borderRadius: 8, background: '#e8f5e9', color: '#2e7d32', fontWeight: 600, fontSize: 11 }}>✓ Paid</span>}
-                    {o.status === 'cancelled' && <span style={{ padding: '6px 12px', borderRadius: 8, background: '#fef2f2', color: '#d32f2f', fontWeight: 600, fontSize: 11 }}>✕ Cancelled</span>}
+                    {o.paid && <span style={{ padding: '6px 12px', borderRadius: 8, background: 'rgba(34,197,94,0.12)', color: '#4ade80', fontWeight: 600, fontSize: 11 }}>✓ Paid</span>}
+                    {o.status === 'cancelled' && <span style={{ padding: '6px 12px', borderRadius: 8, background: 'rgba(239,68,68,0.12)', color: '#f87171', fontWeight: 600, fontSize: 11 }}>✕ Cancelled</span>}
                     {canCancel(o.status) && (
-                      <button onClick={() => handleCancelOrder(o.id)} disabled={cancellingOrders[o.id]} style={{ padding: '6px 12px', borderRadius: 8, background: '#fef2f2', color: '#d32f2f', border: 'none', cursor: 'pointer', fontWeight: 500, fontSize: 11, display: 'flex', alignItems: 'center', gap: 4 }}>
-                        {cancellingOrders[o.id] && <Spinner size={10} color="#d32f2f" />}
+                      <button onClick={() => handleCancelOrder(o.id)} disabled={cancellingOrders[o.id]} style={{ padding: '6px 12px', borderRadius: 8, background: 'rgba(239,68,68,0.1)', color: '#f87171', border: 'none', cursor: 'pointer', fontWeight: 500, fontSize: 11, display: 'flex', alignItems: 'center', gap: 4 }}>
+                        {cancellingOrders[o.id] && <Spinner size={10} color="#f87171" />}
                         Cancel
                       </button>
                     )}
                     {o.status === 'in_transit' && (
-                      <button onClick={() => navigate('/customer')} style={{ padding: '6px 12px', borderRadius: 8, background: '#000', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 500, fontSize: 11 }}>Track</button>
+                      <button onClick={() => navigate('/customer')} style={{ padding: '6px 12px', borderRadius: 8, background: 'linear-gradient(135deg, #1e40af, #2563eb)', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 500, fontSize: 11, boxShadow: '0 2px 6px rgba(30,64,175,0.3)' }}>Track</button>
                     )}
                   </div>
                 </div>
@@ -452,21 +454,21 @@ export default function CustomerDashboard() {
       </div>
 
       {showPayModal && (
-        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: 16 }} onClick={() => !paying && setShowPayModal(null)}>
-          <div style={{ background: '#fff', borderRadius: 16, padding: 24, width: '100%', maxWidth: 440 }} onClick={e => e.stopPropagation()}>
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(6px)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: 16 }} onClick={() => !paying && setShowPayModal(null)}>
+          <div style={{ background: 'rgba(15,29,50,0.95)', borderRadius: 16, padding: 24, width: '100%', maxWidth: 440, border: '1px solid rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)' }} onClick={e => e.stopPropagation()}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-              <h3 style={{ fontSize: 20, fontWeight: 700, color: '#000', margin: 0 }}>Pay for Order #{showPayModal.id}</h3>
-              <button onClick={() => !paying && setShowPayModal(null)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 20, color: '#888' }}>✕</button>
+              <h3 style={{ fontSize: 20, fontWeight: 700, color: '#fff', margin: 0 }}>Pay for Order #{showPayModal.id}</h3>
+              <button onClick={() => !paying && setShowPayModal(null)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 20, color: 'rgba(255,255,255,0.5)' }}>✕</button>
             </div>
-            <p style={{ fontSize: 14, color: '#666', marginBottom: 16 }}>
-              Amount: <strong>{Number(showPayModal.total).toLocaleString()} TZS</strong><br />
+            <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.6)', marginBottom: 16 }}>
+              Amount: <strong style={{ color: '#fff' }}>{Number(showPayModal.total).toLocaleString()} TZS</strong><br />
               Enter your mobile money number starting with 255 to receive a payment push.
             </p>
             <input type="tel" placeholder="e.g. 255712345678" value={phoneNumber} onChange={e => setPhoneNumber(e.target.value)} disabled={paying}
-              style={{ width: '100%', padding: '12px 14px', borderRadius: 8, border: '1px solid #ddd', fontSize: 16, boxSizing: 'border-box', marginBottom: 16 }} />
+              className="glass-input" style={{ width: '100%', padding: '12px 14px', borderRadius: 8, border: '1px solid rgba(255,255,255,0.1)', fontSize: 16, boxSizing: 'border-box', marginBottom: 16, background: 'rgba(255,255,255,0.06)', color: '#fff', outline: 'none' }} />
             <div style={{ display: 'flex', gap: 12 }}>
-              <button onClick={() => setShowPayModal(null)} disabled={paying} style={{ flex: 1, padding: '12px', borderRadius: 8, border: '1px solid #ddd', background: '#fff', color: '#666', cursor: 'pointer', fontWeight: 600 }}>Cancel</button>
-              <button onClick={handlePay} disabled={paying} style={{ flex: 1, padding: '12px', borderRadius: 8, background: '#0a6e46', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 700, opacity: paying ? 0.7 : 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
+              <button onClick={() => setShowPayModal(null)} disabled={paying} style={{ flex: 1, padding: '12px', borderRadius: 8, border: '1px solid rgba(255,255,255,0.15)', background: 'rgba(255,255,255,0.05)', color: '#fff', cursor: 'pointer', fontWeight: 600 }}>Cancel</button>
+              <button onClick={handlePay} disabled={paying} style={{ flex: 1, padding: '12px', borderRadius: 8, background: 'linear-gradient(135deg, #1e40af, #2563eb)', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 700, opacity: paying ? 0.7 : 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, boxShadow: '0 2px 8px rgba(30,64,175,0.3)' }}>
                 {paying && <Spinner size={14} color="#fff" />}
                 {paying ? 'Sending...' : `Pay ${Number(showPayModal.total).toLocaleString()} TZS`}
               </button>
