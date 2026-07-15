@@ -2,8 +2,8 @@
 html { scroll-behavior: smooth; }
 body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  background: #020617;
-  color: #f1f5f9;
+  background: #f8fafc;
+  color: #1e293b;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
 }
@@ -21,22 +21,6 @@ table { border-collapse: collapse; width: 100%; }
   from { opacity: 0; transform: translateY(24px); }
   to { opacity: 1; transform: translateY(0); }
 }
-@keyframes shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
-}
-@keyframes float {
-  0%, 100% { transform: translateY(0) rotate(0deg); }
-  50% { transform: translateY(-20px) rotate(3deg); }
-}
-@keyframes floatSlow {
-  0%, 100% { transform: translateY(0) scale(1); }
-  50% { transform: translateY(-10px) scale(1.02); }
-}
-@keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 20px rgba(30, 64, 175, 0.3); }
-  50% { box-shadow: 0 0 40px rgba(30, 64, 175, 0.6); }
-}
 @keyframes spin {
   to { transform: rotate(360deg); }
 }
@@ -46,44 +30,42 @@ table { border-collapse: collapse; width: 100%; }
 
 ::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); border-radius: 6px; }
-::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
+::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 6px; }
+::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
 
 .glass-input {
   width: 100%;
   padding: 13px 16px;
-  background: rgba(255, 255, 255, 0.07);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: #fff;
+  border: 1px solid #e2e8f0;
   border-radius: 12px;
   font-size: 15px;
-  color: #fff;
+  color: #0f172a;
   transition: all 0.2s ease;
 }
-.glass-input::placeholder { color: rgba(255, 255, 255, 0.3); }
+.glass-input::placeholder { color: #94a3b8; }
 .glass-input:focus {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(30, 64, 175, 0.6);
-  box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.15);
+  border-color: #0a6e46;
+  box-shadow: 0 0 0 3px rgba(10, 110, 70, 0.1);
 }
 
 .glass-select {
   width: 100%;
   padding: 13px 16px;
-  background: rgba(255, 255, 255, 0.07);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: #fff;
+  border: 1px solid #e2e8f0;
   border-radius: 12px;
   font-size: 15px;
-  color: #fff;
+  color: #0f172a;
   transition: all 0.2s ease;
   appearance: none;
   cursor: pointer;
 }
 .glass-select:focus {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(30, 64, 175, 0.6);
-  box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.15);
+  border-color: #0a6e46;
+  box-shadow: 0 0 0 3px rgba(10, 110, 70, 0.1);
 }
-.glass-select option { background: #0f172a; color: #fff; }
+.glass-select option { background: #fff; color: #0f172a; }
 
 @media (max-width: 768px) {
   .sidebar-link { display: none; }

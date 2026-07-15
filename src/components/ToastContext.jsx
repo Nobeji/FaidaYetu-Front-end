@@ -17,10 +17,11 @@ export function ToastProvider({ children }) {
         {toasts.map(t => (
           <div key={t.id} className="toast-enter" style={{
             padding: '12px 20px', borderRadius: 10,
-            background: t.type === 'error' ? 'rgba(239,68,68,0.9)' : t.type === 'success' ? 'rgba(30,64,175,0.9)' : 'rgba(255,255,255,0.1)',
-            color: '#fff', fontSize: 14, fontWeight: 500,
-            boxShadow: '0 4px 16px rgba(0,0,0,0.3)',
-            backdropFilter: 'blur(16px)', border: '1px solid rgba(255,255,255,0.08)',
+            background: t.type === 'error' ? '#fef2f2' : t.type === 'success' ? '#f0fdf4' : '#f8fafc',
+            color: t.type === 'error' ? '#dc2626' : t.type === 'success' ? '#15803d' : '#475569',
+            fontSize: 14, fontWeight: 500,
+            boxShadow: '0 4px 16px rgba(0,0,0,0.1)',
+            border: `1px solid ${t.type === 'error' ? '#fecaca' : t.type === 'success' ? '#bbf7d0' : '#e2e8f0'}`,
             display: 'flex', alignItems: 'center', gap: 8, animation: 'slideIn 0.3s ease',
           }}>
             <span>{t.type === 'error' ? '✕' : t.type === 'success' ? '✓' : 'ℹ'}</span>{t.message}

@@ -1,16 +1,16 @@
 const statusColors = {
-  New: { bg: 'rgba(255,255,255,0.08)', text: 'rgba(255,255,255,0.75)' },
-  Paid: { bg: 'rgba(34,197,94,0.15)', text: '#4ade80' },
-  Processing: { bg: 'rgba(251,191,36,0.15)', text: '#fbbf24' },
-  Ready: { bg: 'linear-gradient(135deg, #1e40af, #2563eb)', text: '#fff' },
-  Cancelled: { bg: 'rgba(239,68,68,0.12)', text: '#f87171' },
-  Delivered: { bg: 'rgba(34,197,94,0.15)', text: '#4ade80' },
-  Active: { bg: 'rgba(34,197,94,0.15)', text: '#4ade80' },
-  Pending: { bg: 'rgba(251,191,36,0.12)', text: '#fbbf24' },
+  New: { bg: '#f1f5f9', text: '#475569' },
+  Paid: { bg: '#f0fdf4', text: '#15803d' },
+  Processing: { bg: '#fef9c3', text: '#a16207' },
+  Ready: { bg: '#dbeafe', text: '#1d4ed8' },
+  Cancelled: { bg: '#fef2f2', text: '#dc2626' },
+  Delivered: { bg: '#f0fdf4', text: '#15803d' },
+  Active: { bg: '#f0fdf4', text: '#15803d' },
+  Pending: { bg: '#fef9c3', text: '#a16207' },
 };
 
 export default function StatusBadge({ status }) {
-  const c = statusColors[status] || { bg: 'rgba(255,255,255,0.06)', text: 'rgba(255,255,255,0.45)' };
+  const c = statusColors[status] || { bg: '#f1f5f9', text: '#64748b' };
   return (
     <span style={{
       display: 'inline-flex', alignItems: 'center', gap: 4,

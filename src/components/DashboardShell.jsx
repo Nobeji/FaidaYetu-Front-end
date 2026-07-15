@@ -22,96 +22,93 @@ export default function DashboardShell({ brand, brandSub, navItems, profile, chi
   }, []);
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: 'linear-gradient(160deg, #020617 0%, #0a1628 30%, #0f1d32 60%, #1e3a5f 100%)', color: '#f1f5f9' }}>
+    <div style={{ display: 'flex', minHeight: '100vh', background: '#f8fafc', color: '#1e293b' }}>
       {isMobile && sidebarOpen && (
-        <div onClick={() => setSidebarOpen(false)} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(4px)', zIndex: 35 }} />
+        <div onClick={() => setSidebarOpen(false)} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.3)', zIndex: 35 }} />
       )}
 
-      {/* Sidebar */}
       <aside style={{
-        position: 'fixed', top: 0, left: 0, width: 240, height: '100vh',
-        background: 'rgba(255,255,255,0.03)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)',
-        borderRight: '1px solid rgba(255,255,255,0.05)',
+        position: 'fixed', top: 0, left: 0, width: 250, height: '100vh',
+        background: '#fff', borderRight: '1px solid #e2e8f0',
         display: 'flex', flexDirection: 'column', zIndex: 40,
         transform: !isMobile || sidebarOpen ? 'translateX(0)' : 'translateX(-100%)',
-        transition: 'transform 0.3s ease',
+        transition: 'transform 0.3s ease', boxShadow: isMobile ? '4px 0 20px rgba(0,0,0,0.1)' : 'none',
       }}>
-        <div style={{ padding: '24px 20px 20px', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+        <div style={{ padding: '24px 20px 20px', borderBottom: '1px solid #e2e8f0' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <div style={{ width: 34, height: 34, borderRadius: 10, background: 'linear-gradient(135deg, #1e40af, #3b82f6)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16, boxShadow: '0 2px 8px rgba(30,64,175,0.3)' }}>🐔</div>
+            <div style={{ width: 36, height: 36, borderRadius: 10, background: 'linear-gradient(135deg, #0a6e46, #10b981)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16, boxShadow: '0 2px 8px rgba(10,110,70,0.25)' }}>🐔</div>
             <div>
-              <div style={{ fontSize: 16, fontWeight: 700, color: '#fff', letterSpacing: '-0.02em' }}>{brand}</div>
-              {brandSub && <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.35)', marginTop: 1 }}>{brandSub}</div>}
+              <div style={{ fontSize: 16, fontWeight: 700, color: '#0f172a', letterSpacing: '-0.02em' }}>{brand}</div>
+              {brandSub && <div style={{ fontSize: 10, color: '#94a3b8', marginTop: 1 }}>{brandSub}</div>}
             </div>
           </div>
         </div>
 
-        <nav style={{ flex: 1, padding: '12px 8px', display: 'flex', flexDirection: 'column', gap: 2, overflowY: 'auto' }}>
+        <nav style={{ flex: 1, padding: '12px 10px', display: 'flex', flexDirection: 'column', gap: 2, overflowY: 'auto' }}>
           {navItems.map((item) => {
             const active = location.pathname === (item.nav || '/');
             return (
               <div key={item.label} onClick={() => { navigate(item.nav || '#'); if (isMobile) setSidebarOpen(false); }} style={{
-                display: 'flex', alignItems: 'center', gap: 10, padding: '9px 12px', borderRadius: 10, cursor: 'pointer', fontSize: 13,
-                color: active ? '#fff' : 'rgba(255,255,255,0.5)',
-                background: active ? 'rgba(30,64,175,0.3)' : 'transparent',
+                display: 'flex', alignItems: 'center', gap: 10, padding: '10px 14px', borderRadius: 10, cursor: 'pointer', fontSize: 13,
+                color: active ? '#0f172a' : '#475569',
+                background: active ? '#f0fdf4' : 'transparent',
                 fontWeight: active ? 600 : 400, transition: 'all 0.2s ease',
-                border: active ? '1px solid rgba(30,64,175,0.25)' : '1px solid transparent',
+                border: active ? '1px solid #bbf7d0' : '1px solid transparent',
               }}>
-                <span style={{ fontSize: 15, opacity: active ? 1 : 0.55 }}>{item.icon}</span>
+                <span style={{ fontSize: 15, opacity: active ? 1 : 0.6 }}>{item.icon}</span>
                 {item.label}
               </div>
             );
           })}
         </nav>
 
-        <div style={{ padding: '12px 16px 20px', borderTop: '1px solid rgba(255,255,255,0.05)', marginTop: 'auto' }}>
+        <div style={{ padding: '12px 16px 20px', borderTop: '1px solid #e2e8f0', marginTop: 'auto' }}>
           {profile && <div style={{ marginBottom: 8 }}>{profile}</div>}
           <div onClick={() => { localStorage.removeItem('token'); localStorage.removeItem('user'); localStorage.removeItem('profile'); localStorage.removeItem('customer'); localStorage.removeItem('supplier'); localStorage.removeItem('delivery_person'); navigate('/'); }} style={{
-            display: 'flex', alignItems: 'center', gap: 8, padding: '8px 10px', borderRadius: 8, cursor: 'pointer', fontSize: 13, color: '#f87171', fontWeight: 500,
+            display: 'flex', alignItems: 'center', gap: 8, padding: '8px 10px', borderRadius: 8, cursor: 'pointer', fontSize: 13, color: '#ef4444', fontWeight: 500,
           }}>
             Logout <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
           </div>
         </div>
       </aside>
 
-      {/* Main */}
-      <div style={{ flex: 1, marginLeft: isMobile ? 0 : 240, minHeight: '100vh', paddingBottom: isMobile ? 64 : 0 }}>
+      <div style={{ flex: 1, marginLeft: isMobile ? 0 : 250, minHeight: '100vh', paddingBottom: isMobile ? 64 : 0 }}>
         <div style={{
           height: 56, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 24px',
-          background: 'rgba(2,6,23,0.85)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)',
-          borderBottom: '1px solid rgba(255,255,255,0.05)', position: 'sticky', top: 0, zIndex: 30,
+          background: '#fff', borderBottom: '1px solid #e2e8f0',
+          position: 'sticky', top: 0, zIndex: 30,
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
             {isMobile && (
               <button onClick={() => setSidebarOpen(!sidebarOpen)} style={{
                 width: 36, height: 36, display: 'flex', alignItems: 'center', justifyContent: 'center',
                 borderRadius: 8, fontSize: 18, cursor: 'pointer',
-                background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.06)', color: '#fff',
+                background: '#f1f5f9', border: '1px solid #e2e8f0', color: '#475569',
               }}>☰</button>
             )}
-            <span style={{ fontSize: 14, fontWeight: 600, color: 'rgba(255,255,255,0.9)' }}>{brand}</span>
+            <span style={{ fontSize: 14, fontWeight: 600, color: '#0f172a' }}>{brand}</span>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
             {(supplierId || customerId) && <NotificationBell supplierId={supplierId} customerId={customerId} />}
-            <span style={{ fontSize: 13, fontWeight: 500, color: 'rgba(255,255,255,0.65)' }}>{userName}</span>
-            <div style={{ width: 32, height: 32, borderRadius: 10, background: 'linear-gradient(135deg, #1e40af, #3b82f6)', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, fontWeight: 700, boxShadow: '0 2px 8px rgba(30,64,175,0.3)' }}>{initials}</div>
+            <span style={{ fontSize: 13, fontWeight: 500, color: '#475569' }}>{userName}</span>
+            <div style={{ width: 32, height: 32, borderRadius: 10, background: 'linear-gradient(135deg, #0a6e46, #10b981)', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, fontWeight: 700, boxShadow: '0 2px 6px rgba(10,110,70,0.2)' }}>{initials}</div>
           </div>
         </div>
-        <div style={{ padding: '28px 28px', maxWidth: 1200, margin: '0 auto' }}>{children}</div>
+        <div style={{ padding: '24px 24px', maxWidth: 1200, margin: '0 auto' }}>{children}</div>
       </div>
 
       {isMobile && (
         <nav style={{
           position: 'fixed', bottom: 0, left: 0, right: 0,
-          background: 'rgba(2,6,23,0.9)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)',
-          borderTop: '1px solid rgba(255,255,255,0.05)', zIndex: 30, padding: '6px 0', display: 'flex', justifyContent: 'space-around',
+          background: '#fff', borderTop: '1px solid #e2e8f0', boxShadow: '0 -2px 10px rgba(0,0,0,0.05)',
+          zIndex: 30, padding: '6px 0', display: 'flex', justifyContent: 'space-around',
         }}>
           {navItems.slice(0, 4).map(item => (
             <div key={item.label} onClick={() => navigate(item.nav || '#')} style={{
               display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2,
-              padding: '6px 12px', cursor: 'pointer', fontSize: 10, fontWeight: 500,
-              color: location.pathname === (item.nav || '/') ? '#60a5fa' : 'rgba(255,255,255,0.3)',
-              padding: '8px 14px',
+              cursor: 'pointer', fontSize: 10, fontWeight: 500,
+              color: location.pathname === (item.nav || '/') ? '#0a6e46' : '#94a3b8',
+              padding: '8px 14px', minHeight: 44,
             }}>
               <span style={{ fontSize: 20 }}>{item.icon}</span>{item.label}
             </div>
