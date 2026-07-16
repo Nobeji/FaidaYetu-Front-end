@@ -129,14 +129,14 @@ export default function Auth() {
         </div>
 
         <div style={{ display: 'flex', borderRadius: 12, padding: 4, background: '#f1f5f9', marginBottom: 24 }}>
-          {['login', 'signup'].map(t => (
-            <button key={t} onClick={() => { setTab(t); setError(''); }} style={{
-              flex: 1, padding: '10px 0', borderRadius: 10, fontSize: 14, fontWeight: tab === t ? 700 : 500,
-              color: tab === t ? '#fff' : '#64748b',
-              background: tab === t ? '#0a6e46' : 'transparent',
+          {['login', 'signup'].map(tabKey => (
+            <button key={tabKey} onClick={() => { setTab(tabKey); setError(''); }} style={{
+              flex: 1, padding: '10px 0', borderRadius: 10, fontSize: 14, fontWeight: tab === tabKey ? 700 : 500,
+              color: tab === tabKey ? '#fff' : '#64748b',
+              background: tab === tabKey ? '#0a6e46' : 'transparent',
               border: 'none', cursor: 'pointer', transition: 'all 0.25s ease',
             }}>
-              {t === 'login' ? t('auth.logIn') : t('auth.signUp')}
+              {tabKey === 'login' ? t('auth.logIn') : t('auth.signUp')}
             </button>
           ))}
         </div>

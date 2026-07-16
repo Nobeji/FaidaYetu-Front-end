@@ -170,15 +170,15 @@ export default function DeliveryDashboard() {
               <span style={{ fontSize: 11, fontWeight: 600, textTransform: 'uppercase', color: '#64748b' }}>{t('delivery.taskQueue')}</span>
               <span onClick={() => navigate('/delivery/route-history')} style={{ fontSize: 12, fontWeight: 600, color: '#0a6e46', cursor: 'pointer' }}>{t('common.viewAll')}</span>
             </div>
-            {tasks.slice(0, 3).map(t => (
-              <div key={t.id} onClick={() => navigate('/delivery/route-history')} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px', borderRadius: 8, marginBottom: 6, cursor: 'pointer', background: '#f8fafc', border: '1px solid #f1f5f9' }}>
+            {tasks.slice(0, 3).map(task => (
+              <div key={task.id} onClick={() => navigate('/delivery/route-history')} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px', borderRadius: 8, marginBottom: 6, cursor: 'pointer', background: '#f8fafc', border: '1px solid #f1f5f9' }}>
                 <div style={{ width: 40, height: 40, borderRadius: 8, background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid #e2e8f0', flexShrink: 0 }}><Package size={18} color="#64748b" /></div>
                 <div style={{ flex: 1 }}>
-                  <div style={{ fontWeight: 600, fontSize: 13, color: '#0f172a' }}>Delivery #{t.id}</div>
-                  <div style={{ fontSize: 12, color: '#94a3b8' }}>{t.status} • {t.distance_km || 'N/A'} km</div>
+                  <div style={{ fontWeight: 600, fontSize: 13, color: '#0f172a' }}>Delivery #{task.id}</div>
+                  <div style={{ fontSize: 12, color: '#94a3b8' }}>{task.status} • {task.distance_km || 'N/A'} km</div>
                 </div>
                 <div style={{ textAlign: 'right' }}>
-                  <div style={{ fontWeight: 600, fontSize: 13, color: '#0f172a' }}>${t.earnings || '0.00'}</div>
+                  <div style={{ fontWeight: 600, fontSize: 13, color: '#0f172a' }}>${task.earnings || '0.00'}</div>
                 </div>
               </div>
             ))}
