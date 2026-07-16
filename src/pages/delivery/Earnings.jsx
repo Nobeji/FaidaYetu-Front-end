@@ -3,16 +3,17 @@ import DashboardShell from '../../components/DashboardShell';
 import { api } from '../../services/api';
 import { useToast } from '../../components/ToastContext';
 import { Truck, Route, Coins, Settings, HelpCircle } from 'lucide-react';
-
-const navItems = [
-  { icon: Truck, label: 'Active Tasks', nav: '/delivery' },
-  { icon: Route, label: 'Route History', nav: '/delivery/route-history' },
-  { icon: Coins, label: 'Earnings', nav: '/delivery/earnings' },
-  { icon: Settings, label: 'Settings', nav: '/delivery/settings' },
-  { icon: HelpCircle, label: 'Support', nav: '/delivery/support' },
-];
+import { useLang } from '../../components/LanguageContext';
 
 export default function DeliveryEarnings() {
+  const { t } = useLang();
+  const navItems = [
+    { icon: Truck, label: t('nav.activeTasks'), nav: '/delivery' },
+    { icon: Route, label: t('nav.routeHistory'), nav: '/delivery/route-history' },
+    { icon: Coins, label: t('nav.earnings'), nav: '/delivery/earnings' },
+    { icon: Settings, label: t('nav.settings'), nav: '/delivery/settings' },
+    { icon: HelpCircle, label: t('nav.support'), nav: '/delivery/support' },
+  ];
   const toast = useToast();
   const [deliveries, setDeliveries] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -30,8 +31,8 @@ export default function DeliveryEarnings() {
     <DashboardShell brand="FaidaYetu" brandSub="Delivery Portal" navItems={navItems}>
       <div className="fade-in">
         <div style={{ marginBottom: 20 }}>
-          <h1 style={{ fontSize: 28, fontWeight: 600, color: '#000' }}>Earnings</h1>
-          <p style={{ fontSize: 15, color: '#888' }}>Track your income and withdrawals</p>
+          <h1 style={{ fontSize: 28, fontWeight: 600, color: '#000' }}>{t('nav.earnings')}</h1>
+          <p style={{ fontSize: 15, color: '#888' }}>{t('delivery.earningsToday')}</p>
         </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12, marginBottom: 20 }}>
@@ -53,7 +54,7 @@ export default function DeliveryEarnings() {
         </div>
 
         {loading ? (
-          <div style={{ textAlign: 'center', padding: 48, color: '#888' }}>Loading...</div>
+          <div style={{ textAlign: 'center', padding: 48, color: '#888' }}>{t('common.loading')}</div>
         ) : (
           <div style={{ background: '#fff', borderRadius: 12, border: `1px solid ${'#eee'}`, padding: 20 }}>
             <h3 style={{ fontSize: 20, fontWeight: 600, color: '#000', marginBottom: 12 }}>Transaction History</h3>
@@ -68,7 +69,7 @@ export default function DeliveryEarnings() {
                     padding: '2px 10px', borderRadius: 999, fontSize: 11, fontWeight: 600,
                     background: d.status === 'completed' ? '#f0f0f0' : '#f5f5f5',
                     color: d.status === 'completed' ? '#000' : '#888',
-                  }}>{d.status === 'completed' ? 'Paid' : 'Pending'}</span>
+                  }                  }>{d.status === 'completed' ? t('common.paid') : t('common.pending')}</span>
                 </div>
               ))}
             </div>

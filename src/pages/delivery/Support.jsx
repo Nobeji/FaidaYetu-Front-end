@@ -1,49 +1,50 @@
 import DashboardShell from '../../components/DashboardShell';
 import { Truck, Route, Coins, Settings, HelpCircle, Mail, Phone, MessageCircle, AlertTriangle } from 'lucide-react';
-
-const navItems = [
-  { icon: Truck, label: 'Active Tasks', nav: '/delivery' },
-  { icon: Route, label: 'Route History', nav: '/delivery/route-history' },
-  { icon: Coins, label: 'Earnings', nav: '/delivery/earnings' },
-  { icon: Settings, label: 'Settings', nav: '/delivery/settings' },
-  { icon: HelpCircle, label: 'Support', nav: '/delivery/support' },
-];
+import { useLang } from '../../components/LanguageContext';
 
 const faqs = [];
 
 export default function DeliverySupport() {
+  const { t } = useLang();
+  const navItems = [
+    { icon: Truck, label: t('nav.activeTasks'), nav: '/delivery' },
+    { icon: Route, label: t('nav.routeHistory'), nav: '/delivery/route-history' },
+    { icon: Coins, label: t('nav.earnings'), nav: '/delivery/earnings' },
+    { icon: Settings, label: t('nav.settings'), nav: '/delivery/settings' },
+    { icon: HelpCircle, label: t('nav.support'), nav: '/delivery/support' },
+  ];
   return (
     <DashboardShell brand="FaidaYetu" brandSub="Delivery Portal" navItems={navItems}>
       <div className="fade-in">
         <div style={{ marginBottom: 20 }}>
-          <h1 style={{ fontSize: 28, fontWeight: 600, color: '#000' }}>Support</h1>
-          <p style={{ fontSize: 15, color: '#888' }}>Get help with your delivery account</p>
+          <h1 style={{ fontSize: 28, fontWeight: 600, color: '#000' }}>{t('nav.support')}</h1>
+          <p style={{ fontSize: 15, color: '#888' }}>{t('contact.subtitle')}</p>
         </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
           <div>
             <div style={{ background: '#fff', borderRadius: 12, border: '1px solid #eee', padding: 20, marginBottom: 20 }}>
-              <h3 style={{ fontSize: 20, fontWeight: 600, color: '#000', marginBottom: 12 }}>Contact Us</h3>
+              <h3 style={{ fontSize: 20, fontWeight: 600, color: '#000', marginBottom: 12 }}>{t('contact.title')}</h3>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: 12, background: '#fafafa', borderRadius: 8 }}>
                   <Mail size={24} />
                   <div>
-                    <div style={{ fontWeight: 700, fontSize: 14 }}>Email Support</div>
+                    <div style={{ fontWeight: 700, fontSize: 14 }}>{t('contact.email')}</div>
                     <div style={{ fontSize: 13, color: '#888' }}>support@faidayetu.co.tz</div>
                   </div>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: 12, background: '#fafafa', borderRadius: 8 }}>
                   <Phone size={24} />
                   <div>
-                    <div style={{ fontWeight: 700, fontSize: 14 }}>Phone Support</div>
-                    <div style={{ fontSize: 13, color: '#888' }}>Coming soon</div>
+                    <div style={{ fontWeight: 700, fontSize: 14 }}>{t('contact.phone')}</div>
+                    <div style={{ fontSize: 13, color: '#888' }}>{t('contact.comingSoon')}</div>
                   </div>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: 12, background: '#fafafa', borderRadius: 8 }}>
                   <MessageCircle size={24} />
                   <div>
-                    <div style={{ fontWeight: 700, fontSize: 14 }}>Live Chat</div>
-                    <div style={{ fontSize: 13, color: '#888' }}>Coming soon</div>
+                    <div style={{ fontWeight: 700, fontSize: 14 }}>{t('contact.liveChat')}</div>
+                    <div style={{ fontSize: 13, color: '#888' }}>{t('contact.comingSoon')}</div>
                   </div>
                 </div>
               </div>

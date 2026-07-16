@@ -7,17 +7,7 @@ import StatusBadge from '../../components/StatusBadge';
 import { api } from '../../services/api';
 import { useToast } from '../../components/ToastContext';
 import Spinner from '../../components/Spinner';
-
-const navItems = [
-  { icon: LayoutDashboard, label: 'Dashboard', nav: '/supplier' },
-  { icon: Package, label: 'Inventory', nav: '/supplier/inventory' },
-  { icon: ShoppingCart, label: 'Orders', nav: '/supplier/orders' },
-  { icon: Bell, label: 'Notifications', nav: '/supplier/notifications' },
-  { icon: TrendingUp, label: 'Analytics', nav: '/supplier/analytics' },
-  { icon: TrendingDown, label: 'Statistics', nav: '/supplier/statistics' },
-  { icon: Settings, label: 'Settings', nav: '/supplier/settings' },
-  { icon: HelpCircle, label: 'Support', nav: '/supplier/support' },
-];
+import { useLang } from '../../components/LanguageContext';
 
 const modalOverlay = {
   position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', display: 'flex',
@@ -29,6 +19,17 @@ const modalBox = {
 };
 
 export default function SupplierOrders() {
+  const { t } = useLang();
+  const navItems = [
+    { icon: LayoutDashboard, label: t('nav.dashboard'), nav: '/supplier' },
+    { icon: Package, label: t('nav.inventory'), nav: '/supplier/inventory' },
+    { icon: ShoppingCart, label: t('nav.orders'), nav: '/supplier/orders' },
+    { icon: Bell, label: t('nav.notifications'), nav: '/supplier/notifications' },
+    { icon: TrendingUp, label: t('nav.analytics'), nav: '/supplier/analytics' },
+    { icon: TrendingDown, label: t('nav.statistics'), nav: '/supplier/statistics' },
+    { icon: Settings, label: t('nav.settings'), nav: '/supplier/settings' },
+    { icon: HelpCircle, label: t('nav.support'), nav: '/supplier/support' },
+  ];
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('All');
@@ -110,23 +111,23 @@ export default function SupplierOrders() {
     <DashboardShell brand="FaidaYetu" brandSub="Poultry Logistics Hub" navItems={navItems}>
       <div className="fade-in">
         <div style={{ marginBottom: 20 }}>
-          <h1 style={{ fontSize: 28, fontWeight: 600, color: '#000' }}>Orders</h1>
+          <h1 style={{ fontSize: 28, fontWeight: 600, color: '#000' }}>{t('nav.orders')}</h1>
           <p style={{ fontSize: 15, color: '#888' }}>Manage incoming orders and fulfillment</p>
         </div>
 
         <div style={{ display: 'flex', gap: 12, marginBottom: 20, flexWrap: 'wrap' }}>
-          {['All', 'New', 'Paid', 'Processing', 'Ready', 'Delivered', 'Cancelled'].map(t => (
-            <button key={t} onClick={() => setFilter(t)} style={{
+          {['All', 'New', 'Paid', 'Processing', 'Ready', 'Delivered', 'Cancelled'].map(filterKey => (
+            <button key={filterKey} onClick={() => setFilter(filterKey)} style={{
               padding: '8px 20px', borderRadius: 999, border: 'none', cursor: 'pointer',
-              background: t === filter ? '#000' : '#f5f5f5',
-              color: t === filter ? '#fff' : '#888',
+              background: filterKey === filter ? '#000' : '#f5f5f5',
+              color: filterKey === filter ? '#fff' : '#888',
               fontWeight: 600, fontSize: 13,
-            }}>{t}</button>
+            }}>{filterKey}</button>
           ))}
         </div>
 
         {loading ? (
-          <div style={{ textAlign: 'center', padding: 48, color: '#888' }}>Loading orders...</div>
+          <div style={{ textAlign: 'center', padding: 48, color: '#888' }}>{t('common.loading')}</div>
         ) : (
           <div style={{ background: '#fff', borderRadius: 12, border: `1px solid ${'#eee'}`, overflow: 'hidden' }}>
             <div style={{ overflowX: 'auto' }}>
@@ -147,21 +148,21 @@ export default function SupplierOrders() {
                       <td style={{ padding: 12, fontWeight: 700 }}>{Number(o.total).toLocaleString()} TZS</td>
                       <td style={{ padding: 12 }}>
                         {o.paid
-                          ? <span style={{ color: '#2e7d32', fontWeight: 600, fontSize: 13 }}>✓ Paid</span>
+                          ? <span style={{ color: '#2e7d32', fontWeight: 600, fontSize: 13 }}>✓ {t('common.paid')}</span>
                           : <span style={{ color: '#d32f2f', fontWeight: 600, fontSize: 13 }}>Unpaid</span>
                         }
                       </td>
                       <td style={{ padding: 12 }}><StatusBadge status={o.status} /></td>
                       <td style={{ padding: 12 }}>
-                        <button onClick={() => setSelectedOrder(o)} style={{ padding: '6px 14px', borderRadius: 8, background: '#000', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: 12, marginRight: 4 }}>View</button>
+                        <button onClick={() => setSelectedOrder(o)} style={{ padding: '6px 14px', borderRadius: 8, background: '#000', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: 12, marginRight: 4 }}>{t('common.details')}</button>
                         {!o.paid && o.status !== 'cancelled' && o.status !== 'delivered' && (
                           <button onClick={() => handleConfirmPayment(o.id)} disabled={confirmingPayments[o.id]} style={{ padding: '6px 14px', borderRadius: 8, background: '#0a6e46', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: 12, marginRight: 4, display: 'flex', alignItems: 'center', gap: 4 }}>
                             {confirmingPayments[o.id] && <Spinner size={10} color="#fff" />}
-                            Confirm Payment
+                            {t('common.payNow')}
                           </button>
                         )}
                         {o.status === 'ready' && (
-                          <button onClick={() => openAssign(o)} style={{ padding: '6px 14px', borderRadius: 8, background: '#e67e22', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: 12 }}>Assign</button>
+                          <button onClick={() => openAssign(o)} style={{ padding: '6px 14px', borderRadius: 8, background: '#e67e22', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: 12 }}>{t('common.track')}</button>
                         )}
                       </td>
                     </tr>
@@ -210,15 +211,15 @@ export default function SupplierOrders() {
 
             <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
               {selectedOrder.status === 'ready' && (
-                <button onClick={() => { setSelectedOrder(null); openAssign(selectedOrder); }} style={{ padding: '10px 20px', borderRadius: 8, background: '#e67e22', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 700, flex: 1 }}>Assign Driver</button>
+                <button onClick={() => { setSelectedOrder(null); openAssign(selectedOrder); }} style={{ padding: '10px 20px', borderRadius: 8, background: '#e67e22', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 700, flex: 1 }}>{t('orders.assignDriver')}</button>
               )}
               {['new', 'ready'].includes(selectedOrder.status) && (
                 <button onClick={() => handleStatusUpdate(selectedOrder.id, 'cancelled')} disabled={confirmingPayments[selectedOrder.id]} style={{ padding: '10px 20px', borderRadius: 8, background: '#fef2f2', color: '#d32f2f', border: '1px solid #fecaca', cursor: 'pointer', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 4 }}>
                   {confirmingPayments[selectedOrder.id] && <Spinner size={12} color="#d32f2f" />}
-                  Cancel
+                  {t('common.cancel')}
                 </button>
               )}
-              <button onClick={() => setSelectedOrder(null)} style={{ padding: '10px 20px', borderRadius: 8, background: 'none', border: `1px solid ${'#eee'}`, cursor: 'pointer', fontWeight: 600 }}>Close</button>
+              <button onClick={() => setSelectedOrder(null)} style={{ padding: '10px 20px', borderRadius: 8, background: 'none', border: `1px solid ${'#eee'}`, cursor: 'pointer', fontWeight: 600 }}>{t('common.close')}</button>
             </div>
           </div>
         </div>
@@ -229,15 +230,15 @@ export default function SupplierOrders() {
         <div style={modalOverlay} onClick={() => setShowAssign(null)}>
           <div style={modalBox} onClick={e => e.stopPropagation()}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-              <h3 style={{ fontSize: 20, fontWeight: 700, color: '#000' }}>Assign Delivery — Order #{showAssign.id}</h3>
+              <h3 style={{ fontSize: 20, fontWeight: 700, color: '#000' }}>{t('orders.assignDriver')} — Order #{showAssign.id}</h3>
               <button onClick={() => setShowAssign(null)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 20, color: '#888' }}>✕</button>
             </div>
             <p style={{ fontSize: 14, color: '#888', marginBottom: 16 }}>Available delivery personnel nearby:</p>
 
             {loadingDrivers ? (
-              <div style={{ textAlign: 'center', padding: 28, color: '#888' }}>Loading nearby drivers...</div>
+              <div style={{ textAlign: 'center', padding: 28, color: '#888' }}>{t('common.loading')}</div>
             ) : drivers.length === 0 ? (
-              <div style={{ textAlign: 'center', padding: 28, color: '#888' }}>No available drivers nearby. Try expanding the search radius or check back later.</div>
+              <div style={{ textAlign: 'center', padding: 28, color: '#888' }}>{t('orders.noDrivers')}</div>
             ) : (
               <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                 {drivers.map(d => (

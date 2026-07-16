@@ -2,19 +2,20 @@ import { useState, useEffect } from 'react';
 import { LayoutDashboard, Package, ShoppingCart, Bell, TrendingUp, TrendingDown, Settings, HelpCircle } from 'lucide-react';
 import DashboardShell from '../../components/DashboardShell';
 import { api } from '../../services/api';
-
-const navItems = [
-  { icon: LayoutDashboard, label: 'Dashboard', nav: '/supplier' },
-  { icon: Package, label: 'Inventory', nav: '/supplier/inventory' },
-  { icon: ShoppingCart, label: 'Orders', nav: '/supplier/orders' },
-  { icon: Bell, label: 'Notifications', nav: '/supplier/notifications' },
-  { icon: TrendingUp, label: 'Analytics', nav: '/supplier/analytics' },
-  { icon: TrendingDown, label: 'Statistics', nav: '/supplier/statistics' },
-  { icon: Settings, label: 'Settings', nav: '/supplier/settings' },
-  { icon: HelpCircle, label: 'Support', nav: '/supplier/support' },
-];
+import { useLang } from '../../components/LanguageContext';
 
 export default function SupplierAnalytics() {
+  const { t } = useLang();
+  const navItems = [
+    { icon: LayoutDashboard, label: t('nav.dashboard'), nav: '/supplier' },
+    { icon: Package, label: t('nav.inventory'), nav: '/supplier/inventory' },
+    { icon: ShoppingCart, label: t('nav.orders'), nav: '/supplier/orders' },
+    { icon: Bell, label: t('nav.notifications'), nav: '/supplier/notifications' },
+    { icon: TrendingUp, label: t('nav.analytics'), nav: '/supplier/analytics' },
+    { icon: TrendingDown, label: t('nav.statistics'), nav: '/supplier/statistics' },
+    { icon: Settings, label: t('nav.settings'), nav: '/supplier/settings' },
+    { icon: HelpCircle, label: t('nav.support'), nav: '/supplier/support' },
+  ];
   const [data, setData] = useState({ stats: { orders: '0', revenue: '0 TZS' } });
   const [loading, setLoading] = useState(true);
 
@@ -27,12 +28,12 @@ export default function SupplierAnalytics() {
     <DashboardShell brand="FaidaYetu" brandSub="Poultry Logistics Hub" navItems={navItems}>
       <div className="fade-in">
         <div style={{ marginBottom: 20 }}>
-          <h1 style={{ fontSize: 28, fontWeight: 600, color: '#000' }}>Analytics</h1>
+          <h1 style={{ fontSize: 28, fontWeight: 600, color: '#000' }}>{t('nav.analytics')}</h1>
           <p style={{ fontSize: 15, color: '#888' }}>Performance insights and trends</p>
         </div>
 
         {loading ? (
-          <div style={{ textAlign: 'center', padding: 48, color: '#888' }}>Loading analytics...</div>
+          <div style={{ textAlign: 'center', padding: 48, color: '#888' }}>{t('common.loading')}</div>
         ) : (
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: 12, marginBottom: 20 }}>
             <div style={{ background: '#fff', borderRadius: 12, border: `1px solid ${'#eee'}`, padding: 20 }}>

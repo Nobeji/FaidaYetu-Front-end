@@ -4,9 +4,11 @@ import { useState, useEffect } from 'react';
 import { api } from '../services/api';
 import MapComponent from '../components/MapComponent';
 import { useNavigate } from 'react-router-dom';
+import { useLang } from '../components/LanguageContext';
 
 export default function Welcome() {
   const navigate = useNavigate();
+  const { t } = useLang();
   const [suppliers, setSuppliers] = useState([]);
   const [stats, setStats] = useState({});
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
@@ -36,12 +38,12 @@ export default function Welcome() {
             padding: '8px 20px', borderRadius: 10, background: '#fff',
             border: '1px solid #e2e8f0', cursor: 'pointer', fontSize: 14, fontWeight: 500,
             color: '#475569',
-          }}>Log In</button>
+          }}>{t('auth.logIn')}</button>
           <button onClick={() => navigate('/auth?tab=signup')} style={{
             padding: '8px 24px', borderRadius: 10,
             background: '#0a6e46', color: '#fff',
             border: 'none', cursor: 'pointer', fontSize: 14, fontWeight: 600,
-          }}>Sign Up</button>
+          }}>{t('auth.signUp')}</button>
         </div>
       </header>
 
@@ -60,12 +62,12 @@ export default function Welcome() {
                 display: 'flex', alignItems: 'center', gap: 8, padding: '16px 40px', borderRadius: 14,
                 background: '#0a6e46', color: '#fff',
                 border: 'none', cursor: 'pointer', fontSize: 16, fontWeight: 700,
-              }}>Join the Network <span>→</span></button>
+              }}>{t('auth.joinNetwork')} <span>→</span></button>
               <button onClick={() => document.getElementById('overview-map')?.scrollIntoView({ behavior: 'smooth' })} style={{
                 padding: '16px 40px', borderRadius: 14,
                 border: '1px solid #e2e8f0', color: '#475569',
                 background: '#fff', cursor: 'pointer', fontSize: 16, fontWeight: 600,
-              }}>View Live Map</button>
+              }}>{t('common.viewAll')}</button>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: isMobile ? 12 : 32, flexWrap: 'wrap' }}>
               {[{ v: stats.activeFarmers || '--', l: 'Active Farmers' }, { v: stats.dailyDeliveries || '--', l: 'Daily Deliveries' }, { v: stats.onTimeRate || '--', l: 'On-time Rate' }].map((s, i) => (
@@ -103,7 +105,7 @@ export default function Welcome() {
           <div style={{ maxWidth: 600, margin: '0 auto' }}>
             <h2 style={{ fontSize: isMobile ? 28 : 36, fontWeight: 800, color: '#0f172a', marginBottom: 16 }}>Ready to Digitalize Your Supply Chain?</h2>
             <p style={{ fontSize: 16, color: '#64748b', maxWidth: 480, margin: '0 auto 32px', lineHeight: 1.6 }}>Join the most advanced poultry network in Tanzania. Start optimizing your operations today with FaidaYetu.</p>
-            <button onClick={() => navigate('/auth')} style={{ padding: isMobile ? '14px 32px' : '16px 56px', borderRadius: 14, background: '#0a6e46', color: '#fff', border: 'none', cursor: 'pointer', fontSize: isMobile ? 15 : 16, fontWeight: 700 }}>Get Started Now</button>
+            <button onClick={() => navigate('/auth')} style={{ padding: isMobile ? '14px 32px' : '16px 56px', borderRadius: 14, background: '#0a6e46', color: '#fff', border: 'none', cursor: 'pointer', fontSize: isMobile ? 15 : 16, fontWeight: 700 }}>{t('auth.signUp')}</button>
           </div>
         </section>
 
@@ -112,7 +114,7 @@ export default function Welcome() {
           <div style={{ display: 'flex', gap: 20 }}>
             <a href="/privacy" style={{ color: 'inherit', textDecoration: 'none' }}>Privacy Policy</a>
             <a href="/terms" style={{ color: 'inherit', textDecoration: 'none' }}>Terms of Service</a>
-            <a href="/contact" style={{ color: 'inherit', textDecoration: 'none' }}>Contact Support</a>
+            <a href="/contact" style={{ color: 'inherit', textDecoration: 'none' }}>{t('contact.title')}</a>
           </div>
         </footer>
       </main>

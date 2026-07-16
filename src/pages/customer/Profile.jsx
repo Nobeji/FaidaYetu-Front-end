@@ -4,14 +4,7 @@ import DashboardShell from '../../components/DashboardShell';
 import { api } from '../../services/api';
 import { useToast } from '../../components/ToastContext';
 import { Home, ShoppingCart, ClipboardList, Bell, User, MapPin, CreditCard, Lock, Globe } from 'lucide-react';
-
-const navItems = [
-  { icon: Home, label: 'Explore', nav: '/customer' },
-  { icon: ShoppingCart, label: 'Marketplace', nav: '/customer/marketplace' },
-  { icon: ClipboardList, label: 'My Orders', nav: '/customer/orders' },
-  { icon: Bell, label: 'Notifications', nav: '/customer/notifications' },
-  { icon: User, label: 'Profile', nav: '/customer/profile' },
-];
+import { useLang } from '../../components/LanguageContext';
 
 const sectionsConfig = {
   addresses: {
@@ -56,6 +49,7 @@ const sectionsConfig = {
 };
 
 export default function CustomerProfile() {
+  const { t } = useLang();
   const toast = useToast();
   const navigate = useNavigate();
   const [profile, setProfile] = useState(null);
@@ -76,6 +70,14 @@ export default function CustomerProfile() {
   const user = JSON.parse(localStorage.getItem('user') || '{}');
   const userName = user.username || 'Customer';
   const initials = userName.charAt(0).toUpperCase();
+
+  const navItems = [
+    { icon: Home, label: t('nav.explore'), nav: '/customer' },
+    { icon: ShoppingCart, label: t('nav.marketplace'), nav: '/customer/marketplace' },
+    { icon: ClipboardList, label: t('nav.myOrders'), nav: '/customer/orders' },
+    { icon: Bell, label: t('nav.notifications'), nav: '/customer/notifications' },
+    { icon: User, label: t('nav.profile'), nav: '/customer/profile' },
+  ];
 
   useEffect(() => {
     api.profile().then(p => { setProfile(p); setForm({ first_name: p.user.first_name || '', last_name: p.user.last_name || '', email: p.user.email || '', phone: p.phone || '' }); setLoading(false); }).catch(() => setLoading(false));
@@ -177,7 +179,7 @@ export default function CustomerProfile() {
           </div>
         </div>
       }>
-      <div style={{ textAlign: 'center', padding: 48, color: '#888' }}>Loading profile...</div>
+      <div style={{ textAlign: 'center', padding: 48, color: '#888' }}>{t('common.loading')}</div>
     </DashboardShell>
   );
 
@@ -196,7 +198,7 @@ export default function CustomerProfile() {
       }>
       <div className="fade-in">
         <div style={{ marginBottom: 20 }}>
-          <h1 style={{ fontSize: 28, fontWeight: 600, color: '#000' }}>My Profile</h1>
+          <h1 style={{ fontSize: 28, fontWeight: 600, color: '#000' }}>{t('nav.profile')}</h1>
           <p style={{ fontSize: 15, color: '#888' }}>Manage your account and preferences</p>
         </div>
 
@@ -212,12 +214,12 @@ export default function CustomerProfile() {
               <span style={{ padding: '4px 12px', background: '#f5f5f5', borderRadius: 999, fontSize: 12, fontWeight: 600, color: '#888' }}>Member since {new Date(c.created_at).getFullYear() || 2026}</span>
             </div>
           </div>
-          <button onClick={() => setEditing(true)} style={{ padding: '10px 20px', borderRadius: 8, background: '#000', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: 14 }}>Edit Profile</button>
+          <button onClick={() => setEditing(true)} style={{ padding: '10px 20px', borderRadius: 8, background: '#000', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: 14 }}>{t('nav.profile')}</button>
         </div>
 
         {editing && (
           <div style={{ background: '#fff', borderRadius: 12, border: `1px solid ${'#000'}`, padding: 20, marginBottom: 20 }}>
-            <h3 style={{ fontSize: 18, fontWeight: 700, color: '#000', marginBottom: 12 }}>Edit Profile</h3>
+            <h3 style={{ fontSize: 18, fontWeight: 700, color: '#000', marginBottom: 12 }}>{t('nav.profile')}</h3>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 12 }}>
               <div>
                 <label style={{ fontSize: 13, fontWeight: 600, display: 'block', marginBottom: 4 }}>First Name</label>
@@ -237,8 +239,8 @@ export default function CustomerProfile() {
               </div>
             </div>
             <div style={{ display: 'flex', gap: 12 }}>
-              <button onClick={handleSave} style={{ padding: '10px 24px', borderRadius: 8, background: '#000', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 700 }}>Save Changes</button>
-              <button onClick={() => setEditing(false)} style={{ padding: '10px 24px', borderRadius: 8, background: 'none', border: `1px solid ${'#eee'}`, cursor: 'pointer', fontWeight: 600 }}>Cancel</button>
+              <button onClick={handleSave} style={{ padding: '10px 24px', borderRadius: 8, background: '#000', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 700 }}>{t('common.save')}</button>
+              <button onClick={() => setEditing(false)} style={{ padding: '10px 24px', borderRadius: 8, background: 'none', border: `1px solid ${'#eee'}`, cursor: 'pointer', fontWeight: 600 }}>{t('common.cancel')}</button>
             </div>
           </div>
         )}
@@ -255,7 +257,7 @@ export default function CustomerProfile() {
               <h3 style={{ fontSize: 20, fontWeight: 700, color: '#d32f2f', margin: '0 0 8px' }}>Delete Account?</h3>
               <p style={{ fontSize: 14, color: '#666', marginBottom: 20 }}>This will permanently delete your account, orders, and all associated data. Are you sure?</p>
               <div style={{ display: 'flex', gap: 12 }}>
-                <button onClick={() => setShowDeleteConfirm(false)} disabled={deleting} style={{ flex: 1, padding: '12px', borderRadius: 8, border: '1px solid #ddd', background: '#fff', color: '#666', cursor: 'pointer', fontWeight: 600 }}>Cancel</button>
+                <button onClick={() => setShowDeleteConfirm(false)} disabled={deleting} style={{ flex: 1, padding: '12px', borderRadius: 8, border: '1px solid #ddd', background: '#fff', color: '#666', cursor: 'pointer', fontWeight: 600 }}>{t('common.cancel')}</button>
                 <button onClick={handleDeleteAccount} disabled={deleting} style={{ flex: 1, padding: '12px', borderRadius: 8, background: '#d32f2f', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 700, opacity: deleting ? 0.7 : 1 }}>
                   {deleting ? 'Deleting...' : 'Delete Forever'}
                 </button>
@@ -298,8 +300,8 @@ export default function CustomerProfile() {
                       ))}
                     </div>
                     <div style={{ display: 'flex', gap: 12 }}>
-                      <button onClick={() => handleSectionSave(key)} style={{ flex: 1, padding: '10px', borderRadius: 8, background: '#000', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 700 }}>Save</button>
-                      <button onClick={() => setOpenSection(null)} style={{ flex: 1, padding: '10px', borderRadius: 8, background: 'none', border: `1px solid ${'#eee'}`, cursor: 'pointer', fontWeight: 600 }}>Cancel</button>
+                      <button onClick={() => handleSectionSave(key)} style={{ flex: 1, padding: '10px', borderRadius: 8, background: '#000', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 700 }}>{t('common.save')}</button>
+                      <button onClick={() => setOpenSection(null)} style={{ flex: 1, padding: '10px', borderRadius: 8, background: 'none', border: `1px solid ${'#eee'}`, cursor: 'pointer', fontWeight: 600 }}>{t('common.cancel')}</button>
                     </div>
                   </div>
                 )}

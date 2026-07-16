@@ -6,17 +6,7 @@ import DashboardShell from '../../components/DashboardShell';
 import ProgressBar from '../../components/ProgressBar';
 import { api } from '../../services/api';
 import { useToast } from '../../components/ToastContext';
-
-const navItems = [
-  { icon: LayoutDashboard, label: 'Dashboard', nav: '/supplier' },
-  { icon: Package, label: 'Inventory', nav: '/supplier/inventory' },
-  { icon: ShoppingCart, label: 'Orders', nav: '/supplier/orders' },
-  { icon: Bell, label: 'Notifications', nav: '/supplier/notifications' },
-  { icon: TrendingUp, label: 'Analytics', nav: '/supplier/analytics' },
-  { icon: TrendingDown, label: 'Statistics', nav: '/supplier/statistics' },
-  { icon: Settings, label: 'Settings', nav: '/supplier/settings' },
-  { icon: HelpCircle, label: 'Support', nav: '/supplier/support' },
-];
+import { useLang } from '../../components/LanguageContext';
 
 const modalOverlay = {
   position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', display: 'flex',
@@ -31,6 +21,17 @@ const modalBox = {
 const fallbackImg = '';
 
 export default function SupplierInventory() {
+  const { t } = useLang();
+  const navItems = [
+    { icon: LayoutDashboard, label: t('nav.dashboard'), nav: '/supplier' },
+    { icon: Package, label: t('nav.inventory'), nav: '/supplier/inventory' },
+    { icon: ShoppingCart, label: t('nav.orders'), nav: '/supplier/orders' },
+    { icon: Bell, label: t('nav.notifications'), nav: '/supplier/notifications' },
+    { icon: TrendingUp, label: t('nav.analytics'), nav: '/supplier/analytics' },
+    { icon: TrendingDown, label: t('nav.statistics'), nav: '/supplier/statistics' },
+    { icon: Settings, label: t('nav.settings'), nav: '/supplier/settings' },
+    { icon: HelpCircle, label: t('nav.support'), nav: '/supplier/support' },
+  ];
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showAdd, setShowAdd] = useState(false);
@@ -108,17 +109,17 @@ export default function SupplierInventory() {
       <div className="fade-in">
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20, flexWrap: 'wrap', gap: 12 }}>
           <div>
-            <h1 style={{ fontSize: 28, fontWeight: 600, color: '#000' }}>Inventory</h1>
+            <h1 style={{ fontSize: 28, fontWeight: 600, color: '#000' }}>{t('nav.inventory')}</h1>
             <p style={{ fontSize: 15, color: '#888' }}>Manage your poultry product stock</p>
           </div>
           <div style={{ display: 'flex', gap: 12 }}>
             <span onClick={() => toast('Exporting inventory data...', 'info')} style={{ fontSize: 14, color: '#000', cursor: 'pointer', alignSelf: 'center' }}>Export →</span>
-            <button onClick={() => setShowAdd(true)} style={{ padding: '12px 24px', borderRadius: 8, background: '#000', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 700, fontSize: 14 }}>+ Add Product</button>
+            <button onClick={() => setShowAdd(true)} style={{ padding: '12px 24px', borderRadius: 8, background: '#000', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 700, fontSize: 14 }}>+ {t('inventory.addProduct')}</button>
           </div>
         </div>
 
         {loading ? (
-          <div style={{ textAlign: 'center', padding: 48, color: '#888' }}>Loading inventory...</div>
+          <div style={{ textAlign: 'center', padding: 48, color: '#888' }}>{t('common.loading')}</div>
         ) : (
           <div style={{ background: '#fff', borderRadius: 12, border: `1px solid ${'#eee'}`, overflow: 'hidden' }}>
             <div style={{ overflowX: 'auto' }}>
@@ -140,8 +141,8 @@ export default function SupplierInventory() {
                       <td style={{ padding: 12, color: '#888' }}>{item.category}</td>
                       <td style={{ padding: 12, fontWeight: 700 }}>{Number(item.price).toLocaleString()} TZS</td>
                       <td style={{ padding: 12 }}>{item.stock} {item.unit}</td>
-                      <td style={{ padding: 12 }}><span style={{ padding: '2px 10px', borderRadius: 999, fontSize: 11, fontWeight: 600, background: item.stock <= item.min_stock ? '#ffebee' : '#e8f5e9', color: item.stock <= item.min_stock ? '#c62828' : '#2e7d32' }}>{item.stock <= item.min_stock ? 'Low' : 'In Stock'}</span></td>
-                      <td style={{ padding: 12 }}><button onClick={() => handleEdit(item)} style={{ padding: '6px 14px', borderRadius: 8, border: `1px solid ${'#000'}`, background: 'none', color: '#000', cursor: 'pointer', fontWeight: 600, fontSize: 12 }}>Edit</button></td>
+                      <td style={{ padding: 12 }}><span style={{ padding: '2px 10px', borderRadius: 999, fontSize: 11, fontWeight: 600, background: item.stock <= item.min_stock ? '#ffebee' : '#e8f5e9', color: item.stock <= item.min_stock ? '#c62828' : '#2e7d32' }}>{item.stock <= item.min_stock ? t('inventory.low') : t('inventory.inStock')}</span></td>
+                      <td style={{ padding: 12 }}><button onClick={() => handleEdit(item)} style={{ padding: '6px 14px', borderRadius: 8, border: `1px solid ${'#000'}`, background: 'none', color: '#000', cursor: 'pointer', fontWeight: 600, fontSize: 12 }}>{t('inventory.edit')}</button></td>
                     </tr>
                   ))}
                 </tbody>
@@ -155,7 +156,7 @@ export default function SupplierInventory() {
       {showAdd && (
         <div style={modalOverlay} onClick={() => setShowAdd(false)}>
           <div style={modalBox} onClick={e => e.stopPropagation()}>
-            <h3 style={{ fontSize: 20, fontWeight: 700, color: '#000', marginBottom: 16 }}>Add Product</h3>
+            <h3 style={{ fontSize: 20, fontWeight: 700, color: '#000', marginBottom: 16 }}>{t('inventory.addProduct')}</h3>
 
             <label style={{ fontSize: 13, fontWeight: 600, display: 'block', marginBottom: 4 }}>Product Image</label>
             <input type="file" accept="image/*" onChange={handleImageChange} style={inputStyle} />
@@ -194,8 +195,8 @@ export default function SupplierInventory() {
             </div>
 
             <div style={{ display: 'flex', gap: 12, marginTop: 8 }}>
-              <button onClick={handleAdd} style={{ flex: 1, padding: '12px', borderRadius: 8, background: '#000', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 700 }}>Add Product</button>
-              <button onClick={() => { setShowAdd(false); resetForm(); }} style={{ flex: 1, padding: '12px', borderRadius: 8, background: 'none', border: `1px solid ${'#eee'}`, cursor: 'pointer', fontWeight: 600 }}>Cancel</button>
+              <button onClick={handleAdd} style={{ flex: 1, padding: '12px', borderRadius: 8, background: '#000', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 700 }}>{t('inventory.addProduct')}</button>
+              <button onClick={() => { setShowAdd(false); resetForm(); }} style={{ flex: 1, padding: '12px', borderRadius: 8, background: 'none', border: `1px solid ${'#eee'}`, cursor: 'pointer', fontWeight: 600 }}>{t('common.cancel')}</button>
             </div>
           </div>
         </div>
@@ -205,7 +206,7 @@ export default function SupplierInventory() {
       {showEdit && (
         <div style={modalOverlay} onClick={() => setShowEdit(null)}>
           <div style={modalBox} onClick={e => e.stopPropagation()}>
-            <h3 style={{ fontSize: 20, fontWeight: 700, color: '#000', marginBottom: 16 }}>Edit Product</h3>
+            <h3 style={{ fontSize: 20, fontWeight: 700, color: '#000', marginBottom: 16 }}>{t('inventory.editProduct')}</h3>
 
             <label style={{ fontSize: 13, fontWeight: 600, display: 'block', marginBottom: 4 }}>Product Image</label>
             <input type="file" accept="image/*" onChange={handleImageChange} style={inputStyle} />
@@ -244,8 +245,8 @@ export default function SupplierInventory() {
             </div>
 
             <div style={{ display: 'flex', gap: 12, marginTop: 8 }}>
-              <button onClick={handleSaveEdit} style={{ flex: 1, padding: '12px', borderRadius: 8, background: '#000', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 700 }}>Save Changes</button>
-              <button onClick={() => { setShowEdit(null); resetForm(); }} style={{ flex: 1, padding: '12px', borderRadius: 8, background: 'none', border: `1px solid ${'#eee'}`, cursor: 'pointer', fontWeight: 600 }}>Cancel</button>
+              <button onClick={handleSaveEdit} style={{ flex: 1, padding: '12px', borderRadius: 8, background: '#000', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 700 }}>{t('common.save')}</button>
+              <button onClick={() => { setShowEdit(null); resetForm(); }} style={{ flex: 1, padding: '12px', borderRadius: 8, background: 'none', border: `1px solid ${'#eee'}`, cursor: 'pointer', fontWeight: 600 }}>{t('common.cancel')}</button>
             </div>
           </div>
         </div>

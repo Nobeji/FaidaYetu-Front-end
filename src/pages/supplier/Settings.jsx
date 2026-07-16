@@ -3,57 +3,58 @@ import { LayoutDashboard, Package, ShoppingCart, Bell, TrendingUp, TrendingDown,
 import DashboardShell from '../../components/DashboardShell';
 import { api } from '../../services/api';
 import { useToast } from '../../components/ToastContext';
-
-const navItems = [
-  { icon: LayoutDashboard, label: 'Dashboard', nav: '/supplier' },
-  { icon: Package, label: 'Inventory', nav: '/supplier/inventory' },
-  { icon: ShoppingCart, label: 'Orders', nav: '/supplier/orders' },
-  { icon: Bell, label: 'Notifications', nav: '/supplier/notifications' },
-  { icon: TrendingUp, label: 'Analytics', nav: '/supplier/analytics' },
-  { icon: TrendingDown, label: 'Statistics', nav: '/supplier/statistics' },
-  { icon: Settings, label: 'Settings', nav: '/supplier/settings' },
-  { icon: HelpCircle, label: 'Support', nav: '/supplier/support' },
-];
+import { useLang } from '../../components/LanguageContext';
 
 const sectionsConfig = {
   store: {
-    icon: Store, label: 'Store Profile',
+    icon: Store, labelKey: 'storeProfile',
     fields: [
-      { key: 'business_name', label: 'Business Name', type: 'text' },
-      { key: 'business_email', label: 'Business Email', type: 'text' },
-      { key: 'phone', label: 'Phone Number', type: 'text' },
-      { key: 'address', label: 'Location', type: 'text' },
-      { key: 'description', label: 'Description', type: 'text' },
+      { key: 'business_name', labelKey: 'businessName', type: 'text' },
+      { key: 'business_email', labelKey: 'businessEmail', type: 'text' },
+      { key: 'phone', labelKey: 'phone', type: 'text' },
+      { key: 'address', labelKey: 'location', type: 'text' },
+      { key: 'description', labelKey: 'description', type: 'text' },
     ],
   },
   account: {
-    icon: User, label: 'Account',
+    icon: User, labelKey: 'account',
     fields: [
-      { key: 'username', label: 'Username', type: 'text' },
-      { key: 'email', label: 'Email', type: 'text' },
-      { key: 'current_password', label: 'Current Password', type: 'password' },
-      { key: 'new_password', label: 'New Password', type: 'password' },
+      { key: 'username', labelKey: 'username', type: 'text' },
+      { key: 'email', labelKey: 'email', type: 'text' },
+      { key: 'current_password', labelKey: 'currentPassword', type: 'password' },
+      { key: 'new_password', labelKey: 'newPassword', type: 'password' },
     ],
   },
   notifications: {
-    icon: Bell, label: 'Notifications',
+    icon: Bell, labelKey: 'notifications',
     fields: [
-      { key: 'push', label: 'Push Notifications', type: 'toggle' },
-      { key: 'sms', label: 'SMS Alerts', type: 'toggle' },
-      { key: 'email', label: 'Email Updates', type: 'toggle' },
+      { key: 'push', labelKey: 'pushNotifications', type: 'toggle' },
+      { key: 'sms', labelKey: 'smsAlerts', type: 'toggle' },
+      { key: 'email', labelKey: 'emailUpdates', type: 'toggle' },
     ],
   },
   business: {
-    icon: Clock, label: 'Business Hours',
+    icon: Clock, labelKey: 'businessHours',
     fields: [
-      { key: 'opening', label: 'Opening Time', type: 'text', placeholder: 'e.g. 08:00' },
-      { key: 'closing', label: 'Closing Time', type: 'text', placeholder: 'e.g. 18:00' },
-      { key: 'weekends', label: 'Open on Weekends', type: 'toggle' },
+      { key: 'opening', labelKey: 'openingTime', type: 'text', placeholder: 'e.g. 08:00' },
+      { key: 'closing', labelKey: 'closingTime', type: 'text', placeholder: 'e.g. 18:00' },
+      { key: 'weekends', labelKey: 'openWeekends', type: 'toggle' },
     ],
   },
 };
 
 export default function SupplierSettings() {
+  const { t } = useLang();
+  const navItems = [
+    { icon: LayoutDashboard, label: t('nav.dashboard'), nav: '/supplier' },
+    { icon: Package, label: t('nav.inventory'), nav: '/supplier/inventory' },
+    { icon: ShoppingCart, label: t('nav.orders'), nav: '/supplier/orders' },
+    { icon: Bell, label: t('nav.notifications'), nav: '/supplier/notifications' },
+    { icon: TrendingUp, label: t('nav.analytics'), nav: '/supplier/analytics' },
+    { icon: TrendingDown, label: t('nav.statistics'), nav: '/supplier/statistics' },
+    { icon: Settings, label: t('nav.settings'), nav: '/supplier/settings' },
+    { icon: HelpCircle, label: t('nav.support'), nav: '/supplier/support' },
+  ];
   const toast = useToast();
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -106,7 +107,7 @@ export default function SupplierSettings() {
         api.updateProfile({ current_password: data.current_password, new_password: data.new_password }).catch(() => {});
       }
     }
-    toast(`${sectionsConfig[section].label} saved!`, 'success');
+    toast(`${t(`settings.${sectionsConfig[section].labelKey}`)} saved!`, 'success');
     setOpenSection(null);
   };
 
@@ -130,14 +131,14 @@ export default function SupplierSettings() {
     }
     if (field.type === 'password') {
       return (
-        <input type="password" value={val} placeholder={field.label}
+        <input type="password" value={val} placeholder={t(`settings.${field.labelKey}`)}
           onChange={e => setSectionData(prev => ({ ...prev, [sectionKey]: { ...prev[sectionKey], [field.key]: e.target.value } }))}
           style={{ width: '100%', padding: '10px 12px', borderRadius: 8, border: '1px solid #eee', fontSize: 14, boxSizing: 'border-box' }}
         />
       );
     }
     return (
-      <input type="text" value={val} placeholder={field.placeholder || field.label}
+      <input type="text" value={val} placeholder={field.placeholder || t(`settings.${field.labelKey}`)}
         onChange={e => setSectionData(prev => ({ ...prev, [sectionKey]: { ...prev[sectionKey], [field.key]: e.target.value } }))}
         style={{ width: '100%', padding: '10px 12px', borderRadius: 8, border: '1px solid #eee', fontSize: 14, boxSizing: 'border-box' }}
       />
@@ -146,7 +147,7 @@ export default function SupplierSettings() {
 
   if (loading) return (
     <DashboardShell brand="FaidaYetu" brandSub="Poultry Logistics Hub" navItems={navItems}>
-      <div style={{ textAlign: 'center', padding: 48, color: '#888' }}>Loading settings...</div>
+      <div style={{ textAlign: 'center', padding: 48, color: '#888' }}>{t('common.loading')}</div>
     </DashboardShell>
   );
 
@@ -158,7 +159,7 @@ export default function SupplierSettings() {
     <DashboardShell brand="FaidaYetu" brandSub="Poultry Logistics Hub" navItems={navItems}>
       <div className="fade-in">
         <div style={{ marginBottom: 20 }}>
-          <h1 style={{ fontSize: 28, fontWeight: 600, color: '#000' }}>Settings</h1>
+          <h1 style={{ fontSize: 28, fontWeight: 600, color: '#000' }}>{t('nav.settings')}</h1>
           <p style={{ fontSize: 15, color: '#888' }}>Manage your business profile and preferences</p>
         </div>
 
@@ -174,12 +175,12 @@ export default function SupplierSettings() {
               {s.address && <span style={{ padding: '4px 12px', background: '#f5f5f5', borderRadius: 999, fontSize: 12, fontWeight: 600, color: '#888' }}>{s.address}</span>}
             </div>
           </div>
-          <button onClick={() => setEditing(true)} style={{ padding: '10px 20px', borderRadius: 8, background: '#000', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: 14 }}>Edit Profile</button>
+          <button onClick={() => setEditing(true)} style={{ padding: '10px 20px', borderRadius: 8, background: '#000', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: 14 }}>{t('settings.editProfile')}</button>
         </div>
 
         {editing && (
           <div style={{ background: '#fff', borderRadius: 12, border: '1px solid #000', padding: 20, marginBottom: 20 }}>
-            <h3 style={{ fontSize: 18, fontWeight: 700, color: '#000', marginBottom: 12 }}>Edit Profile</h3>
+            <h3 style={{ fontSize: 18, fontWeight: 700, color: '#000', marginBottom: 12 }}>{t('settings.editProfile')}</h3>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 12 }}>
               <div>
                 <label style={{ fontSize: 13, fontWeight: 600, display: 'block', marginBottom: 4 }}>First Name</label>
@@ -207,8 +208,8 @@ export default function SupplierSettings() {
               </div>
             </div>
             <div style={{ display: 'flex', gap: 12 }}>
-              <button onClick={handleSave} style={{ padding: '10px 24px', borderRadius: 8, background: '#000', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 700 }}>Save Changes</button>
-              <button onClick={() => setEditing(false)} style={{ padding: '10px 24px', borderRadius: 8, background: 'none', border: '1px solid #eee', cursor: 'pointer', fontWeight: 600 }}>Cancel</button>
+              <button onClick={handleSave} style={{ padding: '10px 24px', borderRadius: 8, background: '#000', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 700 }}>{t('common.save')}</button>
+              <button onClick={() => setEditing(false)} style={{ padding: '10px 24px', borderRadius: 8, background: 'none', border: '1px solid #eee', cursor: 'pointer', fontWeight: 600 }}>{t('common.cancel')}</button>
             </div>
           </div>
         )}
@@ -224,7 +225,7 @@ export default function SupplierSettings() {
                 >
                   <div style={{ width: 48, height: 48, borderRadius: 8, background: '#f5f5f5', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><SectionIcon size={22} /></div>
                   <div style={{ flex: 1 }}>
-                    <div style={{ fontWeight: 700, fontSize: 15, color: '#111' }}>{section.label}</div>
+                    <div style={{ fontWeight: 700, fontSize: 15, color: '#111' }}>{t(`settings.${section.labelKey}`)}</div>
                     <div style={{ fontSize: 13, color: '#888' }}>{openSection === key ? 'Click to close' : 'Click to manage'}</div>
                   </div>
                   <span style={{ color: '#888', transform: openSection === key ? 'rotate(90deg)' : 'none', transition: '0.2s' }}>→</span>
@@ -234,10 +235,10 @@ export default function SupplierSettings() {
                     <div style={{ padding: 12, display: 'flex', flexDirection: 'column', gap: 12 }}>
                       {section.fields.map(f => (
                         <div key={f.key}>
-                          {f.type !== 'toggle' && <label style={{ fontSize: 13, fontWeight: 600, display: 'block', marginBottom: 4 }}>{f.label}</label>}
+                          {f.type !== 'toggle' && <label style={{ fontSize: 13, fontWeight: 600, display: 'block', marginBottom: 4 }}>{t(`settings.${f.labelKey}`)}</label>}
                           {f.type === 'toggle' ? (
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                              <span style={{ fontSize: 14 }}>{f.label}</span>
+                              <span style={{ fontSize: 14 }}>{t(`settings.${f.labelKey}`)}</span>
                               {renderField(key, f)}
                             </div>
                           ) : (
@@ -247,8 +248,8 @@ export default function SupplierSettings() {
                       ))}
                     </div>
                     <div style={{ display: 'flex', gap: 12 }}>
-                      <button onClick={() => handleSectionSave(key)} style={{ flex: 1, padding: '10px', borderRadius: 8, background: '#000', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 700 }}>Save</button>
-                      <button onClick={() => setOpenSection(null)} style={{ flex: 1, padding: '10px', borderRadius: 8, background: 'none', border: '1px solid #eee', cursor: 'pointer', fontWeight: 600 }}>Cancel</button>
+                      <button onClick={() => handleSectionSave(key)} style={{ flex: 1, padding: '10px', borderRadius: 8, background: '#000', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 700 }}>{t('common.save')}</button>
+                      <button onClick={() => setOpenSection(null)} style={{ flex: 1, padding: '10px', borderRadius: 8, background: 'none', border: '1px solid #eee', cursor: 'pointer', fontWeight: 600 }}>{t('common.cancel')}</button>
                     </div>
                   </div>
                 )}

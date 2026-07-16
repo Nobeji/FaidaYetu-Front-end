@@ -3,14 +3,7 @@ import DashboardShell from '../../components/DashboardShell';
 import { api } from '../../services/api';
 import { useToast } from '../../components/ToastContext';
 import { Truck, Route, Coins, Settings, HelpCircle } from 'lucide-react';
-
-const navItems = [
-  { icon: Truck, label: 'Active Tasks', nav: '/delivery' },
-  { icon: Route, label: 'Route History', nav: '/delivery/route-history' },
-  { icon: Coins, label: 'Earnings', nav: '/delivery/earnings' },
-  { icon: Settings, label: 'Settings', nav: '/delivery/settings' },
-  { icon: HelpCircle, label: 'Support', nav: '/delivery/support' },
-];
+import { useLang } from '../../components/LanguageContext';
 
 const fieldMeta = {
   'Full Name': { key: 'username', section: 'user' },
@@ -21,6 +14,14 @@ const fieldMeta = {
 };
 
 export default function DeliverySettings() {
+  const { t } = useLang();
+  const navItems = [
+    { icon: Truck, label: t('nav.activeTasks'), nav: '/delivery' },
+    { icon: Route, label: t('nav.routeHistory'), nav: '/delivery/route-history' },
+    { icon: Coins, label: t('nav.earnings'), nav: '/delivery/earnings' },
+    { icon: Settings, label: t('nav.settings'), nav: '/delivery/settings' },
+    { icon: HelpCircle, label: t('nav.support'), nav: '/delivery/support' },
+  ];
   const toast = useToast();
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -83,12 +84,12 @@ export default function DeliverySettings() {
     <DashboardShell brand="FaidaYetu" brandSub="Delivery Portal" navItems={navItems}>
       <div className="fade-in">
         <div style={{ marginBottom: 20 }}>
-          <h1 style={{ fontSize: 28, fontWeight: 600, color: '#000' }}>Settings</h1>
-          <p style={{ fontSize: 15, color: '#888' }}>Manage your delivery account</p>
+          <h1 style={{ fontSize: 28, fontWeight: 600, color: '#000' }}>{t('nav.settings')}</h1>
+          <p style={{ fontSize: 15, color: '#888' }}>{t('delivery.awaitingTasks')}</p>
         </div>
 
         {loading ? (
-          <div style={{ textAlign: 'center', padding: 48, color: '#888' }}>Loading settings...</div>
+          <div style={{ textAlign: 'center', padding: 48, color: '#888' }}>{t('common.loading')}</div>
         ) : (
           sections.map(section => (
             <div key={section.title} style={{ background: '#fff', borderRadius: 12, border: `1px solid ${'#eee'}`, marginBottom: 20 }}>
@@ -116,8 +117,8 @@ export default function DeliverySettings() {
                           }}
                           autoFocus
                         />
-                        <button onClick={() => saveEdit(item.label)} style={{ padding: '6px 14px', borderRadius: 8, background: '#000', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: 12, whiteSpace: 'nowrap' }}>Save</button>
-                        <button onClick={() => setEditingField(null)} style={{ padding: '6px 14px', borderRadius: 8, background: 'none', border: `1px solid ${'#eee'}`, cursor: 'pointer', fontWeight: 600, fontSize: 12 }}>Cancel</button>
+                        <button onClick={() => saveEdit(item.label)} style={{ padding: '6px 14px', borderRadius: 8, background: '#000', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: 12, whiteSpace: 'nowrap' }}>{t('common.save')}</button>
+                        <button onClick={() => setEditingField(null)} style={{ padding: '6px 14px', borderRadius: 8, background: 'none', border: `1px solid ${'#eee'}`, cursor: 'pointer', fontWeight: 600, fontSize: 12 }}>{t('common.cancel')}</button>
                       </div>
                     ) : (
                       <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>

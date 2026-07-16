@@ -5,14 +5,7 @@ import { api } from '../../services/api';
 import { useToast } from '../../components/ToastContext';
 import Spinner from '../../components/Spinner';
 import { Home, ShoppingCart, ClipboardList, Bell, User, Package, Search } from 'lucide-react';
-
-const navItems = [
-  { icon: Home, label: 'Explore', nav: '/customer' },
-  { icon: ShoppingCart, label: 'Marketplace', nav: '/customer/marketplace' },
-  { icon: ClipboardList, label: 'My Orders', nav: '/customer/orders' },
-  { icon: Bell, label: 'Notifications', nav: '/customer/notifications' },
-  { icon: User, label: 'Profile', nav: '/customer/profile' },
-];
+import { useLang } from '../../components/LanguageContext';
 
 const modalOverlay = {
   position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', display: 'flex',
@@ -24,6 +17,7 @@ const modalBox = {
 };
 
 export default function Marketplace() {
+  const { t } = useLang();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeCat, setActiveCat] = useState('all');
@@ -39,6 +33,14 @@ export default function Marketplace() {
   const navigate = useNavigate();
   const toast = useToast();
   const [placingOrder, setPlacingOrder] = useState(false);
+
+  const navItems = [
+    { icon: Home, label: t('nav.explore'), nav: '/customer' },
+    { icon: ShoppingCart, label: t('nav.marketplace'), nav: '/customer/marketplace' },
+    { icon: ClipboardList, label: t('nav.myOrders'), nav: '/customer/orders' },
+    { icon: Bell, label: t('nav.notifications'), nav: '/customer/notifications' },
+    { icon: User, label: t('nav.profile'), nav: '/customer/profile' },
+  ];
 
   useEffect(() => {
     api.products().then(p => { setProducts(p); setLoading(false); }).catch(() => setLoading(false));
@@ -104,8 +106,8 @@ export default function Marketplace() {
       }>
       <div className="fade-in">
         <div style={{ marginBottom: 20 }}>
-          <h1 style={{ fontSize: 28, fontWeight: 600, color: '#000' }}>Marketplace</h1>
-          <p style={{ fontSize: 15, color: '#888' }}>Browse and order fresh poultry products</p>
+          <h1 style={{ fontSize: 28, fontWeight: 600, color: '#000' }}>{t('marketplace.title')}</h1>
+          <p style={{ fontSize: 15, color: '#888' }}>{t('marketplace.subtitle')}</p>
         </div>
 
         <div style={{ marginBottom: 16, position: 'relative' }}>
@@ -114,13 +116,13 @@ export default function Marketplace() {
             type="text"
             value={searchQuery}
             onChange={e => setSearchQuery(e.target.value)}
-            placeholder="Search products by name, supplier, or category..."
+            placeholder={t('marketplace.searchProducts')}
             style={{ width: '100%', padding: '12px 14px 12px 40px', borderRadius: 10, border: '1px solid #e2e8f0', background: '#fff', fontSize: 14, color: '#0f172a', outline: 'none', boxSizing: 'border-box' }}
           />
         </div>
 
         <div style={{ display: 'flex', gap: 12, marginBottom: 20, flexWrap: 'wrap' }}>
-          {[['all','All'],['eggs','Eggs'],['chicken','Chicken'],['feed','Feed'],['supplements','Supplements']].map(([v,l]) => (
+          {[['all', t('marketplace.all')],['eggs', t('marketplace.eggs')],['chicken', t('marketplace.chicken')],['feed', t('marketplace.feed')],['supplements', t('marketplace.supplements')]].map(([v,l]) => (
             <button key={v} onClick={() => setActiveCat(v)} style={{
               padding: '8px 20px', borderRadius: 999, border: 'none', cursor: 'pointer',
               background: v === activeCat ? '#000' : '#f5f5f5',
@@ -131,7 +133,7 @@ export default function Marketplace() {
         </div>
 
         {loading ? (
-          <div style={{ textAlign: 'center', padding: 48, color: '#888' }}>Loading products...</div>
+          <div style={{ textAlign: 'center', padding: 48, color: '#888' }}>{t('common.loading')}</div>
         ) : (
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 12 }}>
             {filtered.map(p => (
@@ -146,8 +148,8 @@ export default function Marketplace() {
                     <span style={{ fontWeight: 800, fontSize: 16, color: '#000' }}>{Number(p.price).toLocaleString()} TZS</span>
                   </div>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <span style={{ fontSize: 12, color: '#888' }}>{p.stock} {p.unit} available</span>
-                    <button onClick={() => handleAddToCart(p)} style={{ padding: '8px 16px', borderRadius: 8, background: '#000', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: 13 }}>Add to Cart</button>
+                    <span style={{ fontSize: 12, color: '#888' }}>{p.stock} {p.unit} {t('marketplace.available')}</span>
+                    <button onClick={() => handleAddToCart(p)} style={{ padding: '8px 16px', borderRadius: 8, background: '#000', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: 13 }}>{t('marketplace.addToCart')}</button>
                   </div>
                 </div>
               </div>
@@ -170,24 +172,24 @@ export default function Marketplace() {
             </div>
 
             <div style={{ textAlign: 'center', fontSize: 14, color: '#888', marginBottom: 16 }}>
-              Total: <strong style={{ fontSize: 22, color: '#000' }}>{(cartItem.price * quantity).toLocaleString()} TZS</strong>
+              {t('marketplace.total')}: <strong style={{ fontSize: 22, color: '#000' }}>{(cartItem.price * quantity).toLocaleString()} TZS</strong>
             </div>
 
             <div style={{ marginBottom: 16 }}>
-              <h4 style={{ fontSize: 14, fontWeight: 700, color: '#000', marginBottom: 8 }}>Delivery Address</h4>
+              <h4 style={{ fontSize: 14, fontWeight: 700, color: '#000', marginBottom: 8 }}>{t('marketplace.deliveryAddress')}</h4>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                <input type="text" value={deliveryArea} onChange={e => setDeliveryArea(e.target.value)} placeholder="Area (e.g. Kariakoo)" required style={{ width: '100%', padding: '10px 12px', borderRadius: 8, border: '1px solid #eee', fontSize: 14, boxSizing: 'border-box' }} />
-                <input type="text" value={deliveryStreet} onChange={e => setDeliveryStreet(e.target.value)} placeholder="Street / Landmark" style={{ width: '100%', padding: '10px 12px', borderRadius: 8, border: '1px solid #eee', fontSize: 14, boxSizing: 'border-box' }} />
-                <input type="text" value={deliveryCity} onChange={e => setDeliveryCity(e.target.value)} placeholder="City" required style={{ width: '100%', padding: '10px 12px', borderRadius: 8, border: '1px solid #eee', fontSize: 14, boxSizing: 'border-box' }} />
+                <input type="text" value={deliveryArea} onChange={e => setDeliveryArea(e.target.value)} placeholder={t('marketplace.area')} required style={{ width: '100%', padding: '10px 12px', borderRadius: 8, border: '1px solid #eee', fontSize: 14, boxSizing: 'border-box' }} />
+                <input type="text" value={deliveryStreet} onChange={e => setDeliveryStreet(e.target.value)} placeholder={t('marketplace.street')} style={{ width: '100%', padding: '10px 12px', borderRadius: 8, border: '1px solid #eee', fontSize: 14, boxSizing: 'border-box' }} />
+                <input type="text" value={deliveryCity} onChange={e => setDeliveryCity(e.target.value)} placeholder={t('marketplace.city')} required style={{ width: '100%', padding: '10px 12px', borderRadius: 8, border: '1px solid #eee', fontSize: 14, boxSizing: 'border-box' }} />
               </div>
             </div>
 
             <div style={{ display: 'flex', gap: 12 }}>
               <button onClick={handleConfirmCart} disabled={placingOrder} style={{ flex: 1, padding: '12px', borderRadius: 8, background: '#000', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 700, opacity: placingOrder ? 0.7 : 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
                 {placingOrder && <Spinner size={14} color="#fff" />}
-                {placingOrder ? 'Ordering...' : 'Add to Cart'}
+                {placingOrder ? t('marketplace.ordering') : t('marketplace.addToCart')}
               </button>
-              <button onClick={() => setCartItem(null)} style={{ flex: 1, padding: '12px', borderRadius: 8, background: 'none', border: `1px solid ${'#eee'}`, cursor: 'pointer', fontWeight: 600 }}>Cancel</button>
+              <button onClick={() => setCartItem(null)} style={{ flex: 1, padding: '12px', borderRadius: 8, background: 'none', border: `1px solid ${'#eee'}`, cursor: 'pointer', fontWeight: 600 }}>{t('common.cancel')}</button>
             </div>
           </div>
         </div>

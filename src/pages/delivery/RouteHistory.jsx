@@ -3,16 +3,17 @@ import DashboardShell from '../../components/DashboardShell';
 import StatusBadge from '../../components/StatusBadge';
 import { api } from '../../services/api';
 import { Truck, Route, Coins, Settings, HelpCircle, Ruler, Star } from 'lucide-react';
-
-const navItems = [
-  { icon: Truck, label: 'Active Tasks', nav: '/delivery' },
-  { icon: Route, label: 'Route History', nav: '/delivery/route-history' },
-  { icon: Coins, label: 'Earnings', nav: '/delivery/earnings' },
-  { icon: Settings, label: 'Settings', nav: '/delivery/settings' },
-  { icon: HelpCircle, label: 'Support', nav: '/delivery/support' },
-];
+import { useLang } from '../../components/LanguageContext';
 
 export default function RouteHistory() {
+  const { t } = useLang();
+  const navItems = [
+    { icon: Truck, label: t('nav.activeTasks'), nav: '/delivery' },
+    { icon: Route, label: t('nav.routeHistory'), nav: '/delivery/route-history' },
+    { icon: Coins, label: t('nav.earnings'), nav: '/delivery/earnings' },
+    { icon: Settings, label: t('nav.settings'), nav: '/delivery/settings' },
+    { icon: HelpCircle, label: t('nav.support'), nav: '/delivery/support' },
+  ];
   const [deliveries, setDeliveries] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -27,8 +28,8 @@ export default function RouteHistory() {
     <DashboardShell brand="FaidaYetu" brandSub="Delivery Portal" navItems={navItems}>
       <div className="fade-in">
         <div style={{ marginBottom: 20 }}>
-          <h1 style={{ fontSize: 28, fontWeight: 600, color: '#000' }}>Route History</h1>
-          <p style={{ fontSize: 15, color: '#888' }}>Past deliveries and completed routes</p>
+          <h1 style={{ fontSize: 28, fontWeight: 600, color: '#000' }}>{t('nav.routeHistory')}</h1>
+          <p style={{ fontSize: 15, color: '#888' }}>{t('delivery.awaitingTasks')}</p>
         </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 12, marginBottom: 20 }}>
@@ -55,7 +56,7 @@ export default function RouteHistory() {
         </div>
 
         {loading ? (
-          <div style={{ textAlign: 'center', padding: 48, color: '#888' }}>Loading...</div>
+          <div style={{ textAlign: 'center', padding: 48, color: '#888' }}>{t('common.loading')}</div>
         ) : (
           <div style={{ background: '#fff', borderRadius: 12, border: `1px solid ${'#eee'}`, overflow: 'hidden' }}>
             <div style={{ padding: 20, borderBottom: `1px solid ${'#eee'}` }}>

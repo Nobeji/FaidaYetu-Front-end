@@ -5,18 +5,19 @@ import DashboardShell from '../components/DashboardShell';
 import MapComponent from '../components/MapComponent';
 import { api } from '../services/api';
 import { useToast } from '../components/ToastContext';
-
-const navItems = [
-  { icon: Truck, label: 'Active Tasks', nav: '/delivery' },
-  { icon: Navigation, label: 'Route History', nav: '/delivery/route-history' },
-  { icon: Coins, label: 'Earnings', nav: '/delivery/earnings' },
-  { icon: Settings, label: 'Settings', nav: '/delivery/settings' },
-  { icon: HelpCircle, label: 'Support', nav: '/delivery/support' },
-  { icon: FileText, label: 'TAM Survey', nav: '/delivery/tam-survey' },
-  { icon: ClipboardList, label: 'SUS Survey', nav: '/delivery/sus-survey' },
-];
+import { useLang } from '../components/LanguageContext';
 
 export default function DeliveryDashboard() {
+  const { t } = useLang();
+  const navItems = [
+    { icon: Truck, label: t('nav.activeTasks'), nav: '/delivery' },
+    { icon: Navigation, label: t('nav.routeHistory'), nav: '/delivery/route-history' },
+    { icon: Coins, label: t('nav.earnings'), nav: '/delivery/earnings' },
+    { icon: Settings, label: t('nav.settings'), nav: '/delivery/settings' },
+    { icon: HelpCircle, label: t('nav.support'), nav: '/delivery/support' },
+    { icon: FileText, label: t('nav.tamSurvey'), nav: '/delivery/tam-survey' },
+    { icon: ClipboardList, label: t('nav.susSurvey'), nav: '/delivery/sus-survey' },
+  ];
   const [dashboardData, setDashboardData] = useState(null);
   const [tasks, setTasks] = useState([]);
   const [profile, setProfile] = useState(null);
@@ -72,7 +73,7 @@ export default function DeliveryDashboard() {
 
   if (loading) return (
     <DashboardShell brand="FaidaYetu" brandSub="Delivery Portal" navItems={navItems}>
-      <div style={{ textAlign: 'center', padding: 60, color: '#94a3b8' }}>Loading dashboard...</div>
+      <div style={{ textAlign: 'center', padding: 60, color: '#94a3b8' }}>{t('common.loading')}</div>
     </DashboardShell>
   );
 
@@ -96,16 +97,16 @@ export default function DeliveryDashboard() {
       <div>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: isMobile ? 'stretch' : 'flex-start', marginBottom: 24, flexDirection: isMobile ? 'column' : 'row', gap: 12 }}>
           <div>
-            <h1 style={{ fontSize: isMobile ? 20 : 22, fontWeight: 700, color: '#0f172a', margin: 0 }}>Delivery Dashboard</h1>
-            <p style={{ fontSize: 13, color: '#64748b', margin: '4px 0 0' }}>Optimized routes for regional poultry logistics.</p>
+            <h1 style={{ fontSize: isMobile ? 20 : 22, fontWeight: 700, color: '#0f172a', margin: 0 }}>{t('dashboard.deliveryDash')}</h1>
+            <p style={{ fontSize: 13, color: '#64748b', margin: '4px 0 0' }}>{t('delivery.taskQueue')}</p>
           </div>
           <div style={{ display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap' }}>
             <div onClick={() => setDriverOnline(!driverOnline)} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '8px 16px', background: '#fff', borderRadius: 20, border: '1px solid #e2e8f0', cursor: 'pointer' }}>
               <span style={{ width: 8, height: 8, borderRadius: '50%', background: driverOnline ? '#22c55e' : '#d1d5db' }} />
-              <span style={{ fontSize: 13, fontWeight: 500, color: '#475569' }}>{driverOnline ? 'Online' : 'Offline'}</span>
+              <span style={{ fontSize: 13, fontWeight: 500, color: '#475569' }}>{driverOnline ? t('common.online') : t('common.offline')}</span>
             </div>
             <button onClick={() => navigate('/delivery/route-history')} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '10px 20px', borderRadius: 8, background: '#0a6e46', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: 13 }}>
-              <Truck size={14} /> Start Route
+              <Truck size={14} /> {t('common.startRoute')}
             </button>
           </div>
         </div>
@@ -120,13 +121,13 @@ export default function DeliveryDashboard() {
           {activeDelivery ? (
             <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: 12, padding: '20px', display: 'flex', flexDirection: 'column' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-                <span style={{ fontSize: 11, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#64748b' }}>Active Delivery</span>
-                <span style={{ padding: '3px 10px', background: '#dbeafe', color: '#1d4ed8', fontSize: 11, fontWeight: 600, borderRadius: 20 }}>In Progress</span>
+                <span style={{ fontSize: 11, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#64748b' }}>{t('delivery.activeDelivery')}</span>
+                <span style={{ padding: '3px 10px', background: '#dbeafe', color: '#1d4ed8', fontSize: 11, fontWeight: 600, borderRadius: 20 }}>{t('delivery.inProgress')}</span>
               </div>
               <div style={{ display: 'flex', gap: 12, marginBottom: 12 }}>
                 <MapPin size={16} color="#64748b" />
                 <div>
-                  <div style={{ fontSize: 11, color: '#64748b', textTransform: 'uppercase', fontWeight: 600 }}>Pickup</div>
+                  <div style={{ fontSize: 11, color: '#64748b', textTransform: 'uppercase', fontWeight: 600 }}>{t('delivery.pickup')}</div>
                   <div style={{ fontSize: 14, fontWeight: 600, color: '#0f172a' }}>{activeDelivery.supplier_name || 'Supplier'}</div>
                   <div style={{ fontSize: 12, color: '#94a3b8' }}>Order #{activeDelivery.id}</div>
                 </div>
@@ -134,21 +135,21 @@ export default function DeliveryDashboard() {
               <div style={{ display: 'flex', gap: 12, marginBottom: 16 }}>
                 <MapPin size={16} color="#64748b" />
                 <div>
-                  <div style={{ fontSize: 11, color: '#64748b', textTransform: 'uppercase', fontWeight: 600 }}>Drop-off</div>
+                  <div style={{ fontSize: 11, color: '#64748b', textTransform: 'uppercase', fontWeight: 600 }}>{t('delivery.dropoff')}</div>
                   <div style={{ fontSize: 14, fontWeight: 600, color: '#0f172a' }}>{activeDelivery.customer_name || 'Customer'}</div>
                   <div style={{ fontSize: 12, color: '#94a3b8' }}>{activeDelivery.delivery_address || 'N/A'}</div>
                 </div>
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginTop: 'auto', paddingTop: 16, borderTop: '1px solid #f1f5f9' }}>
-                <button onClick={() => toast('Contact supplier at support@faidayetu.co.tz', 'info')} style={{ padding: '10px', borderRadius: 8, border: '1px solid #e2e8f0', background: '#fff', color: '#475569', cursor: 'pointer', fontWeight: 600, fontSize: 12 }}>Contact</button>
-                <button onClick={handleComplete} style={{ padding: '10px', borderRadius: 8, background: '#0a6e46', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: 12 }}>Complete</button>
+                <button onClick={() => toast('Contact supplier at support@faidayetu.co.tz', 'info')} style={{ padding: '10px', borderRadius: 8, border: '1px solid #e2e8f0', background: '#fff', color: '#475569', cursor: 'pointer', fontWeight: 600, fontSize: 12 }}>{t('common.contact')}</button>
+                <button onClick={handleComplete} style={{ padding: '10px', borderRadius: 8, background: '#0a6e46', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: 12 }}>{t('common.complete')}</button>
               </div>
             </div>
           ) : (
             <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: 12, padding: 20, display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: 12 }}>
               <Inbox size={40} color="#94a3b8" />
-              <div style={{ fontWeight: 700, fontSize: 16, color: '#0f172a' }}>No Active Deliveries</div>
-              <p style={{ fontSize: 13, color: '#94a3b8', textAlign: 'center', margin: 0 }}>You're all caught up! Awaiting new task assignments.</p>
+              <div style={{ fontWeight: 700, fontSize: 16, color: '#0f172a' }}>{t('delivery.noActive')}</div>
+              <p style={{ fontSize: 13, color: '#94a3b8', textAlign: 'center', margin: 0 }}>{t('delivery.awaitingTasks')}</p>
             </div>
           )}
         </div>
@@ -156,7 +157,7 @@ export default function DeliveryDashboard() {
         <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 2fr', gap: 20, marginTop: 20 }}>
           <div onClick={() => navigate('/delivery/earnings')} style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: 12, padding: '20px', cursor: 'pointer' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
-              <span style={{ fontSize: 11, fontWeight: 600, textTransform: 'uppercase', color: '#64748b' }}>Earnings Today</span>
+              <span style={{ fontSize: 11, fontWeight: 600, textTransform: 'uppercase', color: '#64748b' }}>{t('delivery.earningsToday')}</span>
               <TrendingUp size={16} color="#64748b" />
             </div>
             <div style={{ display: 'flex', alignItems: 'baseline', gap: 8 }}>
@@ -166,8 +167,8 @@ export default function DeliveryDashboard() {
 
           <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: 12, padding: '20px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-              <span style={{ fontSize: 11, fontWeight: 600, textTransform: 'uppercase', color: '#64748b' }}>Task Queue</span>
-              <span onClick={() => navigate('/delivery/route-history')} style={{ fontSize: 12, fontWeight: 600, color: '#0a6e46', cursor: 'pointer' }}>View All</span>
+              <span style={{ fontSize: 11, fontWeight: 600, textTransform: 'uppercase', color: '#64748b' }}>{t('delivery.taskQueue')}</span>
+              <span onClick={() => navigate('/delivery/route-history')} style={{ fontSize: 12, fontWeight: 600, color: '#0a6e46', cursor: 'pointer' }}>{t('common.viewAll')}</span>
             </div>
             {tasks.slice(0, 3).map(t => (
               <div key={t.id} onClick={() => navigate('/delivery/route-history')} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px', borderRadius: 8, marginBottom: 6, cursor: 'pointer', background: '#f8fafc', border: '1px solid #f1f5f9' }}>

@@ -1,12 +1,14 @@
 import { useNavigate } from 'react-router-dom';
+import { useLang } from '../components/LanguageContext';
 
 export default function TermsOfService() {
   const navigate = useNavigate();
+  const { t } = useLang();
   return (
     <div style={{ minHeight: '100vh', background: '#f8fafc', color: '#1e293b' }}>
       <header style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 24px', height: 64, background: '#fff', borderBottom: '1px solid #e2e8f0', position: 'sticky', top: 0, zIndex: 10 }}>
         <span style={{ fontSize: 20, fontWeight: 800, color: '#0f172a', cursor: 'pointer' }} onClick={() => navigate('/')}>FaidaYetu</span>
-        <button onClick={() => navigate(-1)} style={{ padding: '8px 16px', borderRadius: 10, border: '1px solid #e2e8f0', background: '#fff', cursor: 'pointer', fontWeight: 600, fontSize: 14, color: '#475569' }}>← Back</button>
+        <button onClick={() => navigate(-1)} style={{ padding: '8px 16px', borderRadius: 10, border: '1px solid #e2e8f0', background: '#fff', cursor: 'pointer', fontWeight: 600, fontSize: 14, color: '#475569' }}>← {t('common.back')}</button>
       </header>
       <main style={{ maxWidth: 800, margin: '0 auto', padding: 28 }}>
         <h1 style={{ fontSize: 32, fontWeight: 700, color: '#0f172a', marginBottom: 8 }}>Terms of Service</h1>
@@ -23,7 +25,7 @@ export default function TermsOfService() {
           ].map(s => (<div key={s.title}><h2 style={{ fontSize: 20, fontWeight: 700, color: '#0f172a', marginBottom: 8 }}>{s.title}</h2><p style={{ fontSize: 15, color: '#475569', lineHeight: 1.7 }}>{s.content}</p></div>))}
         </div>
         <div style={{ marginTop: 28, padding: 20, background: '#fff', borderRadius: 14, border: '1px solid #e2e8f0' }}>
-          <h3 style={{ fontWeight: 700, fontSize: 16, marginBottom: 8, color: '#0f172a' }}>Questions?</h3>
+          <h3 style={{ fontWeight: 700, fontSize: 16, marginBottom: 8, color: '#0f172a' }}>{t('contact.title')}</h3>
           <p style={{ fontSize: 14, color: '#64748b' }}>Contact us at <strong style={{ color: '#0a6e46' }}>legal@faidayetu.co.tz</strong></p>
         </div>
       </main>

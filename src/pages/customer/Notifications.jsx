@@ -3,14 +3,7 @@ import DashboardShell from '../../components/DashboardShell';
 import { api } from '../../services/api';
 import Spinner from '../../components/Spinner';
 import { Home, ShoppingCart, ClipboardList, Bell, User, DollarSign, Package, XCircle, Truck, AlertTriangle } from 'lucide-react';
-
-const navItems = [
-  { icon: Home, label: 'Explore', nav: '/customer' },
-  { icon: ShoppingCart, label: 'Marketplace', nav: '/customer/marketplace' },
-  { icon: ClipboardList, label: 'My Orders', nav: '/customer/orders' },
-  { icon: Bell, label: 'Notifications', nav: '/customer/notifications' },
-  { icon: User, label: 'Profile', nav: '/customer/profile' },
-];
+import { useLang } from '../../components/LanguageContext';
 
 const getIcon = (type) => {
   switch (type) {
@@ -34,10 +27,19 @@ const formatTime = (dateStr) => {
 };
 
 export default function CustomerNotifications() {
+  const { t } = useLang();
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
   const [marking, setMarking] = useState(null);
   const customerId = JSON.parse(localStorage.getItem('customer') || '{}').id;
+
+  const navItems = [
+    { icon: Home, label: t('nav.explore'), nav: '/customer' },
+    { icon: ShoppingCart, label: t('nav.marketplace'), nav: '/customer/marketplace' },
+    { icon: ClipboardList, label: t('nav.myOrders'), nav: '/customer/orders' },
+    { icon: Bell, label: t('nav.notifications'), nav: '/customer/notifications' },
+    { icon: User, label: t('nav.profile'), nav: '/customer/profile' },
+  ];
 
   const fetch = async () => {
     setLoading(true);
@@ -75,7 +77,7 @@ export default function CustomerNotifications() {
       <div className="fade-in">
         <div style={{ marginBottom: 20, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <div>
-            <h1 style={{ fontSize: 28, fontWeight: 600, color: '#000', margin: 0 }}>Arifa</h1>
+            <h1 style={{ fontSize: 28, fontWeight: 600, color: '#000', margin: 0 }}>{t('nav.notifications')}</h1>
             <p style={{ fontSize: 15, color: '#888', margin: '4px 0 0' }}>Notifications and updates</p>
           </div>
           {unreadCount > 0 && (
@@ -93,12 +95,12 @@ export default function CustomerNotifications() {
         {loading ? (
           <div style={{ textAlign: 'center', padding: 48, color: '#888' }}>
             <Spinner size={24} color="#888" />
-            <div style={{ marginTop: 8 }}>Inapakia arifa...</div>
+            <div style={{ marginTop: 8 }}>{t('common.loading')}</div>
           </div>
         ) : notifications.length === 0 ? (
           <div style={{ textAlign: 'center', padding: 48, color: '#888' }}>
             <div style={{ marginBottom: 12, display: 'flex', justifyContent: 'center' }}><Bell size={48} /></div>
-            <div style={{ fontSize: 16, fontWeight: 600, marginBottom: 4 }}>Hakuna arifa bado</div>
+            <div style={{ fontSize: 16, fontWeight: 600, marginBottom: 4 }}>{t('common.noData')}</div>
             <div style={{ fontSize: 13, color: '#aaa' }}>Utapokea arifa za malipo na msafirishaji hapa.</div>
           </div>
         ) : (

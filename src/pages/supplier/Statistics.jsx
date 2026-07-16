@@ -6,17 +6,7 @@ import StatsCard from '../../components/StatsCard';
 import StatusBadge from '../../components/StatusBadge';
 import ProgressBar from '../../components/ProgressBar';
 import { api } from '../../services/api';
-
-const navItems = [
-  { icon: LayoutDashboard, label: 'Dashboard', nav: '/supplier' },
-  { icon: Package, label: 'Inventory', nav: '/supplier/inventory' },
-  { icon: ShoppingCart, label: 'Orders', nav: '/supplier/orders' },
-  { icon: Bell, label: 'Notifications', nav: '/supplier/notifications' },
-  { icon: TrendingUp, label: 'Analytics', nav: '/supplier/analytics' },
-  { icon: TrendingDown, label: 'Statistics', nav: '/supplier/statistics' },
-  { icon: Settings, label: 'Settings', nav: '/supplier/settings' },
-  { icon: HelpCircle, label: 'Support', nav: '/supplier/support' },
-];
+import { useLang } from '../../components/LanguageContext';
 
 const STATUS_LABELS = {
   new: 'New', processing: 'Processing', ready: 'Ready',
@@ -24,6 +14,17 @@ const STATUS_LABELS = {
 };
 
 export default function SupplierStatistics() {
+  const { t } = useLang();
+  const navItems = [
+    { icon: LayoutDashboard, label: t('nav.dashboard'), nav: '/supplier' },
+    { icon: Package, label: t('nav.inventory'), nav: '/supplier/inventory' },
+    { icon: ShoppingCart, label: t('nav.orders'), nav: '/supplier/orders' },
+    { icon: Bell, label: t('nav.notifications'), nav: '/supplier/notifications' },
+    { icon: TrendingUp, label: t('nav.analytics'), nav: '/supplier/analytics' },
+    { icon: TrendingDown, label: t('nav.statistics'), nav: '/supplier/statistics' },
+    { icon: Settings, label: t('nav.settings'), nav: '/supplier/settings' },
+    { icon: HelpCircle, label: t('nav.support'), nav: '/supplier/support' },
+  ];
   const [data, setData] = useState({ stats: { orders: '0', revenue: '0 TZS', lowStock: '00', growth: '--' }, orders: [], inventory: [] });
   const [allOrders, setAllOrders] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -53,12 +54,12 @@ export default function SupplierStatistics() {
     <DashboardShell brand="FaidaYetu" brandSub="Poultry Logistics Hub" navItems={navItems}>
       <div className="fade-in">
         <div style={{ marginBottom: 20 }}>
-          <h1 style={{ fontSize: 28, fontWeight: 600, color: '#000' }}>Statistics</h1>
+          <h1 style={{ fontSize: 28, fontWeight: 600, color: '#000' }}>{t('nav.statistics')}</h1>
           <p style={{ fontSize: 15, color: '#888' }}>Detailed performance metrics for your business</p>
         </div>
 
         {loading ? (
-          <div style={{ textAlign: 'center', padding: 48, color: '#888' }}>Loading statistics...</div>
+          <div style={{ textAlign: 'center', padding: 48, color: '#888' }}>{t('common.loading')}</div>
         ) : (
           <>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: 12, marginBottom: 28 }}>
@@ -120,8 +121,8 @@ export default function SupplierStatistics() {
 
             <div style={{ background: '#fff', border: `1px solid ${'#eee'}`, borderRadius: 12, overflow: 'hidden', marginBottom: 28 }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: 20, borderBottom: `1px solid ${'#eee'}` }}>
-                <h3 style={{ fontSize: 18, fontWeight: 600, color: '#000' }}>Recent Orders</h3>
-                <span style={{ fontSize: 14, color: '#000', cursor: 'pointer' }}>View All</span>
+                <h3 style={{ fontSize: 18, fontWeight: 600, color: '#000' }}>{t('dashboard.recentOrders')}</h3>
+                <span style={{ fontSize: 14, color: '#000', cursor: 'pointer' }}>{t('common.viewAll')}</span>
               </div>
               <div style={{ overflowX: 'auto' }}>
                 <table style={{ width: '100%', textAlign: 'left', borderCollapse: 'collapse' }}>
