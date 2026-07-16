@@ -4,7 +4,7 @@ import DashboardShell from '../../components/DashboardShell';
 import { api } from '../../services/api';
 import { useToast } from '../../components/ToastContext';
 import Spinner from '../../components/Spinner';
-import { Home, ShoppingCart, ClipboardList, Bell, User, Package } from 'lucide-react';
+import { Home, ShoppingCart, ClipboardList, Bell, User, Package, Search } from 'lucide-react';
 
 const navItems = [
   { icon: Home, label: 'Explore', nav: '/customer' },
@@ -27,6 +27,7 @@ export default function Marketplace() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeCat, setActiveCat] = useState('all');
+  const [searchQuery, setSearchQuery] = useState('');
   const [cartItem, setCartItem] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const [deliveryArea, setDeliveryArea] = useState('');
@@ -43,7 +44,15 @@ export default function Marketplace() {
     api.products().then(p => { setProducts(p); setLoading(false); }).catch(() => setLoading(false));
   }, []);
 
-  const filtered = activeCat === 'all' ? products : products.filter(p => p.category === activeCat);
+  let filtered = activeCat === 'all' ? products : products.filter(p => p.category === activeCat);
+  if (searchQuery.trim()) {
+    const q = searchQuery.toLowerCase();
+    filtered = filtered.filter(p =>
+      p.name?.toLowerCase().includes(q) ||
+      p.supplier_name?.toLowerCase().includes(q) ||
+      p.category?.toLowerCase().includes(q)
+    );
+  }
 
   const handleAddToCart = (p) => {
     setCartItem(p);
@@ -97,6 +106,17 @@ export default function Marketplace() {
         <div style={{ marginBottom: 20 }}>
           <h1 style={{ fontSize: 28, fontWeight: 600, color: '#000' }}>Marketplace</h1>
           <p style={{ fontSize: 15, color: '#888' }}>Browse and order fresh poultry products</p>
+        </div>
+
+        <div style={{ marginBottom: 16, position: 'relative' }}>
+          <Search size={16} style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }} />
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={e => setSearchQuery(e.target.value)}
+            placeholder="Search products by name, supplier, or category..."
+            style={{ width: '100%', padding: '12px 14px 12px 40px', borderRadius: 10, border: '1px solid #e2e8f0', background: '#fff', fontSize: 14, color: '#0f172a', outline: 'none', boxSizing: 'border-box' }}
+          />
         </div>
 
         <div style={{ display: 'flex', gap: 12, marginBottom: 20, flexWrap: 'wrap' }}>

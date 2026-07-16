@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import DashboardShell from '../../components/DashboardShell';
 import StatusBadge from '../../components/StatusBadge';
+import MapComponent from '../../components/MapComponent';
 import { api } from '../../services/api';
 import { useToast } from '../../components/ToastContext';
 import Spinner from '../../components/Spinner';
@@ -41,6 +42,7 @@ export default function MyOrders() {
   const pollRefs = useRef({});
   const [checkingPayments, setCheckingPayments] = useState({});
   const [cancellingOrders, setCancellingOrders] = useState({});
+  const [driverLocation, setDriverLocation] = useState(null);
   const user = JSON.parse(localStorage.getItem('user') || '{}');
   const userName = user.username || 'Customer';
   const initials = userName.charAt(0).toUpperCase();
@@ -48,6 +50,21 @@ export default function MyOrders() {
   const toast = useToast();
 
   const customerId = JSON.parse(localStorage.getItem('customer') || '{}').id || 1;
+
+  useEffect(() => {
+    if (!selectedOrder || selectedOrder.status !== 'in_transit' || !selectedOrder.delivery_id) {
+      setDriverLocation(null);
+      return;
+    }
+    const poll = () => {
+      api.latestLocation(selectedOrder.delivery_id).then(loc => {
+        if (loc?.lat != null && loc?.lng != null) setDriverLocation([loc.lat, loc.lng]);
+      }).catch(() => {});
+    };
+    poll();
+    const id = setInterval(poll, 5000);
+    return () => clearInterval(id);
+  }, [selectedOrder?.id, selectedOrder?.status, selectedOrder?.delivery_id]);
 
   useEffect(() => {
     api.orders({ customer: customerId }).then(o => {
@@ -276,6 +293,33 @@ export default function MyOrders() {
                 <span style={{ color: '#000' }}>{Number(selectedOrder.total).toLocaleString()} TZS</span>
               </div>
             </div>
+
+            {selectedOrder.status === 'in_transit' && selectedOrder.delivery_id && (
+              <div style={{ marginBottom: 16 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 8 }}>
+                  <MapPin size={14} color="#0a6e46" />
+                  <h4 style={{ fontSize: 14, fontWeight: 700, color: '#0f172a', margin: 0 }}>Live Driver Location</h4>
+                  {driverLocation && <span style={{ fontSize: 11, color: '#15803d', fontWeight: 600 }}>Updating</span>}
+                </div>
+                <div style={{ borderRadius: 10, overflow: 'hidden', border: '1px solid #e2e8f0' }}>
+                  <MapComponent
+                    height={220}
+                    userLocation={driverLocation || [-6.7924, 39.2083]}
+                    driverLocation={driverLocation}
+                    routePoints={
+                      selectedOrder.delivery_lat && selectedOrder.delivery_lng
+                        ? [driverLocation, [selectedOrder.delivery_lat, selectedOrder.delivery_lng]].filter(Boolean)
+                        : []
+                    }
+                  />
+                </div>
+                {!driverLocation && (
+                  <div style={{ textAlign: 'center', padding: 12, color: '#94a3b8', fontSize: 12 }}>
+                    Waiting for driver location updates...
+                  </div>
+                )}
+              </div>
+            )}
 
             <button onClick={() => setSelectedOrder(null)} style={{ width: '100%', padding: '12px', borderRadius: 8, background: '#000', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 700 }}>Close</button>
           </div>

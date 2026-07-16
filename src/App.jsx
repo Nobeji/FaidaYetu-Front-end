@@ -56,10 +56,13 @@ import TAMSurvey from './pages/admin/TAMSurvey';
 import SUSSurvey from './pages/admin/SUSSurvey';
 import SpatialAccuracy from './pages/admin/SpatialAccuracy';
 import { ToastProvider } from './components/ToastContext';
+import { LanguageProvider } from './components/LanguageContext';
+import ProtectedRoute from './components/ProtectedRoute';
 
 export default function App() {
   return (
     <BrowserRouter>
+      <LanguageProvider>
       <ToastProvider>
       <Routes>
         <Route path="/" element={<Welcome />} />
@@ -69,34 +72,34 @@ export default function App() {
         <Route path="/terms" element={<TermsOfService />} />
         <Route path="/contact" element={<ContactSupport />} />
 
-        <Route path="/customer" element={<CustomerDashboard />} />
-        <Route path="/customer/marketplace" element={<Marketplace />} />
-        <Route path="/customer/orders" element={<MyOrders />} />
-        <Route path="/customer/notifications" element={<CustomerNotifications />} />
-        <Route path="/customer/profile" element={<CustomerProfile />} />
-        <Route path="/customer/tam-survey" element={<TAMSurvey />} />
-        <Route path="/customer/sus-survey" element={<SUSSurvey />} />
+        <Route path="/customer" element={<ProtectedRoute allowedRoles={['customer']}><CustomerDashboard /></ProtectedRoute>} />
+        <Route path="/customer/marketplace" element={<ProtectedRoute allowedRoles={['customer']}><Marketplace /></ProtectedRoute>} />
+        <Route path="/customer/orders" element={<ProtectedRoute allowedRoles={['customer']}><MyOrders /></ProtectedRoute>} />
+        <Route path="/customer/notifications" element={<ProtectedRoute allowedRoles={['customer']}><CustomerNotifications /></ProtectedRoute>} />
+        <Route path="/customer/profile" element={<ProtectedRoute allowedRoles={['customer']}><CustomerProfile /></ProtectedRoute>} />
+        <Route path="/customer/tam-survey" element={<ProtectedRoute allowedRoles={['customer']}><TAMSurvey /></ProtectedRoute>} />
+        <Route path="/customer/sus-survey" element={<ProtectedRoute allowedRoles={['customer']}><SUSSurvey /></ProtectedRoute>} />
 
-        <Route path="/supplier" element={<SupplierDashboard />} />
-        <Route path="/supplier/inventory" element={<SupplierInventory />} />
-        <Route path="/supplier/orders" element={<SupplierOrders />} />
-        <Route path="/supplier/notifications" element={<SupplierNotifications />} />
-        <Route path="/supplier/analytics" element={<SupplierAnalytics />} />
-        <Route path="/supplier/statistics" element={<SupplierStatistics />} />
-        <Route path="/supplier/settings" element={<SupplierSettings />} />
-        <Route path="/supplier/support" element={<SupplierSupport />} />
-        <Route path="/supplier/tam-survey" element={<TAMSurvey />} />
-        <Route path="/supplier/sus-survey" element={<SUSSurvey />} />
+        <Route path="/supplier" element={<ProtectedRoute allowedRoles={['supplier']}><SupplierDashboard /></ProtectedRoute>} />
+        <Route path="/supplier/inventory" element={<ProtectedRoute allowedRoles={['supplier']}><SupplierInventory /></ProtectedRoute>} />
+        <Route path="/supplier/orders" element={<ProtectedRoute allowedRoles={['supplier']}><SupplierOrders /></ProtectedRoute>} />
+        <Route path="/supplier/notifications" element={<ProtectedRoute allowedRoles={['supplier']}><SupplierNotifications /></ProtectedRoute>} />
+        <Route path="/supplier/analytics" element={<ProtectedRoute allowedRoles={['supplier']}><SupplierAnalytics /></ProtectedRoute>} />
+        <Route path="/supplier/statistics" element={<ProtectedRoute allowedRoles={['supplier']}><SupplierStatistics /></ProtectedRoute>} />
+        <Route path="/supplier/settings" element={<ProtectedRoute allowedRoles={['supplier']}><SupplierSettings /></ProtectedRoute>} />
+        <Route path="/supplier/support" element={<ProtectedRoute allowedRoles={['supplier']}><SupplierSupport /></ProtectedRoute>} />
+        <Route path="/supplier/tam-survey" element={<ProtectedRoute allowedRoles={['supplier']}><TAMSurvey /></ProtectedRoute>} />
+        <Route path="/supplier/sus-survey" element={<ProtectedRoute allowedRoles={['supplier']}><SUSSurvey /></ProtectedRoute>} />
 
-        <Route path="/delivery" element={<DeliveryDashboard />} />
-        <Route path="/delivery/route-history" element={<RouteHistory />} />
-        <Route path="/delivery/earnings" element={<DeliveryEarnings />} />
-        <Route path="/delivery/settings" element={<DeliverySettings />} />
-        <Route path="/delivery/support" element={<DeliverySupport />} />
-        <Route path="/delivery/tam-survey" element={<TAMSurvey />} />
-        <Route path="/delivery/sus-survey" element={<SUSSurvey />} />
+        <Route path="/delivery" element={<ProtectedRoute allowedRoles={['delivery']}><DeliveryDashboard /></ProtectedRoute>} />
+        <Route path="/delivery/route-history" element={<ProtectedRoute allowedRoles={['delivery']}><RouteHistory /></ProtectedRoute>} />
+        <Route path="/delivery/earnings" element={<ProtectedRoute allowedRoles={['delivery']}><DeliveryEarnings /></ProtectedRoute>} />
+        <Route path="/delivery/settings" element={<ProtectedRoute allowedRoles={['delivery']}><DeliverySettings /></ProtectedRoute>} />
+        <Route path="/delivery/support" element={<ProtectedRoute allowedRoles={['delivery']}><DeliverySupport /></ProtectedRoute>} />
+        <Route path="/delivery/tam-survey" element={<ProtectedRoute allowedRoles={['delivery']}><TAMSurvey /></ProtectedRoute>} />
+        <Route path="/delivery/sus-survey" element={<ProtectedRoute allowedRoles={['delivery']}><SUSSurvey /></ProtectedRoute>} />
 
-        <Route path="/admin" element={<AdminDashboard />}>
+        <Route path="/admin" element={<ProtectedRoute allowedRoles={['admin']}><AdminDashboard /></ProtectedRoute>}>
           <Route index element={<Navigate to="/admin/demand-analysis" replace />} />
           <Route path="demand-analysis" element={<DemandAnalysis />} />
           <Route path="heat-map" element={<AdminHeatMap />} />
@@ -128,6 +131,7 @@ export default function App() {
         </Route>
       </Routes>
       </ToastProvider>
+      </LanguageProvider>
     </BrowserRouter>
   );
 }

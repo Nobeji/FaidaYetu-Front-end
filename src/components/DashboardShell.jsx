@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import NotificationBell from './NotificationBell';
-import { Menu, LogOut, Egg } from 'lucide-react';
+import { useLang } from './LanguageContext';
+import { Menu, LogOut, Egg, Globe } from 'lucide-react';
 
 export default function DashboardShell({ brand, brandSub, navItems, profile, children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -15,6 +16,7 @@ export default function DashboardShell({ brand, brandSub, navItems, profile, chi
   const customerData = JSON.parse(localStorage.getItem('customer') || '{}');
   const supplierId = supplierData.id || null;
   const customerId = customerData.id || null;
+  const { lang, toggle: toggleLang } = useLang();
 
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth < 768);
@@ -89,7 +91,10 @@ export default function DashboardShell({ brand, brandSub, navItems, profile, chi
             )}
             <span style={{ fontSize: 14, fontWeight: 600, color: '#0f172a' }}>{brand}</span>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <button onClick={toggleLang} style={{ display: 'flex', alignItems: 'center', gap: 4, padding: '5px 10px', borderRadius: 8, border: '1px solid #e2e8f0', background: '#fff', cursor: 'pointer', fontSize: 11, fontWeight: 600, color: '#475569' }}>
+              <Globe size={14} />{lang === 'en' ? 'SW' : 'EN'}
+            </button>
             {(supplierId || customerId) && <NotificationBell supplierId={supplierId} customerId={customerId} />}
             <span style={{ fontSize: 13, fontWeight: 500, color: '#475569' }}>{userName}</span>
             <div style={{ width: 32, height: 32, borderRadius: 10, background: 'linear-gradient(135deg, #0a6e46, #10b981)', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, fontWeight: 700, boxShadow: '0 2px 6px rgba(10,110,70,0.2)' }}>{initials}</div>
