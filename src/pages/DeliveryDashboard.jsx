@@ -1,18 +1,19 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Truck, Navigation, Coins, Settings, HelpCircle, FileText, ClipboardList, TrendingUp, Package, MapPin, Inbox } from 'lucide-react';
 import DashboardShell from '../components/DashboardShell';
 import MapComponent from '../components/MapComponent';
 import { api } from '../services/api';
 import { useToast } from '../components/ToastContext';
 
 const navItems = [
-  { icon: '🚚', label: 'Active Tasks', nav: '/delivery' },
-  { icon: '🛣️', label: 'Route History', nav: '/delivery/route-history' },
-  { icon: '💰', label: 'Earnings', nav: '/delivery/earnings' },
-  { icon: '⚙️', label: 'Settings', nav: '/delivery/settings' },
-  { icon: '❓', label: 'Support', nav: '/delivery/support' },
-  { icon: '📝', label: 'TAM Survey', nav: '/delivery/tam-survey' },
-  { icon: '📋', label: 'SUS Survey', nav: '/delivery/sus-survey' },
+  { icon: Truck, label: 'Active Tasks', nav: '/delivery' },
+  { icon: Navigation, label: 'Route History', nav: '/delivery/route-history' },
+  { icon: Coins, label: 'Earnings', nav: '/delivery/earnings' },
+  { icon: Settings, label: 'Settings', nav: '/delivery/settings' },
+  { icon: HelpCircle, label: 'Support', nav: '/delivery/support' },
+  { icon: FileText, label: 'TAM Survey', nav: '/delivery/tam-survey' },
+  { icon: ClipboardList, label: 'SUS Survey', nav: '/delivery/sus-survey' },
 ];
 
 export default function DeliveryDashboard() {
@@ -104,7 +105,7 @@ export default function DeliveryDashboard() {
               <span style={{ fontSize: 13, fontWeight: 500, color: '#475569' }}>{driverOnline ? 'Online' : 'Offline'}</span>
             </div>
             <button onClick={() => navigate('/delivery/route-history')} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '10px 20px', borderRadius: 8, background: '#0a6e46', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: 13 }}>
-              ▶ Start Route
+              <Truck size={14} /> Start Route
             </button>
           </div>
         </div>
@@ -123,7 +124,7 @@ export default function DeliveryDashboard() {
                 <span style={{ padding: '3px 10px', background: '#dbeafe', color: '#1d4ed8', fontSize: 11, fontWeight: 600, borderRadius: 20 }}>In Progress</span>
               </div>
               <div style={{ display: 'flex', gap: 12, marginBottom: 12 }}>
-                <span style={{ fontSize: 16 }}>📍</span>
+                <MapPin size={16} color="#64748b" />
                 <div>
                   <div style={{ fontSize: 11, color: '#64748b', textTransform: 'uppercase', fontWeight: 600 }}>Pickup</div>
                   <div style={{ fontSize: 14, fontWeight: 600, color: '#0f172a' }}>{activeDelivery.supplier_name || 'Supplier'}</div>
@@ -131,7 +132,7 @@ export default function DeliveryDashboard() {
                 </div>
               </div>
               <div style={{ display: 'flex', gap: 12, marginBottom: 16 }}>
-                <span style={{ fontSize: 16 }}>📍</span>
+                <MapPin size={16} color="#64748b" />
                 <div>
                   <div style={{ fontSize: 11, color: '#64748b', textTransform: 'uppercase', fontWeight: 600 }}>Drop-off</div>
                   <div style={{ fontSize: 14, fontWeight: 600, color: '#0f172a' }}>{activeDelivery.customer_name || 'Customer'}</div>
@@ -145,7 +146,7 @@ export default function DeliveryDashboard() {
             </div>
           ) : (
             <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: 12, padding: 20, display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: 12 }}>
-              <span style={{ fontSize: 40 }}>📭</span>
+              <Inbox size={40} color="#94a3b8" />
               <div style={{ fontWeight: 700, fontSize: 16, color: '#0f172a' }}>No Active Deliveries</div>
               <p style={{ fontSize: 13, color: '#94a3b8', textAlign: 'center', margin: 0 }}>You're all caught up! Awaiting new task assignments.</p>
             </div>
@@ -156,7 +157,7 @@ export default function DeliveryDashboard() {
           <div onClick={() => navigate('/delivery/earnings')} style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: 12, padding: '20px', cursor: 'pointer' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
               <span style={{ fontSize: 11, fontWeight: 600, textTransform: 'uppercase', color: '#64748b' }}>Earnings Today</span>
-              <span style={{ fontSize: 16 }}>📈</span>
+              <TrendingUp size={16} color="#64748b" />
             </div>
             <div style={{ display: 'flex', alignItems: 'baseline', gap: 8 }}>
               <span style={{ fontSize: 24, fontWeight: 700, color: '#0f172a' }}>{stats.earnings_today || '$0.00'}</span>
@@ -170,7 +171,7 @@ export default function DeliveryDashboard() {
             </div>
             {tasks.slice(0, 3).map(t => (
               <div key={t.id} onClick={() => navigate('/delivery/route-history')} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px', borderRadius: 8, marginBottom: 6, cursor: 'pointer', background: '#f8fafc', border: '1px solid #f1f5f9' }}>
-                <div style={{ width: 40, height: 40, borderRadius: 8, background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18, border: '1px solid #e2e8f0', flexShrink: 0 }}>📦</div>
+                <div style={{ width: 40, height: 40, borderRadius: 8, background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid #e2e8f0', flexShrink: 0 }}><Package size={18} color="#64748b" /></div>
                 <div style={{ flex: 1 }}>
                   <div style={{ fontWeight: 600, fontSize: 13, color: '#0f172a' }}>Delivery #{t.id}</div>
                   <div style={{ fontSize: 12, color: '#94a3b8' }}>{t.status} • {t.distance_km || 'N/A'} km</div>

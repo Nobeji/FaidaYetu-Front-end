@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { api } from '../../services/api';
+import { AlertTriangle } from 'lucide-react';
 
 const RISK_COLORS = { 'High Risk': '#d32f2f', 'Medium Risk': '#e65100', 'Low Risk': '#2e7d32' };
 
@@ -15,7 +16,7 @@ export default function ChurnPrediction() {
 
   return (
     <div className="fade-in">
-      <h1 style={{ fontSize: 28, fontWeight: 700, margin: '0 0 4px' }}>⚠️ Churn Prediction</h1>
+      <h1 style={{ fontSize: 28, fontWeight: 700, margin: '0 0 4px' }}><span style={{display:'inline-flex',verticalAlign:'middle',marginRight:8}}><AlertTriangle size={24} /></span> Churn Prediction</h1>
       <p style={{ fontSize: 15, color: '#666', marginBottom: 24 }}>Customers at risk of leaving the platform</p>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12, marginBottom: 24 }}>
         {Object.entries(data?.summary || {}).map(([risk, count]) => (

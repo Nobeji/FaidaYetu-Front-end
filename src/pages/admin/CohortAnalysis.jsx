@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { api } from '../../services/api';
+import { Users } from 'lucide-react';
 
 export default function CohortAnalysis() {
   const [data, setData] = useState(null);
@@ -15,7 +16,7 @@ export default function CohortAnalysis() {
 
   return (
     <div className="fade-in">
-      <h1 style={{ fontSize: 28, fontWeight: 700, margin: '0 0 4px' }}>👥 Cohort Analysis</h1>
+      <h1 style={{ fontSize: 28, fontWeight: 700, margin: '0 0 4px' }}><span style={{display:'inline-flex',verticalAlign:'middle',marginRight:8}}><Users size={24} /></span> Cohort Analysis</h1>
       <p style={{ fontSize: 15, color: '#666', marginBottom: 24 }}>Customer retention by signup month</p>
       <div style={{ background: '#fff', borderRadius: 16, border: '1px solid #eaeaea', overflow: 'hidden' }}>
         <div style={{ overflowX: 'auto' }}>

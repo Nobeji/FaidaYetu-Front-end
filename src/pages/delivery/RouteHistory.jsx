@@ -2,13 +2,14 @@ import { useState, useEffect } from 'react';
 import DashboardShell from '../../components/DashboardShell';
 import StatusBadge from '../../components/StatusBadge';
 import { api } from '../../services/api';
+import { Truck, Route, Coins, Settings, HelpCircle, Ruler, Star } from 'lucide-react';
 
 const navItems = [
-  { icon: '🚚', label: 'Active Tasks', nav: '/delivery' },
-  { icon: '🛣️', label: 'Route History', nav: '/delivery/route-history' },
-  { icon: '💰', label: 'Earnings', nav: '/delivery/earnings' },
-  { icon: '⚙️', label: 'Settings', nav: '/delivery/settings' },
-  { icon: '❓', label: 'Support', nav: '/delivery/support' },
+  { icon: Truck, label: 'Active Tasks', nav: '/delivery' },
+  { icon: Route, label: 'Route History', nav: '/delivery/route-history' },
+  { icon: Coins, label: 'Earnings', nav: '/delivery/earnings' },
+  { icon: Settings, label: 'Settings', nav: '/delivery/settings' },
+  { icon: HelpCircle, label: 'Support', nav: '/delivery/support' },
 ];
 
 export default function RouteHistory() {
@@ -32,22 +33,22 @@ export default function RouteHistory() {
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 12, marginBottom: 20 }}>
           <div style={{ background: '#fff', borderRadius: 12, border: `1px solid ${'#eee'}`, padding: 20, textAlign: 'center' }}>
-            <div style={{ fontSize: 32, marginBottom: 8 }}>🛣️</div>
+            <Route size={32} style={{ marginBottom: 8 }} />
             <div style={{ fontSize: 26, fontWeight: 800, color: '#111' }}>{completed.length}</div>
             <div style={{ fontSize: 13, color: '#888' }}>Total Routes</div>
           </div>
           <div style={{ background: '#fff', borderRadius: 12, border: `1px solid ${'#eee'}`, padding: 20, textAlign: 'center' }}>
-            <div style={{ fontSize: 32, marginBottom: 8 }}>📏</div>
+            <Ruler size={32} style={{ marginBottom: 8 }} />
             <div style={{ fontSize: 26, fontWeight: 800, color: '#111' }}>{completed.reduce((s, d) => s + (d.distance_km || 0), 0).toFixed(0)} km</div>
             <div style={{ fontSize: 13, color: '#888' }}>Total Distance</div>
           </div>
           <div style={{ background: '#fff', borderRadius: 12, border: `1px solid ${'#eee'}`, padding: 20, textAlign: 'center' }}>
-            <div style={{ fontSize: 32, marginBottom: 8 }}>💰</div>
+            <Coins size={32} style={{ marginBottom: 8 }} />
             <div style={{ fontSize: 26, fontWeight: 800, color: '#111' }}>${completed.reduce((s, d) => s + (d.earnings || 0), 0).toFixed(2)}</div>
             <div style={{ fontSize: 13, color: '#888' }}>Total Earnings</div>
           </div>
           <div style={{ background: '#fff', borderRadius: 12, border: `1px solid ${'#eee'}`, padding: 20, textAlign: 'center' }}>
-            <div style={{ fontSize: 32, marginBottom: 8 }}>⭐</div>
+            <Star size={32} style={{ marginBottom: 8 }} />
             <div style={{ fontSize: 26, fontWeight: 800, color: '#111' }}>--</div>
             <div style={{ fontSize: 13, color: '#888' }}>Avg Rating</div>
           </div>

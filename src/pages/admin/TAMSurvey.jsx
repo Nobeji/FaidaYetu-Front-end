@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { api } from '../../services/api';
+import { FileText, CheckCircle } from 'lucide-react';
 
 const SCALE_LABELS = ['Strongly Disagree', 'Disagree', 'Neutral', 'Agree', 'Strongly Agree'];
 
@@ -117,7 +118,7 @@ export default function TAMSurvey() {
 
         {(!data || data.total === 0) && (
           <div style={{ background: '#fff', borderRadius: 16, border: '1px solid #eaeaea', padding: 48, textAlign: 'center', color: '#888' }}>
-            <div style={{ fontSize: 32, marginBottom: 12 }}>📝</div>
+            <div style={{ fontSize: 32, marginBottom: 12 }}><FileText size={32} /></div>
             <div style={{ fontSize: 15, fontWeight: 600, marginBottom: 4 }}>No Responses Yet</div>
             <div>Users will submit TAM surveys from their dashboards. Results will appear here.</div>
           </div>
@@ -134,7 +135,7 @@ export default function TAMSurvey() {
 
       {!showForm && !submitted && (
         <div style={{ background: '#fff', borderRadius: 16, border: '1px solid #eaeaea', padding: 40, textAlign: 'center' }}>
-          <div style={{ fontSize: 40, marginBottom: 12 }}>📝</div>
+          <div style={{ fontSize: 40, marginBottom: 12 }}><FileText size={40} /></div>
           <div style={{ fontSize: 18, fontWeight: 700, marginBottom: 8 }}>TAM Survey</div>
           <p style={{ fontSize: 14, color: '#666', marginBottom: 20, maxWidth: 500, margin: '0 auto 20px' }}>
             This survey measures how useful and easy to use you find FaidaYetu.
@@ -190,7 +191,7 @@ export default function TAMSurvey() {
 
       {submitted && (
         <div style={{ background: '#fff', borderRadius: 16, border: '1px solid #eaeaea', padding: 48, textAlign: 'center' }}>
-          <div style={{ fontSize: 48, marginBottom: 16 }}>✅</div>
+          <div style={{ fontSize: 48, marginBottom: 16 }}><CheckCircle size={48} /></div>
           <div style={{ fontSize: 22, fontWeight: 700, marginBottom: 8, color: '#2e7d32' }}>Asante! Survey Imekamilika</div>
           <p style={{ fontSize: 14, color: '#666', marginBottom: 24, maxWidth: 400, margin: '0 auto 24px' }}>
             Your response has been recorded. Thank you for helping us improve FaidaYetu!

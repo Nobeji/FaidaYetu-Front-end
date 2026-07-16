@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { api } from '../../services/api';
+import { BarChart3 } from 'lucide-react';
 
 const SEGMENT_COLORS = { VIP: '#1b5e20', Loyal: '#2e7d32', Active: '#43a047', 'At Risk': '#e65100', Dormant: '#757575', Lost: '#b71c1c' };
 
@@ -15,7 +16,7 @@ export default function CustomerSegmentation() {
 
   return (
     <div className="fade-in">
-      <h1 style={{ fontSize: 28, fontWeight: 700, margin: '0 0 4px' }}>📊 Customer Segmentation</h1>
+      <h1 style={{ fontSize: 28, fontWeight: 700, margin: '0 0 4px' }}><span style={{display:'inline-flex',verticalAlign:'middle',marginRight:8}}><BarChart3 size={24} /></span> Customer Segmentation</h1>
       <p style={{ fontSize: 15, color: '#666', marginBottom: 24 }}>RFM analysis — Recency, Frequency, Monetary value</p>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))', gap: 12, marginBottom: 24 }}>
         {Object.entries(data?.summary || {}).map(([seg, count]) => (

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { api } from '../../services/api';
+import { Store } from 'lucide-react';
 
 export default function AdminSuppliers() {
   const [suppliers, setSuppliers] = useState([]);
@@ -15,7 +16,7 @@ export default function AdminSuppliers() {
     <div className="fade-in">
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 28 }}>
         <div>
-          <h1 style={{ fontSize: 28, fontWeight: 700, color: '#111', margin: 0 }}>🏪 Suppliers</h1>
+          <h1 style={{ fontSize: 28, fontWeight: 700, color: '#111', margin: 0 }}><span style={{display:'inline-flex',verticalAlign:'middle',marginRight:8}}><Store size={24} /></span> Suppliers</h1>
           <p style={{ fontSize: 15, color: '#666', marginTop: 4 }}>{suppliers.length} registered suppliers</p>
         </div>
       </div>

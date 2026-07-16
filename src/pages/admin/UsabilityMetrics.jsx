@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { api } from '../../services/api';
+import AnalyticsChart from '../../components/AnalyticsChart';
 
 export default function UsabilityMetrics() {
   const [data, setData] = useState(null);
@@ -19,6 +20,75 @@ export default function UsabilityMetrics() {
   const actionLabels = {
     login: 'Login', signup: 'Signup', browse: 'Browse', order: 'Place Order',
     track: 'Track Delivery', pay: 'Payment', inventory: 'Inventory', analytics: 'Analytics',
+  };
+
+  // 1. Actions by Type Chart Data (Horizontal Bar)
+  const sortedActions = Object.entries(action_counts || {}).sort((a, b) => b[1] - a[1]);
+  const actionsChartData = {
+    labels: sortedActions.map(([action]) => actionLabels[action] || action),
+    datasets: [{
+      label: 'Actions',
+      data: sortedActions.map(([, count]) => count),
+      backgroundColor: '#0a6e46',
+      borderRadius: 4,
+      barThickness: 12,
+    }]
+  };
+
+  const actionsChartOptions = {
+    indexAxis: 'y',
+    plugins: {
+      legend: { display: false }
+    },
+    scales: {
+      x: { grid: { display: false }, min: 0 },
+      y: { grid: { display: false } }
+    }
+  };
+
+  // 2. Device Breakdown Chart Data (Doughnut)
+  const sortedDevices = Object.entries(device_breakdown || {}).sort((a, b) => b[1] - a[1]);
+  const deviceChartData = {
+    labels: sortedDevices.map(([device]) => device.charAt(0).toUpperCase() + device.slice(1)),
+    datasets: [{
+      data: sortedDevices.map(([, count]) => count),
+      backgroundColor: ['#0a6e46', '#10b981', '#64748b'],
+      borderWidth: 1,
+    }]
+  };
+
+  const deviceChartOptions = {
+    plugins: {
+      legend: {
+        display: true,
+        position: 'right',
+        labels: {
+          font: { family: 'Inter, sans-serif', size: 11 }
+        }
+      }
+    }
+  };
+
+  // 3. Daily Activity Chart Data (Line)
+  const activityData = daily_activity || [];
+  const activityChartData = {
+    labels: activityData.map(d => d.date ? d.date.slice(5) : ''),
+    datasets: [{
+      label: 'Total Actions',
+      data: activityData.map(d => d.actions),
+      borderColor: '#0a6e46',
+      backgroundColor: 'rgba(10, 110, 70, 0.1)',
+      tension: 0.3,
+      fill: true,
+      pointRadius: 3,
+    }]
+  };
+
+  const activityChartOptions = {
+    scales: {
+      x: { grid: { display: false } },
+      y: { min: 0 }
+    }
   };
 
   return (
@@ -52,24 +122,12 @@ export default function UsabilityMetrics() {
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20, marginBottom: 24 }}>
         <div style={{ background: '#fff', borderRadius: 8, border: '1px solid #eee', padding: 20 }}>
           <h3 style={{ fontSize: 14, fontWeight: 600, marginBottom: 16 }}>Actions by Type</h3>
-          {Object.keys(action_counts).length === 0 ? (
+          {sortedActions.length === 0 ? (
             <div style={{ color: '#888', fontSize: 13, textAlign: 'center', padding: 20 }}>No data available</div>
           ) : (
-            Object.entries(action_counts).sort((a, b) => b[1] - a[1]).map(([action, count]) => {
-              const maxCount = Math.max(...Object.values(action_counts));
-              const pct = (count / maxCount) * 100;
-              return (
-                <div key={action} style={{ marginBottom: 10 }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, marginBottom: 3 }}>
-                    <span style={{ fontWeight: 500 }}>{actionLabels[action] || action}</span>
-                    <span style={{ color: '#888' }}>{count}</span>
-                  </div>
-                  <div style={{ height: 6, background: '#f0f0f0', borderRadius: 3 }}>
-                    <div style={{ height: '100%', width: `${pct}%`, background: '#0a6e46', borderRadius: 3, transition: 'width 0.5s' }} />
-                  </div>
-                </div>
-              );
-            })
+            <div style={{ height: 200 }}>
+              <AnalyticsChart type="bar" data={actionsChartData} options={actionsChartOptions} height={200} />
+            </div>
           )}
         </div>
 
@@ -78,16 +136,18 @@ export default function UsabilityMetrics() {
           {Object.keys(completion_rates).length === 0 ? (
             <div style={{ color: '#888', fontSize: 13, textAlign: 'center', padding: 20 }}>No data available</div>
           ) : (
-            Object.entries(completion_rates).sort((a, b) => b[1] - a[1]).map(([action, rate]) => (
-              <div key={action} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid #f5f5f5' }}>
-                <span style={{ fontSize: 13 }}>{actionLabels[action] || action}</span>
-                <span style={{
-                  padding: '2px 10px', borderRadius: 12, fontSize: 12, fontWeight: 600,
-                  background: rate >= 90 ? '#e8f5e9' : rate >= 70 ? '#fff3e0' : '#ffebee',
-                  color: rate >= 90 ? '#2e7d32' : rate >= 70 ? '#e65100' : '#d32f2f',
-                }}>{rate}%</span>
-              </div>
-            ))
+            <div style={{ maxHeight: 200, overflowY: 'auto' }}>
+              {Object.entries(completion_rates).sort((a, b) => b[1] - a[1]).map(([action, rate]) => (
+                <div key={action} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid #f5f5f5' }}>
+                  <span style={{ fontSize: 13 }}>{actionLabels[action] || action}</span>
+                  <span style={{
+                    padding: '2px 10px', borderRadius: 12, fontSize: 12, fontWeight: 600,
+                    background: rate >= 90 ? '#e8f5e9' : rate >= 70 ? '#fff3e0' : '#ffebee',
+                    color: rate >= 90 ? '#2e7d32' : rate >= 70 ? '#e65100' : '#d32f2f',
+                  }}>{rate}%</span>
+                </div>
+              ))}
+            </div>
           )}
         </div>
       </div>
@@ -111,52 +171,21 @@ export default function UsabilityMetrics() {
 
         <div style={{ background: '#fff', borderRadius: 8, border: '1px solid #eee', padding: 20 }}>
           <h3 style={{ fontSize: 14, fontWeight: 600, marginBottom: 16 }}>Device Breakdown</h3>
-          {Object.keys(device_breakdown).length === 0 ? (
+          {sortedDevices.length === 0 ? (
             <div style={{ color: '#888', fontSize: 13, textAlign: 'center', padding: 20 }}>No data available</div>
           ) : (
-            Object.entries(device_breakdown).sort((a, b) => b[1] - a[1]).map(([device, count]) => {
-              const total = Object.values(device_breakdown).reduce((a, b) => a + b, 0);
-              const pct = Math.round(count / total * 100);
-              return (
-                <div key={device} style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 10 }}>
-                  <div style={{ width: 36, height: 36, borderRadius: 8, background: '#f0f0f0', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16 }}>
-                    {device === 'mobile' ? '📱' : device === 'tablet' ? '📟' : '💻'}
-                  </div>
-                  <div style={{ flex: 1 }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13, marginBottom: 2 }}>
-                      <span style={{ fontWeight: 500, textTransform: 'capitalize' }}>{device}</span>
-                      <span style={{ color: '#888' }}>{count} ({pct}%)</span>
-                    </div>
-                    <div style={{ height: 4, background: '#f0f0f0', borderRadius: 2 }}>
-                      <div style={{ height: '100%', width: `${pct}%`, background: '#0a6e46', borderRadius: 2 }} />
-                    </div>
-                  </div>
-                </div>
-              );
-            })
+            <div style={{ height: 160 }}>
+              <AnalyticsChart type="doughnut" data={deviceChartData} options={deviceChartOptions} height={160} />
+            </div>
           )}
         </div>
       </div>
 
-      {daily_activity && daily_activity.length > 0 && (
+      {activityData.length > 0 && (
         <div style={{ background: '#fff', borderRadius: 8, border: '1px solid #eee', padding: 20 }}>
           <h3 style={{ fontSize: 14, fontWeight: 600, marginBottom: 16 }}>Daily Activity</h3>
-          <div style={{ display: 'flex', gap: 3, alignItems: 'flex-end', height: 120 }}>
-            {daily_activity.map((d, i) => {
-              const maxActions = Math.max(...daily_activity.map(x => x.actions), 1);
-              const h = (d.actions / maxActions) * 100;
-              return (
-                <div key={i} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                  <div style={{ fontSize: 9, color: '#888', marginBottom: 2 }}>{d.actions}</div>
-                  <div style={{ width: '100%', height: h, background: '#0a6e46', borderRadius: '3px 3px 0 0', minHeight: 2 }} />
-                </div>
-              );
-            })}
-          </div>
-          <div style={{ display: 'flex', gap: 3, marginTop: 4 }}>
-            {daily_activity.map((d, i) => (
-              <div key={i} style={{ flex: 1, fontSize: 8, color: '#aaa', textAlign: 'center' }}>{d.date?.slice(5)}</div>
-            ))}
+          <div style={{ height: 160 }}>
+            <AnalyticsChart type="line" data={activityChartData} options={activityChartOptions} height={160} />
           </div>
         </div>
       )}

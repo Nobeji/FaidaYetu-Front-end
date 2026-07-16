@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { api } from '../../services/api';
+import { Route } from 'lucide-react';
 
 export default function RouteOptimization() {
   const [data, setData] = useState(null);
@@ -13,7 +14,7 @@ export default function RouteOptimization() {
 
   return (
     <div className="fade-in">
-      <h1 style={{ fontSize: 28, fontWeight: 700, margin: '0 0 4px' }}>🗺️ Route Optimization</h1>
+      <h1 style={{ fontSize: 28, fontWeight: 700, margin: '0 0 4px' }}><span style={{display:'inline-flex',verticalAlign:'middle',marginRight:8}}><Route size={24} /></span> Route Optimization</h1>
       <p style={{ fontSize: 15, color: '#666', marginBottom: 24 }}>Nearest-neighbor optimized delivery route for pending orders</p>
       {data?.message ? (
         <div style={{ textAlign: 'center', padding: 48, color: '#888', background: '#fff', borderRadius: 16, border: '1px solid #eaeaea' }}>{data.message}</div>

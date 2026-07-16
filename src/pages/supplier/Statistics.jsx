@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { LayoutDashboard, Package, ShoppingCart, Bell, TrendingUp, TrendingDown, Settings, HelpCircle, DollarSign, Zap } from 'lucide-react';
 
 import DashboardShell from '../../components/DashboardShell';
 import StatsCard from '../../components/StatsCard';
@@ -7,14 +8,14 @@ import ProgressBar from '../../components/ProgressBar';
 import { api } from '../../services/api';
 
 const navItems = [
-  { icon: '📊', label: 'Dashboard', nav: '/supplier' },
-  { icon: '📦', label: 'Inventory', nav: '/supplier/inventory' },
-  { icon: '🛒', label: 'Orders', nav: '/supplier/orders' },
-  { icon: '🔔', label: 'Notifications', nav: '/supplier/notifications' },
-  { icon: '📈', label: 'Analytics', nav: '/supplier/analytics' },
-  { icon: '📉', label: 'Statistics', nav: '/supplier/statistics' },
-  { icon: '⚙️', label: 'Settings', nav: '/supplier/settings' },
-  { icon: '❓', label: 'Support', nav: '/supplier/support' },
+  { icon: LayoutDashboard, label: 'Dashboard', nav: '/supplier' },
+  { icon: Package, label: 'Inventory', nav: '/supplier/inventory' },
+  { icon: ShoppingCart, label: 'Orders', nav: '/supplier/orders' },
+  { icon: Bell, label: 'Notifications', nav: '/supplier/notifications' },
+  { icon: TrendingUp, label: 'Analytics', nav: '/supplier/analytics' },
+  { icon: TrendingDown, label: 'Statistics', nav: '/supplier/statistics' },
+  { icon: Settings, label: 'Settings', nav: '/supplier/settings' },
+  { icon: HelpCircle, label: 'Support', nav: '/supplier/support' },
 ];
 
 const STATUS_LABELS = {
@@ -61,11 +62,11 @@ export default function SupplierStatistics() {
         ) : (
           <>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: 12, marginBottom: 28 }}>
-              <StatsCard label="Total Revenue" value={data.stats.revenue} sub="All time earnings" subIcon="💰" icon="💳" tertiary />
-              <StatsCard label="Total Orders" value={data.stats.orders} sub="All orders placed" subIcon="📦" icon="🛍️" />
-              <StatsCard label="Avg Order Value" value={`${avgOrderValue} TZS`} sub="Per transaction" subIcon="📊" icon="📈" />
-              <StatsCard label="Growth Rate" value={data.stats.growth} sub="Period over period" subIcon="📉" icon="🚀" />
-              <StatsCard label="Low Stock Items" value={data.stats.lowStock} sub="Needs attention" subIcon="⚠️" icon="📦" error />
+              <StatsCard label="Total Revenue" value={data.stats.revenue} sub="All time earnings" iconComponent={DollarSign} tertiary />
+              <StatsCard label="Total Orders" value={data.stats.orders} sub="All orders placed" iconComponent={ShoppingCart} />
+              <StatsCard label="Avg Order Value" value={`${avgOrderValue} TZS`} sub="Per transaction" iconComponent={TrendingUp} />
+              <StatsCard label="Growth Rate" value={data.stats.growth} sub="Period over period" iconComponent={Zap} />
+              <StatsCard label="Low Stock Items" value={data.stats.lowStock} sub="Needs attention" iconComponent={Package} error />
             </div>
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20, marginBottom: 28 }}>

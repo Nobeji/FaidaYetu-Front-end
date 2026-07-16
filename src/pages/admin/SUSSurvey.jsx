@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { api } from '../../services/api';
+import { ClipboardList, CheckCircle } from 'lucide-react';
 
 const SUS_QUESTIONS = [
   { q: 'q1', text: 'I think I would like to use this system frequently.' },
@@ -129,7 +130,7 @@ export default function SUSSurvey() {
 
         {(!data || data.total === 0) && (
           <div style={{ background: '#fff', borderRadius: 16, border: '1px solid #eaeaea', padding: 48, textAlign: 'center', color: '#888' }}>
-            <div style={{ fontSize: 32, marginBottom: 12 }}>📋</div>
+            <div style={{ fontSize: 32, marginBottom: 12 }}><ClipboardList size={32} /></div>
             <div style={{ fontSize: 15, fontWeight: 600, marginBottom: 4 }}>No Responses Yet</div>
             <div>Users will submit SUS surveys from their dashboards. Results will appear here.</div>
           </div>
@@ -146,7 +147,7 @@ export default function SUSSurvey() {
 
       {!showForm && !submitted && (
         <div style={{ background: '#fff', borderRadius: 16, border: '1px solid #eaeaea', padding: 40, textAlign: 'center' }}>
-          <div style={{ fontSize: 40, marginBottom: 12 }}>📋</div>
+          <div style={{ fontSize: 40, marginBottom: 12 }}><ClipboardList size={40} /></div>
           <div style={{ fontSize: 18, fontWeight: 700, marginBottom: 8 }}>SUS Usability Survey</div>
           <p style={{ fontSize: 14, color: '#666', marginBottom: 20, maxWidth: 500, margin: '0 auto 20px' }}>
             The System Usability Scale (SUS) is a 10-item industry-standard questionnaire
@@ -198,7 +199,7 @@ export default function SUSSurvey() {
 
       {submitted && (
         <div style={{ background: '#fff', borderRadius: 16, border: '1px solid #eaeaea', padding: 48, textAlign: 'center' }}>
-          <div style={{ fontSize: 48, marginBottom: 16 }}>✅</div>
+          <div style={{ fontSize: 48, marginBottom: 16 }}><CheckCircle size={48} /></div>
           <div style={{ fontSize: 28, fontWeight: 800, color: '#2e7d32', marginBottom: 4 }}>Your SUS Score: {myScore}</div>
           <div style={{ fontSize: 16, color: '#666', marginBottom: 8 }}>
             Grade: <strong style={{ color: myScore >= 68 ? '#2e7d32' : '#e65100' }}>

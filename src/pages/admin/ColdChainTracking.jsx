@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { api } from '../../services/api';
+import { AlertTriangle, CheckCircle } from 'lucide-react';
 
 export default function ColdChainTracking() {
   const [data, setData] = useState(null);
@@ -57,7 +58,7 @@ export default function ColdChainTracking() {
                         background: d.has_alert ? '#ffebee' : d.current_temp > 8 ? '#fff3e0' : '#e8f5e9',
                         color: d.has_alert ? '#d32f2f' : d.current_temp > 8 ? '#e65100' : '#2e7d32',
                       }}>
-                        {d.current_temp}°C {d.has_alert ? '⚠️' : '✓'}
+                        {d.current_temp}°C {d.has_alert ? <AlertTriangle size={14} style={{display:'inline',verticalAlign:'middle'}} /> : <CheckCircle size={14} style={{display:'inline',verticalAlign:'middle'}} />}
                       </span>
                     ) : (
                       <span style={{ fontSize: 12, color: '#aaa' }}>No data</span>
@@ -84,7 +85,7 @@ export default function ColdChainTracking() {
                     <div style={{ fontSize: 11, color: '#888' }}>{a.timestamp?.slice(0, 16).replace('T', ' ')}</div>
                   </div>
                   <span style={{ padding: '3px 10px', borderRadius: 12, fontSize: 12, fontWeight: 600, background: '#ffebee', color: '#d32f2f' }}>
-                    {a.temperature}°C ⚠️
+                    {a.temperature}°C <AlertTriangle size={14} style={{display:'inline',verticalAlign:'middle'}} />
                   </span>
                 </div>
               ))}

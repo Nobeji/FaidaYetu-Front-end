@@ -1,63 +1,68 @@
 export const colors = {
-  primary: '#1e40af',
-  primaryLight: '#2563eb',
-  primaryFixed: '#93c5fd',
-  primaryFixedDim: '#60a5fa',
+  primary: '#0a6e46',
+  primaryLight: '#10b981',
+  primaryContainer: '#d1fae5',
   onPrimary: '#ffffff',
-  onPrimaryContainer: '#bfdbfe',
-  onPrimaryFixed: '#0f172a',
+  onPrimaryContainer: '#064e3b',
 
-  tertiary: '#f59e0b',
-  tertiaryContainer: '#d97706',
-  tertiaryFixed: '#fde68a',
-  onTertiaryContainer: '#fcd34d',
+  secondary: '#0369a1',
+  secondaryLight: '#0ea5e9',
 
-  surface: '#0f172a',
-  surfaceDim: '#1e293b',
-  surfaceBright: '#1e3a5f',
-  surfaceContainerLowest: '#ffffff',
-  surfaceContainerLow: '#1e3a5f',
-  surfaceContainer: '#1e40af',
-  surfaceContainerHigh: '#2563eb',
-  surfaceContainerHighest: '#3b82f6',
-  onSurface: '#f8fafc',
-  onSurfaceVariant: '#94a3b8',
+  surface: '#f8fafc',
+  surfaceAlt: '#f1f5f9',
+  onSurface: '#0f172a',
+  onSurfaceVariant: '#64748b',
+  muted: '#94a3b8',
 
-  error: '#ef4444',
-  errorContainer: '#fecaca',
+  border: '#e2e8f0',
+  borderLight: '#f1f5f9',
 
-  outline: '#64748b',
-  outlineVariant: '#334155',
+  error: '#dc2626',
+  errorContainer: '#fef2f2',
+  errorBorder: '#fecaca',
 
-  inverseSurface: '#f8fafc',
-  inverseOnSurface: '#0f172a',
-  inversePrimary: '#1e40af',
+  success: '#15803d',
+  successContainer: '#f0fdf4',
+  successBorder: '#bbf7d0',
+
+  warning: '#a16207',
+  warningContainer: '#fef9c3',
+  warningBorder: '#fde68a',
+
+  info: '#1d4ed8',
+  infoContainer: '#dbeafe',
 
   white: '#ffffff',
+  black: '#0f172a',
+
+  text: {
+    primary: '#0f172a',
+    secondary: '#475569',
+    muted: '#64748b',
+    faint: '#94a3b8',
+    inverse: '#ffffff',
+  },
 };
 
-export const glass = {
-  bgLight: 'rgba(255, 255, 255, 0.08)',
-  bgMedium: 'rgba(255, 255, 255, 0.12)',
-  bgSolid: 'rgba(255, 255, 255, 0.18)',
-  bgWhite: 'rgba(255, 255, 255, 0.85)',
-  borderLight: 'rgba(255, 255, 255, 0.1)',
-  borderMedium: 'rgba(255, 255, 255, 0.18)',
-  blur: 'blur(20px)',
-  blurHeavy: 'blur(40px)',
-  shadow: '0 8px 32px rgba(0, 0, 0, 0.2)',
-  shadowLg: '0 16px 48px rgba(0, 0, 0, 0.3)',
+export const shadow = {
+  xs: '0 1px 2px rgba(0,0,0,0.04)',
+  sm: '0 1px 3px rgba(0,0,0,0.06)',
+  md: '0 4px 6px rgba(0,0,0,0.07)',
+  lg: '0 4px 24px rgba(0,0,0,0.06)',
+  xl: '0 8px 32px rgba(0,0,0,0.08)',
 };
 
-export const gradient = {
-  hero: 'linear-gradient(135deg, #020617 0%, #0f172a 25%, #1e3a5f 55%, #1e40af 80%, #1e3a5f 100%)',
-  heroAlt: 'linear-gradient(160deg, #020617 0%, #0f172a 25%, #1e40af 55%, #3b82f6 80%, #1e40af 100%)',
-  accent: 'linear-gradient(135deg, #1e40af 0%, #2563eb 50%, #3b82f6 100%)',
-  accentHover: 'linear-gradient(135deg, #2563eb 0%, #3b82f6 50%, #60a5fa 100%)',
-  warm: 'linear-gradient(135deg, #1e40af 0%, #06b6d4 100%)',
-  card: 'linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.04) 100%)',
-  sidebar: 'linear-gradient(180deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%)',
-  darkCard: 'linear-gradient(135deg, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.1) 100%)',
+export const card = {
+  base: {
+    background: colors.white,
+    border: `1px solid ${colors.border}`,
+    borderRadius: 12,
+    boxShadow: shadow.sm,
+  },
+  hover: {
+    boxShadow: shadow.md,
+    transform: 'translateY(-2px)',
+  },
 };
 
 export const spacing = {
@@ -70,12 +75,55 @@ export const spacing = {
 };
 
 export const radius = {
-  sm: 4,
+  sm: 6,
   md: 8,
   lg: 12,
   xl: 16,
   xxl: 24,
   round: 9999,
+};
+
+export const chartColors = [
+  '#0a6e46', '#10b981', '#3b82f6', '#f59e0b', '#ef4444',
+  '#8b5cf6', '#ec4899', '#06b6d4', '#84cc16', '#f97316',
+];
+
+export const chartDefaults = {
+  responsive: true,
+  maintainAspectRatio: false,
+  plugins: {
+    legend: {
+      labels: {
+        color: colors.text.primary,
+        font: { family: "'Inter', sans-serif", size: 12, weight: 500 },
+        padding: 16,
+      },
+    },
+    tooltip: {
+      backgroundColor: colors.white,
+      titleColor: colors.text.primary,
+      bodyColor: colors.text.secondary,
+      borderColor: colors.border,
+      borderWidth: 1,
+      padding: 12,
+      cornerRadius: 8,
+      boxPadding: 4,
+      titleFont: { family: "'Inter', sans-serif", size: 13, weight: 600 },
+      bodyFont: { family: "'Inter', sans-serif", size: 12 },
+      displayColors: true,
+      usePointStyle: true,
+    },
+  },
+  scales: {
+    x: {
+      grid: { color: colors.borderLight, drawBorder: false },
+      ticks: { color: colors.text.muted, font: { family: "'Inter', sans-serif", size: 11 } },
+    },
+    y: {
+      grid: { color: colors.borderLight, drawBorder: false },
+      ticks: { color: colors.text.muted, font: { family: "'Inter', sans-serif", size: 11 } },
+    },
+  },
 };
 
 export const DATA = {

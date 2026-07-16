@@ -5,13 +5,14 @@ import StatusBadge from '../../components/StatusBadge';
 import { api } from '../../services/api';
 import { useToast } from '../../components/ToastContext';
 import Spinner from '../../components/Spinner';
+import { Home, ShoppingCart, ClipboardList, Bell, User, Package, Clock, MapPin, FileText, Star } from 'lucide-react';
 
 const navItems = [
-  { icon: '🏠', label: 'Explore', nav: '/customer' },
-  { icon: '🛒', label: 'Marketplace', nav: '/customer/marketplace' },
-  { icon: '📋', label: 'My Orders', nav: '/customer/orders' },
-  { icon: '🔔', label: 'Notifications', nav: '/customer/notifications' },
-  { icon: '👤', label: 'Profile', nav: '/customer/profile' },
+  { icon: Home, label: 'Explore', nav: '/customer' },
+  { icon: ShoppingCart, label: 'Marketplace', nav: '/customer/marketplace' },
+  { icon: ClipboardList, label: 'My Orders', nav: '/customer/orders' },
+  { icon: Bell, label: 'Notifications', nav: '/customer/notifications' },
+  { icon: User, label: 'Profile', nav: '/customer/profile' },
 ];
 
 const filters = ['All', 'new', 'paid', 'processing', 'delivered', 'cancelled'];
@@ -205,7 +206,7 @@ export default function MyOrders() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
             {filtered.map(o => (
               <div key={o.id} style={{ display: 'flex', gap: 12, background: '#fff', padding: 12, borderRadius: 12, border: `1px solid ${'#eee'}`, alignItems: 'center' }}>
-                <div style={{ width: 80, height: 80, borderRadius: 8, background: '#f0f0f0', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 28 }}>📦</div>
+                <div style={{ width: 80, height: 80, borderRadius: 8, background: '#f0f0f0', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Package size={28} /></div>
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 4 }}>
                     <div>
@@ -223,7 +224,7 @@ export default function MyOrders() {
                       )}
                       {pendingPayments[o.id] === 'pending' && (
                         <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap', alignItems: 'center' }}>
-                          <span style={{ padding: '6px 14px', borderRadius: 8, background: '#fff8e1', color: '#f57f17', fontWeight: 600, fontSize: 12 }}>⌛ Pending</span>
+                          <span style={{ padding: '6px 14px', borderRadius: 8, background: '#fff8e1', color: '#f57f17', fontWeight: 600, fontSize: 12, display: 'flex', alignItems: 'center', gap: 4 }}><Clock size={12} /> Pending</span>
                           <button onClick={() => checkPaymentStatus(o.id)} disabled={checkingPayments[o.id]} style={{ padding: '6px 14px', borderRadius: 8, border: '1px solid #f57f17', background: '#fff', color: '#f57f17', cursor: 'pointer', fontWeight: 600, fontSize: 12, display: 'flex', alignItems: 'center', gap: 4 }}>
                             {checkingPayments[o.id] && <Spinner size={10} color="#f57f17" />}
                             Check
@@ -258,8 +259,8 @@ export default function MyOrders() {
             <div style={{ marginBottom: 16 }}>
               <div style={{ fontSize: 13, color: '#888', marginBottom: 4 }}>Supplier: <strong>{selectedOrder.supplier_name}</strong></div>
               <div style={{ fontSize: 13, color: '#888', marginBottom: 4 }}>Date: {new Date(selectedOrder.created_at).toLocaleString()}</div>
-              {selectedOrder.delivery_address && <div style={{ fontSize: 13, color: '#888', marginBottom: 4 }}>📍 {selectedOrder.delivery_address}</div>}
-              {selectedOrder.notes && <div style={{ fontSize: 13, color: '#888' }}>📝 {selectedOrder.notes}</div>}
+              {selectedOrder.delivery_address && <div style={{ fontSize: 13, color: '#888', marginBottom: 4, display: 'flex', alignItems: 'center', gap: 4 }}><MapPin size={14} /> {selectedOrder.delivery_address}</div>}
+              {selectedOrder.notes && <div style={{ fontSize: 13, color: '#888', display: 'flex', alignItems: 'center', gap: 4 }}><FileText size={14} /> {selectedOrder.notes}</div>}
             </div>
 
             <div style={{ marginBottom: 16 }}>
@@ -333,8 +334,8 @@ export default function MyOrders() {
                   <div key={d.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: 12, borderRadius: 8, border: `1px solid ${'#eee'}`, background: '#fafafa' }}>
                     <div>
                       <div style={{ fontWeight: 600 }}>{d.profile?.user?.username || `Driver #${d.id}`}</div>
-                      <div style={{ fontSize: 12, color: '#888' }}>
-                        {d.vehicle_type} • ⭐ {d.rating || 'N/A'} • {d.total_routes || 0} routes
+                      <div style={{ fontSize: 12, color: '#888', display: 'flex', alignItems: 'center', gap: 4 }}>
+                        {d.vehicle_type} • <Star size={14} fill="#f59e0b" color="#f59e0b" /> {d.rating || 'N/A'} • {d.total_routes || 0} routes
                       </div>
                     </div>
                     <button onClick={() => handleAssign(showAssign.id, d.id)} style={{ padding: '8px 16px', borderRadius: 8, background: '#000', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: 13 }}>Assign</button>

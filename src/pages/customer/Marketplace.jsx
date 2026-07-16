@@ -4,13 +4,14 @@ import DashboardShell from '../../components/DashboardShell';
 import { api } from '../../services/api';
 import { useToast } from '../../components/ToastContext';
 import Spinner from '../../components/Spinner';
+import { Home, ShoppingCart, ClipboardList, Bell, User, Package } from 'lucide-react';
 
 const navItems = [
-  { icon: '🏠', label: 'Explore', nav: '/customer' },
-  { icon: '🛒', label: 'Marketplace', nav: '/customer/marketplace' },
-  { icon: '📋', label: 'My Orders', nav: '/customer/orders' },
-  { icon: '🔔', label: 'Notifications', nav: '/customer/notifications' },
-  { icon: '👤', label: 'Profile', nav: '/customer/profile' },
+  { icon: Home, label: 'Explore', nav: '/customer' },
+  { icon: ShoppingCart, label: 'Marketplace', nav: '/customer/marketplace' },
+  { icon: ClipboardList, label: 'My Orders', nav: '/customer/orders' },
+  { icon: Bell, label: 'Notifications', nav: '/customer/notifications' },
+  { icon: User, label: 'Profile', nav: '/customer/profile' },
 ];
 
 const modalOverlay = {
@@ -115,7 +116,7 @@ export default function Marketplace() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 12 }}>
             {filtered.map(p => (
               <div key={p.id} style={{ background: '#fff', borderRadius: 12, border: `1px solid ${'#eee'}`, overflow: 'hidden' }}>
-                <div style={{ width: '100%', height: 160, background: '#f0f0f0', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 40, color: '#888' }}>{p.image ? <img src={p.image} alt={p.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : '📦'}</div>
+                <div style={{ width: '100%', height: 160, background: '#f0f0f0', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 40, color: '#888' }}>{p.image ? <img src={p.image} alt={p.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : <Package size={40} />}</div>
                 <div style={{ padding: 12 }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
                     <div>

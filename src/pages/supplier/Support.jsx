@@ -1,14 +1,15 @@
+import { LayoutDashboard, Package, ShoppingCart, Bell, TrendingUp, TrendingDown, Settings, HelpCircle, Mail, Phone, MessageCircle, Star } from 'lucide-react';
 import DashboardShell from '../../components/DashboardShell';
 
 const navItems = [
-  { icon: '📊', label: 'Dashboard', nav: '/supplier' },
-  { icon: '📦', label: 'Inventory', nav: '/supplier/inventory' },
-  { icon: '🛒', label: 'Orders', nav: '/supplier/orders' },
-  { icon: '🔔', label: 'Notifications', nav: '/supplier/notifications' },
-  { icon: '📈', label: 'Analytics', nav: '/supplier/analytics' },
-  { icon: '📉', label: 'Statistics', nav: '/supplier/statistics' },
-  { icon: '⚙️', label: 'Settings', nav: '/supplier/settings' },
-  { icon: '❓', label: 'Support', nav: '/supplier/support' },
+  { icon: LayoutDashboard, label: 'Dashboard', nav: '/supplier' },
+  { icon: Package, label: 'Inventory', nav: '/supplier/inventory' },
+  { icon: ShoppingCart, label: 'Orders', nav: '/supplier/orders' },
+  { icon: Bell, label: 'Notifications', nav: '/supplier/notifications' },
+  { icon: TrendingUp, label: 'Analytics', nav: '/supplier/analytics' },
+  { icon: TrendingDown, label: 'Statistics', nav: '/supplier/statistics' },
+  { icon: Settings, label: 'Settings', nav: '/supplier/settings' },
+  { icon: HelpCircle, label: 'Support', nav: '/supplier/support' },
 ];
 
 const faqs = [];
@@ -28,21 +29,21 @@ export default function SupplierSupport() {
               <h3 style={{ fontSize: 20, fontWeight: 600, color: '#000', marginBottom: 12 }}>Contact Us</h3>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: 12, background: '#fafafa', borderRadius: 8 }}>
-                  <span style={{ fontSize: 24 }}>📧</span>
+                  <Mail size={24} />
                   <div>
                     <div style={{ fontWeight: 700, fontSize: 14 }}>Email Support</div>
                     <div style={{ fontSize: 13, color: '#888' }}>support@faidayetu.co.tz</div>
                   </div>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: 12, background: '#fafafa', borderRadius: 8 }}>
-                  <span style={{ fontSize: 24 }}>📞</span>
+                  <Phone size={24} />
                   <div>
                     <div style={{ fontWeight: 700, fontSize: 14 }}>Phone Support</div>
                     <div style={{ fontSize: 13, color: '#888' }}>Coming soon</div>
                   </div>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: 12, background: '#fafafa', borderRadius: 8 }}>
-                  <span style={{ fontSize: 24 }}>💬</span>
+                  <MessageCircle size={24} />
                   <div>
                     <div style={{ fontWeight: 700, fontSize: 14 }}>Live Chat</div>
                     <div style={{ fontSize: 13, color: '#888' }}>Coming soon</div>
@@ -52,7 +53,7 @@ export default function SupplierSupport() {
             </div>
 
             <div style={{ background: '#f5f5f5', borderRadius: 12, padding: 20, color: '#111' }}>
-              <div style={{ fontSize: 36, marginBottom: 8 }}>🌟</div>
+              <div style={{ marginBottom: 8 }}><Star size={36} /></div>
               <h4 style={{ fontSize: 18, fontWeight: 700, marginBottom: 8 }}>Have a Question?</h4>
               <p style={{ fontSize: 14, opacity: 0.9, marginBottom: 12 }}>Contact your account manager or email us for assistance.</p>
             </div>

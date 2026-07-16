@@ -3,18 +3,19 @@ import { useNavigate } from 'react-router-dom';
 import DashboardShell from '../../components/DashboardShell';
 import { api } from '../../services/api';
 import { useToast } from '../../components/ToastContext';
+import { Home, ShoppingCart, ClipboardList, Bell, User, MapPin, CreditCard, Lock, Globe } from 'lucide-react';
 
 const navItems = [
-  { icon: '🏠', label: 'Explore', nav: '/customer' },
-  { icon: '🛒', label: 'Marketplace', nav: '/customer/marketplace' },
-  { icon: '📋', label: 'My Orders', nav: '/customer/orders' },
-  { icon: '🔔', label: 'Notifications', nav: '/customer/notifications' },
-  { icon: '👤', label: 'Profile', nav: '/customer/profile' },
+  { icon: Home, label: 'Explore', nav: '/customer' },
+  { icon: ShoppingCart, label: 'Marketplace', nav: '/customer/marketplace' },
+  { icon: ClipboardList, label: 'My Orders', nav: '/customer/orders' },
+  { icon: Bell, label: 'Notifications', nav: '/customer/notifications' },
+  { icon: User, label: 'Profile', nav: '/customer/profile' },
 ];
 
 const sectionsConfig = {
   addresses: {
-    icon: '📍', label: 'Saved Addresses',
+    icon: MapPin, label: 'Saved Addresses',
     fields: [
       { key: 'home', label: 'Home Address', type: 'text' },
       { key: 'work', label: 'Work Address', type: 'text' },
@@ -22,14 +23,14 @@ const sectionsConfig = {
     ],
   },
   payments: {
-    icon: '💳', label: 'Payment Methods',
+    icon: CreditCard, label: 'Payment Methods',
     fields: [
       { key: 'mobile', label: 'Mobile Money', type: 'text', placeholder: 'e.g. +255 7XX XXX XXX' },
       { key: 'card', label: 'Card (last 4 digits)', type: 'text', placeholder: 'e.g. 4242' },
     ],
   },
   notifications: {
-    icon: '🔔', label: 'Notifications',
+    icon: Bell, label: 'Notifications',
     fields: [
       { key: 'push', label: 'Push Notifications', type: 'toggle' },
       { key: 'sms', label: 'SMS Alerts', type: 'toggle' },
@@ -37,7 +38,7 @@ const sectionsConfig = {
     ],
   },
   security: {
-    icon: '🔒', label: 'Privacy & Security',
+    icon: Lock, label: 'Privacy & Security',
     fields: [
       { key: 'current_password', label: 'Current Password', type: 'password' },
       { key: 'new_password', label: 'New Password', type: 'password' },
@@ -45,7 +46,7 @@ const sectionsConfig = {
     ],
   },
   language: {
-    icon: '🌐', label: 'Language & Region',
+    icon: Globe, label: 'Language & Region',
     fields: [
       { key: 'language', label: 'Language', type: 'select', options: ['English', 'Swahili'] },
       { key: 'region', label: 'Region', type: 'select', options: ['Tanzania', 'Kenya', 'Uganda'] },
@@ -264,44 +265,47 @@ export default function CustomerProfile() {
         )}
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 12 }}>
-          {Object.entries(sectionsConfig).map(([key, section]) => (
-            <div key={key} style={{ background: '#fff', borderRadius: 12, border: `1px solid ${'#eee'}`, overflow: 'hidden' }}>
-              <div
-                onClick={() => setOpenSection(openSection === key ? null : key)}
-                style={{ padding: 12, display: 'flex', alignItems: 'center', gap: 12, cursor: 'pointer' }}
-              >
-                <div style={{ width: 48, height: 48, borderRadius: 8, background: '#f5f5f5', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22 }}>{section.icon}</div>
-                <div style={{ flex: 1 }}>
-                  <div style={{ fontWeight: 700, fontSize: 15, color: '#111' }}>{section.label}</div>
-                  <div style={{ fontSize: 13, color: '#888' }}>{openSection === key ? 'Click to close' : 'Click to manage'}</div>
+          {Object.entries(sectionsConfig).map(([key, section]) => {
+            const SectionIcon = section.icon;
+            return (
+              <div key={key} style={{ background: '#fff', borderRadius: 12, border: `1px solid ${'#eee'}`, overflow: 'hidden' }}>
+                <div
+                  onClick={() => setOpenSection(openSection === key ? null : key)}
+                  style={{ padding: 12, display: 'flex', alignItems: 'center', gap: 12, cursor: 'pointer' }}
+                >
+                  <div style={{ width: 48, height: 48, borderRadius: 8, background: '#f5f5f5', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><SectionIcon size={22} /></div>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontWeight: 700, fontSize: 15, color: '#111' }}>{section.label}</div>
+                    <div style={{ fontSize: 13, color: '#888' }}>{openSection === key ? 'Click to close' : 'Click to manage'}</div>
+                  </div>
+                  <span style={{ color: '#888', transform: openSection === key ? 'rotate(90deg)' : 'none', transition: '0.2s' }}>→</span>
                 </div>
-                <span style={{ color: '#888', transform: openSection === key ? 'rotate(90deg)' : 'none', transition: '0.2s' }}>→</span>
+                {openSection === key && (
+                  <div style={{ padding: `0 ${12}px ${12}px`, borderTop: `1px solid ${'#eee'}` }}>
+                    <div style={{ padding: 12, display: 'flex', flexDirection: 'column', gap: 12 }}>
+                      {section.fields.map(f => (
+                        <div key={f.key}>
+                          {f.type !== 'toggle' && <label style={{ fontSize: 13, fontWeight: 600, display: 'block', marginBottom: 4 }}>{f.label}</label>}
+                          {f.type === 'toggle' ? (
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                              <span style={{ fontSize: 14 }}>{f.label}</span>
+                              {renderField(key, f)}
+                            </div>
+                          ) : (
+                            renderField(key, f)
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                    <div style={{ display: 'flex', gap: 12 }}>
+                      <button onClick={() => handleSectionSave(key)} style={{ flex: 1, padding: '10px', borderRadius: 8, background: '#000', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 700 }}>Save</button>
+                      <button onClick={() => setOpenSection(null)} style={{ flex: 1, padding: '10px', borderRadius: 8, background: 'none', border: `1px solid ${'#eee'}`, cursor: 'pointer', fontWeight: 600 }}>Cancel</button>
+                    </div>
+                  </div>
+                )}
               </div>
-              {openSection === key && (
-                <div style={{ padding: `0 ${12}px ${12}px`, borderTop: `1px solid ${'#eee'}` }}>
-                  <div style={{ padding: 12, display: 'flex', flexDirection: 'column', gap: 12 }}>
-                    {section.fields.map(f => (
-                      <div key={f.key}>
-                        {f.type !== 'toggle' && <label style={{ fontSize: 13, fontWeight: 600, display: 'block', marginBottom: 4 }}>{f.label}</label>}
-                        {f.type === 'toggle' ? (
-                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                            <span style={{ fontSize: 14 }}>{f.label}</span>
-                            {renderField(key, f)}
-                          </div>
-                        ) : (
-                          renderField(key, f)
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                  <div style={{ display: 'flex', gap: 12 }}>
-                    <button onClick={() => handleSectionSave(key)} style={{ flex: 1, padding: '10px', borderRadius: 8, background: '#000', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 700 }}>Save</button>
-                    <button onClick={() => setOpenSection(null)} style={{ flex: 1, padding: '10px', borderRadius: 8, background: 'none', border: `1px solid ${'#eee'}`, cursor: 'pointer', fontWeight: 600 }}>Cancel</button>
-                  </div>
-                </div>
-              )}
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </DashboardShell>

@@ -1,11 +1,12 @@
 import DashboardShell from '../../components/DashboardShell';
+import { Truck, Route, Coins, Settings, HelpCircle, Mail, Phone, MessageCircle, AlertTriangle } from 'lucide-react';
 
 const navItems = [
-  { icon: '🚚', label: 'Active Tasks', nav: '/delivery' },
-  { icon: '🛣️', label: 'Route History', nav: '/delivery/route-history' },
-  { icon: '💰', label: 'Earnings', nav: '/delivery/earnings' },
-  { icon: '⚙️', label: 'Settings', nav: '/delivery/settings' },
-  { icon: '❓', label: 'Support', nav: '/delivery/support' },
+  { icon: Truck, label: 'Active Tasks', nav: '/delivery' },
+  { icon: Route, label: 'Route History', nav: '/delivery/route-history' },
+  { icon: Coins, label: 'Earnings', nav: '/delivery/earnings' },
+  { icon: Settings, label: 'Settings', nav: '/delivery/settings' },
+  { icon: HelpCircle, label: 'Support', nav: '/delivery/support' },
 ];
 
 const faqs = [];
@@ -25,21 +26,21 @@ export default function DeliverySupport() {
               <h3 style={{ fontSize: 20, fontWeight: 600, color: '#000', marginBottom: 12 }}>Contact Us</h3>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: 12, background: '#fafafa', borderRadius: 8 }}>
-                  <span style={{ fontSize: 24 }}>📧</span>
+                  <Mail size={24} />
                   <div>
                     <div style={{ fontWeight: 700, fontSize: 14 }}>Email Support</div>
                     <div style={{ fontSize: 13, color: '#888' }}>support@faidayetu.co.tz</div>
                   </div>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: 12, background: '#fafafa', borderRadius: 8 }}>
-                  <span style={{ fontSize: 24 }}>📞</span>
+                  <Phone size={24} />
                   <div>
                     <div style={{ fontWeight: 700, fontSize: 14 }}>Phone Support</div>
                     <div style={{ fontSize: 13, color: '#888' }}>Coming soon</div>
                   </div>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: 12, background: '#fafafa', borderRadius: 8 }}>
-                  <span style={{ fontSize: 24 }}>💬</span>
+                  <MessageCircle size={24} />
                   <div>
                     <div style={{ fontWeight: 700, fontSize: 14 }}>Live Chat</div>
                     <div style={{ fontSize: 13, color: '#888' }}>Coming soon</div>
@@ -49,7 +50,7 @@ export default function DeliverySupport() {
             </div>
 
             <div style={{ background: '#f5f5f5', borderRadius: 12, padding: 20, color: '#111' }}>
-              <div style={{ fontSize: 36, marginBottom: 8 }}>🚨</div>
+              <AlertTriangle size={36} style={{ marginBottom: 8 }} />
               <h4 style={{ fontSize: 18, fontWeight: 700, marginBottom: 8 }}>Roadside Assistance</h4>
               <p style={{ fontSize: 14, opacity: 0.9, marginBottom: 12 }}>Coming soon.</p>
             </div>

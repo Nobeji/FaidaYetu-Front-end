@@ -1,45 +1,51 @@
 import { useState, useEffect } from 'react';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
+import { 
+  TrendingUp, Sparkles, Target, AlertTriangle, Users, Lightbulb,
+  Flame, Route, Package, ShieldAlert, BarChart2, Thermometer,
+  Zap, MapPin, Smartphone, Activity, FileText, ClipboardList,
+  FileSpreadsheet, Sliders, FlaskConical, Network, Store, ShoppingCart, Truck,   CreditCard, Egg
+} from 'lucide-react';
 
 const sidebarSections = [
   { label: 'ANALYTICS', items: [
-    { label: 'Demand Analysis', icon: '📈', nav: '/admin/demand-analysis' },
-    { label: 'Sales Prediction', icon: '🔮', nav: '/admin/sales-prediction' },
-    { label: 'Customer Segmentation', icon: '🎯', nav: '/admin/customer-segmentation' },
-    { label: 'Churn Prediction', icon: '⚠️', nav: '/admin/churn-prediction' },
-    { label: 'Cohort Analysis', icon: '👥', nav: '/admin/cohort-analysis' },
-    { label: 'Trend Insights', icon: '💡', nav: '/admin/trend-insights' },
+    { label: 'Demand Analysis', icon: TrendingUp, nav: '/admin/demand-analysis' },
+    { label: 'Sales Prediction', icon: Sparkles, nav: '/admin/sales-prediction' },
+    { label: 'Customer Segmentation', icon: Target, nav: '/admin/customer-segmentation' },
+    { label: 'Churn Prediction', icon: AlertTriangle, nav: '/admin/churn-prediction' },
+    { label: 'Cohort Analysis', icon: Users, nav: '/admin/cohort-analysis' },
+    { label: 'Trend Insights', icon: Lightbulb, nav: '/admin/trend-insights' },
   ]},
   { label: 'OPERATIONS', items: [
-    { label: 'Heat Map', icon: '🔥', nav: '/admin/heat-map' },
-    { label: 'Route Optimization', icon: '🗺️', nav: '/admin/route-optimization' },
-    { label: 'Inventory Forecast', icon: '📦', nav: '/admin/inventory-forecast' },
-    { label: 'Anomaly Detection', icon: '🕵️', nav: '/admin/anomaly-detection' },
+    { label: 'Heat Map', icon: Flame, nav: '/admin/heat-map' },
+    { label: 'Route Optimization', icon: Route, nav: '/admin/route-optimization' },
+    { label: 'Inventory Forecast', icon: Package, nav: '/admin/inventory-forecast' },
+    { label: 'Anomaly Detection', icon: ShieldAlert, nav: '/admin/anomaly-detection' },
   ]},
   { label: 'IMPACT & TRACKING', items: [
-    { label: 'Enhanced Performance', icon: '📊', nav: '/admin/enhanced-performance' },
-    { label: 'Cold Chain Tracking', icon: '🌡️', nav: '/admin/cold-chain' },
-    { label: 'Route Comparison', icon: '⚡', nav: '/admin/route-comparison' },
-    { label: 'Spatial Accuracy', icon: '📍', nav: '/admin/spatial-accuracy' },
-    { label: 'Usability Metrics', icon: '👥', nav: '/admin/usability-metrics' },
-    { label: 'System Impact', icon: '🎯', nav: '/admin/system-impact' },
+    { label: 'Enhanced Performance', icon: BarChart2, nav: '/admin/enhanced-performance' },
+    { label: 'Cold Chain Tracking', icon: Thermometer, nav: '/admin/cold-chain' },
+    { label: 'Route Comparison', icon: Zap, nav: '/admin/route-comparison' },
+    { label: 'Spatial Accuracy', icon: MapPin, nav: '/admin/spatial-accuracy' },
+    { label: 'Usability Metrics', icon: Smartphone, nav: '/admin/usability-metrics' },
+    { label: 'System Impact', icon: Activity, nav: '/admin/system-impact' },
   ]},
   { label: 'RESEARCH', items: [
-    { label: 'TAM Survey', icon: '📝', nav: '/admin/tam-survey' },
-    { label: 'SUS Usability', icon: '📋', nav: '/admin/sus-survey' },
+    { label: 'TAM Survey', icon: FileText, nav: '/admin/tam-survey' },
+    { label: 'SUS Usability', icon: ClipboardList, nav: '/admin/sus-survey' },
   ]},
   { label: 'REPORTS & AI', items: [
-    { label: 'Reports', icon: '📋', nav: '/admin/reports' },
-    { label: 'Model Evaluation', icon: '📐', nav: '/admin/model-evaluation' },
-    { label: 'What-if Simulator', icon: '🧪', nav: '/admin/what-if-simulator' },
-    { label: 'Network Graph', icon: '🔗', nav: '/admin/network-graph' },
+    { label: 'Reports', icon: FileSpreadsheet, nav: '/admin/reports' },
+    { label: 'Model Evaluation', icon: Sliders, nav: '/admin/model-evaluation' },
+    { label: 'What-if Simulator', icon: FlaskConical, nav: '/admin/what-if-simulator' },
+    { label: 'Network Graph', icon: Network, nav: '/admin/network-graph' },
   ]},
   { label: 'DATA', items: [
-    { label: 'Suppliers', icon: '🏪', nav: '/admin/suppliers' },
-    { label: 'Customers', icon: '👥', nav: '/admin/customers' },
-    { label: 'Orders', icon: '🛒', nav: '/admin/orders' },
-    { label: 'Deliveries', icon: '🚚', nav: '/admin/deliveries' },
-    { label: 'Supplier Payouts', icon: '💰', nav: '/admin/supplier-payouts' },
+    { label: 'Suppliers', icon: Store, nav: '/admin/suppliers' },
+    { label: 'Customers', icon: Users, nav: '/admin/customers' },
+    { label: 'Orders', icon: ShoppingCart, nav: '/admin/orders' },
+    { label: 'Deliveries', icon: Truck, nav: '/admin/deliveries' },
+    { label: 'Supplier Payouts', icon: CreditCard, nav: '/admin/supplier-payouts' },
   ]},
 ];
 
@@ -81,7 +87,7 @@ export default function AdminDashboard() {
       }}>
         <div style={{ minWidth: 260, padding: '24px 20px 20px', borderBottom: '1px solid #e2e8f0' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <div style={{ width: 34, height: 34, borderRadius: 10, background: 'linear-gradient(135deg, #0a6e46, #10b981)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16, boxShadow: '0 2px 8px rgba(10,110,70,0.25)' }}>🐔</div>
+            <div style={{ width: 34, height: 34, borderRadius: 10, background: 'linear-gradient(135deg, #0a6e46, #10b981)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 8px rgba(10,110,70,0.25)' }}><Egg size={16} color="#fff" /></div>
             <div>
               <div style={{ fontSize: 16, fontWeight: 700, color: '#0f172a', whiteSpace: 'nowrap' }}>FaidaYetu</div>
               <div style={{ fontSize: 10, color: '#94a3b8', whiteSpace: 'nowrap' }}>Admin Console</div>
@@ -94,6 +100,7 @@ export default function AdminDashboard() {
               <div style={{ padding: '14px 12px 6px', fontSize: 10, fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.1em' }}>{section.label}</div>
               {section.items.map((item) => {
                 const active = isActive(item.nav);
+                const Icon = item.icon;
                 return (
                   <div key={item.label} onClick={() => { navigate(item.nav); if (isMobile) setSidebarOpen(false); }} style={{
                     display: 'flex', alignItems: 'center', gap: 9, padding: '8px 12px', borderRadius: 8, cursor: 'pointer',
@@ -102,7 +109,10 @@ export default function AdminDashboard() {
                     fontWeight: active ? 600 : 400, fontSize: 12.5, transition: 'all 0.15s', whiteSpace: 'nowrap',
                     border: active ? '1px solid #bbf7d0' : '1px solid transparent',
                   }}>
-                    <span style={{ fontSize: 14, opacity: active ? 1 : 0.6 }}>{item.icon}</span>{item.label}
+                    <span style={{ opacity: active ? 1 : 0.6, display: 'inline-flex', alignItems: 'center' }}>
+                      {typeof Icon === 'string' ? Icon : <Icon size={14} />}
+                    </span>
+                    {item.label}
                   </div>
                 );
               })}

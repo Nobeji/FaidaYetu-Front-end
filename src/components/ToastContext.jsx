@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useCallback } from 'react';
+import { CheckCircle, XCircle, Info } from 'lucide-react';
 
 const ToastContext = createContext(null);
 
@@ -9,6 +10,13 @@ export function ToastProvider({ children }) {
     setToasts(prev => [...prev, { id, message, type }]);
     setTimeout(() => { setToasts(prev => prev.filter(t => t.id !== id)); }, 3500);
   }, []);
+
+  const getIcon = (type) => {
+    const size = 16;
+    if (type === 'error') return <XCircle size={size} />;
+    if (type === 'success') return <CheckCircle size={size} />;
+    return <Info size={size} />;
+  };
 
   return (
     <ToastContext.Provider value={toast}>
@@ -24,7 +32,7 @@ export function ToastProvider({ children }) {
             border: `1px solid ${t.type === 'error' ? '#fecaca' : t.type === 'success' ? '#bbf7d0' : '#e2e8f0'}`,
             display: 'flex', alignItems: 'center', gap: 8, animation: 'slideIn 0.3s ease',
           }}>
-            <span>{t.type === 'error' ? '✕' : t.type === 'success' ? '✓' : 'ℹ'}</span>{t.message}
+            {getIcon(t.type)}{t.message}
           </div>
         ))}
       </div>

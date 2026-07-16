@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Mail, Phone, MessageCircle, CheckCircle } from 'lucide-react';
 
 export default function ContactSupport() {
   const [name, setName] = useState(''); const [email, setEmail] = useState('');
@@ -9,11 +10,17 @@ export default function ContactSupport() {
   useEffect(() => { const c = () => setIsMobile(window.innerWidth < 768); window.addEventListener('resize', c); return () => window.removeEventListener('resize', c); }, []);
   const handleSubmit = (e) => { e.preventDefault(); setSent(true); };
 
+  const contactMethods = [
+    { icon: <Mail size={28} color="#0a6e46" />, label: 'Email', val: 'support@faidayetu.co.tz' },
+    { icon: <Phone size={28} color="#0a6e46" />, label: 'Phone', val: 'Coming soon' },
+    { icon: <MessageCircle size={28} color="#0a6e46" />, label: 'Live Chat', val: 'Coming soon' },
+  ];
+
   return (
     <div style={{ minHeight: '100vh', background: '#f8fafc', color: '#1e293b' }}>
       <header style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 24px', height: 64, background: '#fff', borderBottom: '1px solid #e2e8f0', position: 'sticky', top: 0, zIndex: 10 }}>
         <span style={{ fontSize: 20, fontWeight: 800, color: '#0f172a', cursor: 'pointer' }} onClick={() => navigate('/')}>FaidaYetu</span>
-        <button onClick={() => navigate(-1)} style={{ padding: '8px 16px', borderRadius: 10, border: '1px solid #e2e8f0', background: '#fff', cursor: 'pointer', fontWeight: 600, fontSize: 14, color: '#475569' }}>← Back</button>
+        <button onClick={() => navigate(-1)} style={{ padding: '8px 16px', borderRadius: 10, border: '1px solid #e2e8f0', background: '#fff', cursor: 'pointer', fontWeight: 600, fontSize: 14, color: '#475569' }}>Back</button>
       </header>
       <main style={{ maxWidth: 700, margin: '0 auto', padding: 28 }}>
         <div style={{ textAlign: 'center', marginBottom: 28 }}>
@@ -21,9 +28,9 @@ export default function ContactSupport() {
           <p style={{ fontSize: 15, color: '#64748b' }}>We're here to help. Reach out to us anytime.</p>
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)', gap: 12, marginBottom: 28 }}>
-          {[{ icon: '📧', label: 'Email', val: 'support@faidayetu.co.tz' }, { icon: '📞', label: 'Phone', val: 'Coming soon' }, { icon: '💬', label: 'Live Chat', val: 'Coming soon' }].map(c => (
+          {contactMethods.map(c => (
             <div key={c.label} style={{ background: '#fff', borderRadius: 14, border: '1px solid #e2e8f0', padding: 20, textAlign: 'center', boxShadow: '0 1px 3px rgba(0,0,0,0.04)' }}>
-              <div style={{ fontSize: 28, marginBottom: 8 }}>{c.icon}</div>
+              <div style={{ marginBottom: 8 }}>{c.icon}</div>
               <div style={{ fontWeight: 700, fontSize: 14, color: '#0f172a' }}>{c.label}</div>
               <div style={{ fontSize: 13, color: '#64748b' }}>{c.val}</div>
             </div>
@@ -50,7 +57,7 @@ export default function ContactSupport() {
             </>
           ) : (
             <div style={{ textAlign: 'center', padding: 28 }}>
-              <div style={{ fontSize: 56, marginBottom: 12 }}>✅</div>
+              <CheckCircle size={56} color="#0a6e46" style={{ marginBottom: 12 }} />
               <h2 style={{ fontSize: 24, fontWeight: 700, color: '#0f172a', marginBottom: 8 }}>Message Sent!</h2>
               <p style={{ fontSize: 15, color: '#64748b', marginBottom: 20 }}>Our team will respond within 24 hours.</p>
               <button onClick={() => { setSent(false); setName(''); setEmail(''); setSubject(''); setMessage(''); }} style={{ padding: '12px 32px', borderRadius: 12, background: '#f1f5f9', border: '1px solid #e2e8f0', color: '#475569', cursor: 'pointer', fontWeight: 700, fontSize: 14 }}>Send Another Message</button>

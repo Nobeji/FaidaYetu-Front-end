@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { api } from '../../services/api';
+import { FlaskConical } from 'lucide-react';
 
 export default function WhatIfSimulator() {
   const [priceChange, setPriceChange] = useState(0);
@@ -16,7 +17,7 @@ export default function WhatIfSimulator() {
 
   return (
     <div className="fade-in">
-      <h1 style={{ fontSize: 28, fontWeight: 700, margin: '0 0 4px' }}>🧪 What-if Simulator</h1>
+      <h1 style={{ fontSize: 28, fontWeight: 700, margin: '0 0 4px' }}><span style={{display:'inline-flex',verticalAlign:'middle',marginRight:8}}><FlaskConical size={24} /></span> What-if Simulator</h1>
       <p style={{ fontSize: 15, color: '#666', marginBottom: 24 }}>Model the impact of price changes and promotions on revenue</p>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24, marginBottom: 24 }}>
         <div style={{ background: '#fff', borderRadius: 16, padding: 24, border: '1px solid #eaeaea' }}>

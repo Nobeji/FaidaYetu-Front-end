@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { api } from '../../services/api';
+import { FileText, BarChart3, Truck } from 'lucide-react';
 
 export default function AdminReports() {
   const [dashboard, setDashboard] = useState(null);
@@ -31,7 +32,7 @@ export default function AdminReports() {
 </style></head><body>
 <h1>FaidaYetu Platform Report</h1>
 <p style="color:#666">Generated: ${new Date().toLocaleString('en-TZ')} &nbsp;|&nbsp; <span class="badge">v1.0</span></p>
-<h2>📊 Key Metrics</h2>
+<h2>Key Metrics</h2>
 <table><tr><th>Metric</th><th>Value</th></tr>
 <tr><td>Total Users</td><td>${d.totalUsers || 0}</td></tr>
 <tr><td>Suppliers</td><td>${d.totalSuppliers || 0}</td></tr>
@@ -45,7 +46,7 @@ export default function AdminReports() {
 <tr><td>Supplier→Customer Ratio</td><td>${d.totalSuppliers && d.totalCustomers ? ((d.totalSuppliers / Math.max(d.totalCustomers, 1)) * 100).toFixed(1) + '%' : 'N/A'}</td></tr>
 <tr><td>Revenue per Order</td><td>${d.totalRevenueRaw && d.totalOrders ? (d.totalRevenueRaw / d.totalOrders).toLocaleString() + ' TZS' : 'N/A'}</td></tr>
 </table>
-<h2>🚚 Delivery Performance</h2>
+<h2>Delivery Performance</h2>
 <table><tr><th>Metric</th><th>Value</th></tr>
 <tr><td>Avg Delivery Time</td><td>${p.avgDeliveryTime || 'N/A'}</td></tr>
 <tr><td>Fastest Route</td><td>${p.fastestRoute || 'N/A'}</td></tr>
@@ -74,7 +75,7 @@ export default function AdminReports() {
   return (
     <div className="fade-in">
       <div style={{ marginBottom: 28 }}>
-        <h1 style={{ fontSize: 28, fontWeight: 700, color: '#111', margin: 0 }}>📋 Reports</h1>
+        <h1 style={{ fontSize: 28, fontWeight: 700, color: '#111', margin: 0 }}><span style={{display:'inline-flex',verticalAlign:'middle',marginRight:8}}><FileText size={24} /></span> Reports</h1>
         <p style={{ fontSize: 15, color: '#666', marginTop: 4 }}>Platform-wide performance and operational reports</p>
       </div>
 

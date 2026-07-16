@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { LayoutDashboard, Package, ShoppingCart, Bell, TrendingUp, TrendingDown, Settings, HelpCircle, MapPin, Star } from 'lucide-react';
 
 import DashboardShell from '../../components/DashboardShell';
 import StatusBadge from '../../components/StatusBadge';
@@ -8,14 +9,14 @@ import { useToast } from '../../components/ToastContext';
 import Spinner from '../../components/Spinner';
 
 const navItems = [
-  { icon: '📊', label: 'Dashboard', nav: '/supplier' },
-  { icon: '📦', label: 'Inventory', nav: '/supplier/inventory' },
-  { icon: '🛒', label: 'Orders', nav: '/supplier/orders' },
-  { icon: '🔔', label: 'Notifications', nav: '/supplier/notifications' },
-  { icon: '📈', label: 'Analytics', nav: '/supplier/analytics' },
-  { icon: '📉', label: 'Statistics', nav: '/supplier/statistics' },
-  { icon: '⚙️', label: 'Settings', nav: '/supplier/settings' },
-  { icon: '❓', label: 'Support', nav: '/supplier/support' },
+  { icon: LayoutDashboard, label: 'Dashboard', nav: '/supplier' },
+  { icon: Package, label: 'Inventory', nav: '/supplier/inventory' },
+  { icon: ShoppingCart, label: 'Orders', nav: '/supplier/orders' },
+  { icon: Bell, label: 'Notifications', nav: '/supplier/notifications' },
+  { icon: TrendingUp, label: 'Analytics', nav: '/supplier/analytics' },
+  { icon: TrendingDown, label: 'Statistics', nav: '/supplier/statistics' },
+  { icon: Settings, label: 'Settings', nav: '/supplier/settings' },
+  { icon: HelpCircle, label: 'Support', nav: '/supplier/support' },
 ];
 
 const modalOverlay = {
@@ -186,7 +187,7 @@ export default function SupplierOrders() {
               <div style={{ background: '#fafafa', borderRadius: 8, padding: 12 }}>
                   <div style={{ fontWeight: 600, marginBottom: 4 }}>Customer</div>
                   <div style={{ fontSize: 14, color: '#888' }}>{selectedOrder.customer_name}</div>
-                  {selectedOrder.delivery_address && <div style={{ fontSize: 14, color: '#888' }}>📍 {selectedOrder.delivery_address}</div>}
+                  {selectedOrder.delivery_address && <div style={{ fontSize: 14, color: '#888', display: 'flex', alignItems: 'center', gap: 6 }}><MapPin size={14} /> {selectedOrder.delivery_address}</div>}
                   {selectedOrder.delivery_area && <div style={{ fontSize: 13, color: '#888', marginTop: 4 }}>Area: {selectedOrder.delivery_area}</div>}
                   {selectedOrder.delivery_street && <div style={{ fontSize: 13, color: '#888' }}>Street: {selectedOrder.delivery_street}</div>}
                   {selectedOrder.delivery_city && <div style={{ fontSize: 13, color: '#888' }}>City: {selectedOrder.delivery_city}</div>}
@@ -243,8 +244,8 @@ export default function SupplierOrders() {
                   <div key={d.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: 12, borderRadius: 8, border: `1px solid ${'#eee'}`, background: '#fafafa' }}>
                     <div>
                       <div style={{ fontWeight: 600 }}>{d.profile?.user?.username || `Driver #${d.id}`}</div>
-                      <div style={{ fontSize: 12, color: '#888' }}>
-                        {d.vehicle_type} • ⭐ {d.rating || 'N/A'} • {d.total_routes || 0} routes
+                      <div style={{ fontSize: 12, color: '#888', display: 'flex', alignItems: 'center', gap: 4 }}>
+                        {d.vehicle_type} • <Star size={12} /> {d.rating || 'N/A'} • {d.total_routes || 0} routes
                       </div>
                     </div>
                     <button onClick={() => handleAssign(showAssign.id, d.id)} disabled={assigningDrivers[d.id]} style={{ padding: '8px 16px', borderRadius: 8, background: '#000', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: 13, display: 'flex', alignItems: 'center', gap: 4 }}>

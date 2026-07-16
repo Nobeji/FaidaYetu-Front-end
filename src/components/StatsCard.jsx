@@ -1,5 +1,17 @@
-export default function StatsCard({ label, value, sub, icon, error, tertiary, subIcon }) {
+import { DollarSign, ShoppingCart, BarChart3, TrendingUp, AlertTriangle, Package } from 'lucide-react';
+
+const iconMap = {
+  revenue: DollarSign,
+  orders: ShoppingCart,
+  analytics: BarChart3,
+  growth: TrendingUp,
+  alert: AlertTriangle,
+  product: Package,
+};
+
+export default function StatsCard({ label, value, sub, icon, error, tertiary, subIcon, iconComponent }) {
   const accent = error ? '#dc2626' : tertiary ? '#7c3aed' : '#0a6e46';
+  const IconComp = iconComponent || (typeof icon === 'string' ? null : icon);
   return (
     <div style={{
       background: '#fff', border: '1px solid #e2e8f0',
@@ -9,14 +21,14 @@ export default function StatsCard({ label, value, sub, icon, error, tertiary, su
       <div>
         <div style={{ fontSize: 12, fontWeight: 500, color: '#94a3b8', marginBottom: 4, letterSpacing: '0.02em' }}>{label}</div>
         <div style={{ fontSize: 28, fontWeight: 700, color: '#0f172a', lineHeight: 1.1 }}>{value}</div>
-        {sub && <div style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 12, fontWeight: 600, color: accent, marginTop: 6 }}>{subIcon && <span>{subIcon}</span>} {sub}</div>}
+        {sub && <div style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 12, fontWeight: 600, color: accent, marginTop: 6 }}>{subIcon && <span style={{ display: 'inline-flex' }}>{subIcon}</span>} {sub}</div>}
       </div>
-      {icon && (
+      {IconComp && (
         <div style={{
           width: 48, height: 48, borderRadius: 14, display: 'flex', alignItems: 'center', justifyContent: 'center',
           background: error ? '#fef2f2' : tertiary ? '#f5f3ff' : '#f0fdf4',
-          color: accent, fontSize: 22, flexShrink: 0,
-        }}>{icon}</div>
+          color: accent, flexShrink: 0,
+        }}><IconComp size={22} /></div>
       )}
     </div>
   );

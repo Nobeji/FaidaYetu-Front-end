@@ -1,28 +1,29 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { LayoutDashboard, Package, ShoppingCart, Bell, TrendingUp, TrendingDown, Settings, HelpCircle, DollarSign, XCircle, Truck, AlertTriangle } from 'lucide-react';
 import DashboardShell from '../../components/DashboardShell';
 import { api } from '../../services/api';
 import Spinner from '../../components/Spinner';
 
 const navItems = [
-  { icon: '📊', label: 'Dashboard', nav: '/supplier' },
-  { icon: '📦', label: 'Inventory', nav: '/supplier/inventory' },
-  { icon: '🛒', label: 'Orders', nav: '/supplier/orders' },
-  { icon: '🔔', label: 'Notifications', nav: '/supplier/notifications' },
-  { icon: '📈', label: 'Analytics', nav: '/supplier/analytics' },
-  { icon: '📉', label: 'Statistics', nav: '/supplier/statistics' },
-  { icon: '⚙️', label: 'Settings', nav: '/supplier/settings' },
-  { icon: '❓', label: 'Support', nav: '/supplier/support' },
+  { icon: LayoutDashboard, label: 'Dashboard', nav: '/supplier' },
+  { icon: Package, label: 'Inventory', nav: '/supplier/inventory' },
+  { icon: ShoppingCart, label: 'Orders', nav: '/supplier/orders' },
+  { icon: Bell, label: 'Notifications', nav: '/supplier/notifications' },
+  { icon: TrendingUp, label: 'Analytics', nav: '/supplier/analytics' },
+  { icon: TrendingDown, label: 'Statistics', nav: '/supplier/statistics' },
+  { icon: Settings, label: 'Settings', nav: '/supplier/settings' },
+  { icon: HelpCircle, label: 'Support', nav: '/supplier/support' },
 ];
 
 const getIcon = (type) => {
   switch (type) {
-    case 'payment_received': return '💰';
-    case 'new_order': return '📦';
-    case 'order_cancelled': return '❌';
-    case 'delivery_update': return '🚚';
-    case 'low_stock': return '⚠️';
-    default: return '🔔';
+    case 'payment_received': return DollarSign;
+    case 'new_order': return Package;
+    case 'order_cancelled': return XCircle;
+    case 'delivery_update': return Truck;
+    case 'low_stock': return AlertTriangle;
+    default: return Bell;
   }
 };
 
@@ -101,58 +102,61 @@ export default function SupplierNotifications() {
           </div>
         ) : notifications.length === 0 ? (
           <div style={{ textAlign: 'center', padding: 48, color: '#888' }}>
-            <div style={{ fontSize: 48, marginBottom: 12 }}>🔔</div>
+            <div style={{ marginBottom: 12 }}><Bell size={48} /></div>
             <div style={{ fontSize: 16, fontWeight: 600, marginBottom: 4 }}>Hakuna arifa bado</div>
             <div style={{ fontSize: 13, color: '#aaa' }}>Utapokea arifa za malipo na maagizo mapya hapa.</div>
           </div>
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-            {notifications.map(n => (
-              <div key={n.id} style={{
-                display: 'flex', gap: 12, padding: '14px 16px',
-                background: n.is_read ? '#fff' : '#f8fbff',
-                border: `1px solid ${n.is_read ? '#eee' : '#cce5ff'}`,
-                borderRadius: 10, alignItems: 'flex-start',
-              }}>
-                <span style={{ fontSize: 24, marginTop: 2, flexShrink: 0 }}>{getIcon(n.notification_type)}</span>
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ fontWeight: n.is_read ? 500 : 700, fontSize: 14, color: '#000', marginBottom: 4 }}>
-                    {n.title}
+            {notifications.map(n => {
+              const IconComponent = getIcon(n.notification_type);
+              return (
+                <div key={n.id} style={{
+                  display: 'flex', gap: 12, padding: '14px 16px',
+                  background: n.is_read ? '#fff' : '#f8fbff',
+                  border: `1px solid ${n.is_read ? '#eee' : '#cce5ff'}`,
+                  borderRadius: 10, alignItems: 'flex-start',
+                }}>
+                  <span style={{ marginTop: 2, flexShrink: 0 }}><IconComponent size={24} /></span>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ fontWeight: n.is_read ? 500 : 700, fontSize: 14, color: '#000', marginBottom: 4 }}>
+                      {n.title}
+                    </div>
+                    <div style={{ fontSize: 13, color: '#555', lineHeight: 1.4, marginBottom: 6 }}>
+                      {n.message}
+                    </div>
+                    <div style={{ display: 'flex', gap: 12, alignItems: 'center', fontSize: 12, color: '#aaa' }}>
+                      <span>{formatTime(n.created_at)}</span>
+                      {n.sms_sent && <span style={{ color: '#2e7d32' }}>✓ SMS imetumwa</span>}
+                      {!n.sms_sent && n.notification_type === 'payment_received' && (
+                        <span style={{ color: '#f57f17' }}>ℹ SMS haikufika (hakikisha namba ya simu imesajiliwa)</span>
+                      )}
+                    </div>
                   </div>
-                  <div style={{ fontSize: 13, color: '#555', lineHeight: 1.4, marginBottom: 6 }}>
-                    {n.message}
-                  </div>
-                  <div style={{ display: 'flex', gap: 12, alignItems: 'center', fontSize: 12, color: '#aaa' }}>
-                    <span>{formatTime(n.created_at)}</span>
-                    {n.sms_sent && <span style={{ color: '#2e7d32' }}>✓ SMS imetumwa</span>}
-                    {!n.sms_sent && n.notification_type === 'payment_received' && (
-                      <span style={{ color: '#f57f17' }}>ℹ SMS haikufika (hakikisha namba ya simu imesajiliwa)</span>
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, flexShrink: 0 }}>
+                    {!n.is_read && (
+                      <button onClick={() => handleMarkRead(n.id)} disabled={marking === n.id} style={{
+                        padding: '4px 10px', borderRadius: 6, border: '1px solid #1976d2',
+                        background: 'transparent', color: '#1976d2', cursor: 'pointer',
+                        fontWeight: 600, fontSize: 11, display: 'flex', alignItems: 'center', gap: 4,
+                      }}>
+                        {marking === n.id && <Spinner size={10} color="#1976d2" />}
+                        Soma
+                      </button>
+                    )}
+                    {n.order && (
+                      <button onClick={() => navigate('/supplier/orders')} style={{
+                        padding: '4px 10px', borderRadius: 6, border: 'none',
+                        background: '#f5f5f5', color: '#555', cursor: 'pointer',
+                        fontWeight: 500, fontSize: 11,
+                      }}>
+                        Order #{n.order}
+                      </button>
                     )}
                   </div>
                 </div>
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, flexShrink: 0 }}>
-                  {!n.is_read && (
-                    <button onClick={() => handleMarkRead(n.id)} disabled={marking === n.id} style={{
-                      padding: '4px 10px', borderRadius: 6, border: '1px solid #1976d2',
-                      background: 'transparent', color: '#1976d2', cursor: 'pointer',
-                      fontWeight: 600, fontSize: 11, display: 'flex', alignItems: 'center', gap: 4,
-                    }}>
-                      {marking === n.id && <Spinner size={10} color="#1976d2" />}
-                      Soma
-                    </button>
-                  )}
-                  {n.order && (
-                    <button onClick={() => navigate('/supplier/orders')} style={{
-                      padding: '4px 10px', borderRadius: 6, border: 'none',
-                      background: '#f5f5f5', color: '#555', cursor: 'pointer',
-                      fontWeight: 500, fontSize: 11,
-                    }}>
-                      Order #{n.order}
-                    </button>
-                  )}
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
       </div>

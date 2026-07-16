@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Home, ShoppingCart, ClipboardList, Bell, User, FileText, Clipboard, Truck, Search, MapPin } from 'lucide-react';
 import DashboardShell from '../components/DashboardShell';
 import SupplierCard from '../components/SupplierCard';
 import MapComponent from '../components/MapComponent';
@@ -9,13 +10,13 @@ import { useToast } from '../components/ToastContext';
 import Spinner from '../components/Spinner';
 
 const navItems = [
-  { icon: '🏠', label: 'Explore', nav: '/customer' },
-  { icon: '🛒', label: 'Marketplace', nav: '/customer/marketplace' },
-  { icon: '📋', label: 'My Orders', nav: '/customer/orders' },
-  { icon: '🔔', label: 'Notifications', nav: '/customer/notifications' },
-  { icon: '👤', label: 'Profile', nav: '/customer/profile' },
-  { icon: '📝', label: 'TAM Survey', nav: '/customer/tam-survey' },
-  { icon: '📋', label: 'SUS Survey', nav: '/customer/sus-survey' },
+  { icon: Home, label: 'Explore', nav: '/customer' },
+  { icon: ShoppingCart, label: 'Marketplace', nav: '/customer/marketplace' },
+  { icon: ClipboardList, label: 'My Orders', nav: '/customer/orders' },
+  { icon: Bell, label: 'Notifications', nav: '/customer/notifications' },
+  { icon: User, label: 'Profile', nav: '/customer/profile' },
+  { icon: FileText, label: 'TAM Survey', nav: '/customer/tam-survey' },
+  { icon: Clipboard, label: 'SUS Survey', nav: '/customer/sus-survey' },
 ];
 
 export default function CustomerDashboard() {
@@ -224,7 +225,7 @@ export default function CustomerDashboard() {
         {activeOrder && (
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 20px', background: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: 10, marginBottom: 20, flexWrap: 'wrap', gap: 8 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <span>🚚</span>
+              <Truck size={16} color="#0a6e46" />
               <span style={{ fontSize: 13, color: '#0f172a' }}>Active Order: <strong>In transit</strong></span>
             </div>
             <button onClick={() => navigate('/customer/orders')} style={{ fontSize: 12, fontWeight: 600, padding: '6px 16px', border: '1px solid #e2e8f0', borderRadius: 20, background: '#fff', color: '#475569', cursor: 'pointer' }}>Track Live</button>
@@ -233,7 +234,7 @@ export default function CustomerDashboard() {
 
         <div style={{ display: 'flex', gap: 12, marginBottom: 16, flexDirection: isMobile ? 'column' : 'row' }}>
           <div style={{ position: 'relative', flex: 1 }}>
-            <span style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: '#94a3b8', fontSize: 14 }}>🔍</span>
+            <span style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }}><Search size={14} /></span>
             <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search supplier..." style={{ width: '100%', padding: '10px 14px 10px 38px', borderRadius: 10, border: '1px solid #e2e8f0', background: '#fff', boxSizing: 'border-box', outline: 'none', fontSize: 13, color: '#0f172a' }} />
           </div>
           <select value={radiusFilter} onChange={e => setRadiusFilter(Number(e.target.value))} style={{ padding: '10px 14px', borderRadius: 10, border: '1px solid #e2e8f0', background: '#fff', fontSize: 13, fontWeight: 500, color: '#0f172a', outline: 'none' }}>
@@ -268,7 +269,7 @@ export default function CustomerDashboard() {
             <>
               <div style={{ position: 'absolute', top: 8, right: 8, zIndex: 999 }}>
                 <button onClick={() => { setEditCoords({ lat: userLocation[0], lng: userLocation[1] }); setEditLocation(true); }} style={{ padding: '6px 12px', borderRadius: 8, border: '1px solid #e2e8f0', background: '#fff', cursor: 'pointer', fontSize: 11, fontWeight: 600, color: '#475569', boxShadow: '0 2px 6px rgba(0,0,0,0.1)' }}>
-                  📍 {isMobile ? 'Update' : 'Update My Location'}
+                  <MapPin size={12} /> {isMobile ? 'Update' : 'Update My Location'}
                 </button>
               </div>
               <MapComponent height={isMobile ? 240 : 340} userLocation={userLocation} suppliers={filtered} radiusKm={radiusFilter} driverLocation={driverLocation} />

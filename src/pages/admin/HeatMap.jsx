@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { api } from '../../services/api';
+import { Flame } from 'lucide-react';
 
 export default function HeatMap() {
   const [data, setData] = useState(null);
@@ -93,7 +94,7 @@ export default function HeatMap() {
   return (
     <div className="fade-in">
       <div style={{ marginBottom: 28 }}>
-        <h1 style={{ fontSize: 28, fontWeight: 700, color: '#111', margin: 0 }}>🔥 Heat Map</h1>
+        <h1 style={{ fontSize: 28, fontWeight: 700, color: '#111', margin: 0 }}><span style={{display:'inline-flex',verticalAlign:'middle',marginRight:8}}><Flame size={24} /></span> Heat Map</h1>
         <p style={{ fontSize: 15, color: '#666', marginTop: 4 }}>Geographic order concentration across Dar es Salaam</p>
       </div>
 

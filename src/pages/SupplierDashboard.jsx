@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { LayoutDashboard, Package, ShoppingCart, Bell, TrendingUp, TrendingDown, Settings, HelpCircle, FileText, ClipboardList, TrendingUp as TrendingUpIcon, DollarSign, AlertTriangle, MapPin, Store } from 'lucide-react';
 import DashboardShell from '../components/DashboardShell';
 import StatsCard from '../components/StatsCard';
 import StatusBadge from '../components/StatusBadge';
@@ -10,16 +11,16 @@ import { api } from '../services/api';
 import Spinner from '../components/Spinner';
 
 const navItems = [
-  { icon: '📊', label: 'Dashboard', nav: '/supplier' },
-  { icon: '📦', label: 'Inventory', nav: '/supplier/inventory' },
-  { icon: '🛒', label: 'Orders', nav: '/supplier/orders' },
-  { icon: '🔔', label: 'Notifications', nav: '/supplier/notifications' },
-  { icon: '📈', label: 'Analytics', nav: '/supplier/analytics' },
-  { icon: '📉', label: 'Statistics', nav: '/supplier/statistics' },
-  { icon: '⚙️', label: 'Settings', nav: '/supplier/settings' },
-  { icon: '❓', label: 'Support', nav: '/supplier/support' },
-  { icon: '📝', label: 'TAM Survey', nav: '/supplier/tam-survey' },
-  { icon: '📋', label: 'SUS Survey', nav: '/supplier/sus-survey' },
+  { icon: LayoutDashboard, label: 'Dashboard', nav: '/supplier' },
+  { icon: Package, label: 'Inventory', nav: '/supplier/inventory' },
+  { icon: ShoppingCart, label: 'Orders', nav: '/supplier/orders' },
+  { icon: Bell, label: 'Notifications', nav: '/supplier/notifications' },
+  { icon: TrendingUp, label: 'Analytics', nav: '/supplier/analytics' },
+  { icon: TrendingDown, label: 'Statistics', nav: '/supplier/statistics' },
+  { icon: Settings, label: 'Settings', nav: '/supplier/settings' },
+  { icon: HelpCircle, label: 'Support', nav: '/supplier/support' },
+  { icon: FileText, label: 'TAM Survey', nav: '/supplier/tam-survey' },
+  { icon: ClipboardList, label: 'SUS Survey', nav: '/supplier/sus-survey' },
 ];
 
 export default function SupplierDashboard() {
@@ -95,13 +96,13 @@ export default function SupplierDashboard() {
         ) : (
           <>
             <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)', gap: 16, marginBottom: 24 }}>
-              <StatsCard label="Total Orders" value={data.stats.orders} sub="this month" subIcon="📈" icon="🛍️" />
-              <StatsCard label="Revenue (TZS)" value={data.stats.revenue} sub="Estimated Earnings" subIcon="💰" icon="💳" tertiary />
-              <StatsCard label="Low Stock Alerts" value={data.stats.lowStock} sub="Immediate Action Required" subIcon="⚠️" icon="📦" error />
+              <StatsCard label="Total Orders" value={data.stats.orders} sub="this month" iconComponent={ShoppingCart} />
+              <StatsCard label="Revenue (TZS)" value={data.stats.revenue} sub="Estimated Earnings" iconComponent={DollarSign} tertiary />
+              <StatsCard label="Low Stock Alerts" value={data.stats.lowStock} sub="Immediate Action Required" iconComponent={AlertTriangle} error />
             </div>
 
             <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '14px 20px', background: '#fef9c3', border: '1px solid #fde68a', borderRadius: 10, marginBottom: 24, flexWrap: 'wrap' }}>
-              <span style={{ fontSize: 20 }}>🔔</span>
+              <Bell size={20} color="#92400e" />
               <div style={{ flex: 1 }}>
                 <div style={{ fontSize: 13, fontWeight: 600, color: '#92400e' }}>{data.stats.lowStock} Pending Deliveries Require Confirmation</div>
                 <div style={{ fontSize: 12, color: '#a16207' }}>Logistics partners are waiting for "Ready for Pickup" status update.</div>
@@ -111,7 +112,7 @@ export default function SupplierDashboard() {
 
             <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: 12, padding: 16, marginBottom: 20 }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
-                <h3 style={{ fontSize: 14, fontWeight: 600, color: '#0f172a', margin: 0 }}>📍 Your Business Location</h3>
+                <h3 style={{ fontSize: 14, fontWeight: 600, color: '#0f172a', margin: 0, display: 'flex', alignItems: 'center', gap: 6 }}><MapPin size={14} /> Your Business Location</h3>
                 {!editLocation && (
                   <button onClick={() => { setOriginalCoords({ lat: profile.lat || -6.7924, lng: profile.lng || 39.2083 }); setLocationCoords({ lat: profile.lat || -6.7924, lng: profile.lng || 39.2083 }); setEditLocation(true); }} style={{ fontSize: 12, fontWeight: 600, color: '#0a6e46', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>Update</button>
                 )}
@@ -134,7 +135,7 @@ export default function SupplierDashboard() {
 
             <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: 12, padding: 16, marginBottom: 20 }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
-                <h3 style={{ fontSize: 14, fontWeight: 600, color: '#0f172a', margin: 0 }}>📍 Customer Delivery Locations</h3>
+                <h3 style={{ fontSize: 14, fontWeight: 600, color: '#0f172a', margin: 0, display: 'flex', alignItems: 'center', gap: 6 }}><MapPin size={14} /> Customer Delivery Locations</h3>
               </div>
               <MapComponent height={280} deliveries={data.orders.filter(o => o.delivery_lat && o.delivery_lng)} userLocation={[locationCoords.lat, locationCoords.lng]} />
               {data.orders.filter(o => o.delivery_lat && o.delivery_lng).length === 0 && (
@@ -184,7 +185,7 @@ export default function SupplierDashboard() {
                 </div>
 
                 <div style={{ background: '#f0fdf4', padding: '20px', borderRadius: 12, border: '1px solid #bbf7d0' }}>
-                  <div style={{ fontSize: 28, marginBottom: 8 }}>🏪</div>
+                  <div style={{ marginBottom: 8 }}><Store size={28} color="#0a6e46" /></div>
                   <h4 style={{ fontSize: 15, fontWeight: 700, color: '#0f172a', margin: '0 0 4px' }}>Expand Your Marketplace Presence</h4>
                   <p style={{ fontSize: 12, color: '#64748b', margin: '0 0 12px' }}>Add more products to reach more customers across Dar es Salaam.</p>
                   <div onClick={() => navigate('/supplier/settings')} style={{ display: 'flex', alignItems: 'center', gap: 4, fontWeight: 600, color: '#0a6e46', fontSize: 13, cursor: 'pointer' }}>

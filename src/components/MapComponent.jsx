@@ -1,5 +1,6 @@
+import { Map, Satellite } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import Map, { Marker, Popup, NavigationControl, useMap, Source, Layer } from 'react-map-gl/maplibre';
+import MapView, { Marker, Popup, NavigationControl, useMap, Source, Layer } from 'react-map-gl/maplibre';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import maplibregl from 'maplibre-gl';
 
@@ -98,12 +99,12 @@ export default function MapComponent({
         padding: '6px 12px', borderRadius: 8, border: '1px solid #ccc',
         background: 'rgba(255,255,255,0.95)', cursor: 'pointer',
         fontSize: 12, fontWeight: 600, boxShadow: '0 1px 4px rgba(0,0,0,0.15)',
-        display: 'flex', alignItems: 'center', gap: 6,
+        display: 'flex', alignItems: 'center', gap: 6, color: '#475569',
       }}>
-        <span>{satellite ? '🗺️' : '🛰️'}</span>
+        {satellite ? <Map size={14} /> : <Satellite size={14} />}
         {satellite ? 'Street' : 'Satellite'}
       </button>
-      <Map
+      <MapView
         initialViewState={{ latitude: center[0], longitude: center[1], zoom }}
         mapStyle={satellite ? satelliteStyle : streetStyle}
         style={{ width: '100%', height: '100%' }}
@@ -161,7 +162,7 @@ export default function MapComponent({
               {selected === `s-${s.id}` && (
                 <Popup longitude={lng} latitude={lat} anchor="top" onClose={() => setSelected(null)}>
                   <div style={{ fontSize: 13, fontWeight: 600 }}>{s.business_name}</div>
-                  {s.rating ? <div style={{ fontSize: 12, color: '#666' }}>⭐ {s.rating} {s.product_count ? `• ${s.product_count} products` : ''}</div> : null}
+                  {s.rating ? <div style={{ fontSize: 12, color: '#666' }}>Rating: {s.rating} {s.product_count ? `\u2022 ${s.product_count} products` : ''}</div> : null}
                 </Popup>
               )}
             </div>
@@ -199,7 +200,7 @@ export default function MapComponent({
             </div>
           );
         })}
-      </Map>
+      </MapView>
     </div>
   );
 }

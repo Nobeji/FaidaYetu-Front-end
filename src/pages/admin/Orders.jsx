@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { api } from '../../services/api';
+import { ShoppingCart } from 'lucide-react';
 
 const statusColors = {
   new: { bg: '#f5f5f5', text: '#111' },
@@ -23,7 +24,7 @@ export default function AdminOrders() {
   return (
     <div className="fade-in">
       <div style={{ marginBottom: 28 }}>
-        <h1 style={{ fontSize: 28, fontWeight: 700, color: '#111', margin: 0 }}>🛒 Orders</h1>
+        <h1 style={{ fontSize: 28, fontWeight: 700, color: '#111', margin: 0 }}><span style={{display:'inline-flex',verticalAlign:'middle',marginRight:8}}><ShoppingCart size={24} /></span> Orders</h1>
         <p style={{ fontSize: 15, color: '#666', marginTop: 4 }}>{orders.length} total orders</p>
       </div>
       <div style={{ background: '#fff', borderRadius: 16, border: '1px solid #eaeaea', overflow: 'hidden', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { api } from '../../services/api';
+import { Network } from 'lucide-react';
 
 export default function NetworkGraph() {
   const [data, setData] = useState(null);
@@ -16,7 +17,7 @@ export default function NetworkGraph() {
 
   return (
     <div className="fade-in">
-      <h1 style={{ fontSize: 28, fontWeight: 700, margin: '0 0 4px' }}>🔗 Network Graph</h1>
+      <h1 style={{ fontSize: 28, fontWeight: 700, margin: '0 0 4px' }}><span style={{display:'inline-flex',verticalAlign:'middle',marginRight:8}}><Network size={24} /></span> Network Graph</h1>
       <p style={{ fontSize: 15, color: '#666', marginBottom: 24 }}>Supplier-customer relationship network</p>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 24 }}>
         <div style={{ background: '#fff', borderRadius: 12, padding: 16, border: '1px solid #eaeaea' }}>

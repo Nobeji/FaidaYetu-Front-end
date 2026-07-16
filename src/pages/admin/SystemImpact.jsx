@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { api } from '../../services/api';
+import { Timer, MapPin, BarChart3 } from 'lucide-react';
 
 export default function SystemImpact() {
   const [data, setData] = useState(null);
@@ -106,9 +107,9 @@ export default function SystemImpact() {
         </div>
         <div style={{ marginTop: 12, display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12 }}>
           {[
-            { icon: '⏱️', title: 'Time Savings', desc: 'Automated order processing reduces manual coordination time by up to 80%' },
-            { icon: '📍', title: 'Geolocation', desc: 'GPS-based matching connects customers to nearest suppliers within optimal radius' },
-            { icon: '📊', title: 'Data Analytics', desc: 'Predictive models enable proactive inventory management and demand forecasting' },
+            { icon: <Timer size={20} />, title: 'Time Savings', desc: 'Automated order processing reduces manual coordination time by up to 80%' },
+            { icon: <MapPin size={20} />, title: 'Geolocation', desc: 'GPS-based matching connects customers to nearest suppliers within optimal radius' },
+            { icon: <BarChart3 size={20} />, title: 'Data Analytics', desc: 'Predictive models enable proactive inventory management and demand forecasting' },
           ].map((item, i) => (
             <div key={i} style={{ background: '#fff', borderRadius: 8, padding: 16, border: '1px solid #eee' }}>
               <div style={{ fontSize: 20, marginBottom: 8 }}>{item.icon}</div>

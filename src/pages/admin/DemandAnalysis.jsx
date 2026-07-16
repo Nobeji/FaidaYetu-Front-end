@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { api } from '../../services/api';
+import AnalyticsChart from '../../components/AnalyticsChart';
 
 export default function DemandAnalysis() {
   const [data, setData] = useState(null);
@@ -21,8 +22,72 @@ export default function DemandAnalysis() {
   );
   if (!data) return <div style={{ padding: 48, textAlign: 'center' }}>No data available</div>;
 
-  const maxDay = Math.max(...(data.ordersPerDay || []).map(d => d.count), 1);
-  const maxWard = Math.max(...(data.ordersPerWard || []).map(w => w.count), 1);
+  // Prepare Daily Orders chart data
+  const ordersPerDay = data.ordersPerDay || [];
+  const dailyChartData = {
+    labels: ordersPerDay.map(d => d.date ? new Date(d.date).toLocaleDateString('en', { weekday: 'short' }) : ''),
+    datasets: [{
+      label: 'Orders',
+      data: ordersPerDay.map(d => d.count),
+      backgroundColor: '#0a6e46',
+      borderRadius: 4,
+      barThickness: 18,
+    }]
+  };
+
+  const dailyChartOptions = {
+    scales: {
+      x: { grid: { display: false } },
+      y: { min: 0 }
+    }
+  };
+
+  // Prepare Wards horizontal bar chart data
+  const ordersPerWard = data.ordersPerWard || [];
+  const wardChartData = {
+    labels: ordersPerWard.map(w => w.ward),
+    datasets: [{
+      label: 'Orders',
+      data: ordersPerWard.map(w => w.count),
+      backgroundColor: '#0f172a',
+      borderRadius: 4,
+      barThickness: 14,
+    }]
+  };
+
+  const wardChartOptions = {
+    indexAxis: 'y',
+    plugins: {
+      legend: { display: false }
+    },
+    scales: {
+      x: { grid: { display: false }, min: 0 },
+      y: { grid: { display: false } }
+    }
+  };
+
+  // Prepare Product Categories doughnut chart data
+  const productCategories = data.productCategories || [];
+  const categoryChartData = {
+    labels: productCategories.map(c => c.category),
+    datasets: [{
+      data: productCategories.map(c => c.total),
+      backgroundColor: ['#0a6e46', '#10b981', '#334155', '#64748b', '#cbd5e1'],
+      borderWidth: 1,
+    }]
+  };
+
+  const categoryChartOptions = {
+    plugins: {
+      legend: {
+        display: true,
+        position: 'right',
+        labels: {
+          font: { family: 'Inter, sans-serif', size: 11 }
+        }
+      }
+    }
+  };
 
   return (
     <div className="fade-in">
@@ -48,38 +113,15 @@ export default function DemandAnalysis() {
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 28, marginBottom: 28 }}>
         <div style={{ background: '#fff', borderRadius: 16, padding: 20, border: '1px solid #eaeaea', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
           <h3 style={{ fontSize: 16, fontWeight: 700, color: '#111', marginBottom: 20 }}>Orders Per Day (Last 7 Days)</h3>
-          <div style={{ display: 'flex', alignItems: 'flex-end', gap: 8, height: 160 }}>
-            {(data.ordersPerDay || []).map((d, i) => (
-              <div key={i} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
-                <span style={{ fontSize: 11, fontWeight: 700, color: '#111' }}>{d.count}</span>
-                <div style={{
-                  width: '100%', maxWidth: 48, height: `${(d.count / maxDay) * 130}px`,
-                  background: 'linear-gradient(180deg, #111, #555)',
-                  borderRadius: '8px 8px 4px 4px', transition: 'height 0.5s',
-                  minHeight: 4, boxShadow: '0 2px 4px rgba(10,110,70,0.2)',
-                }} />
-                <span style={{ fontSize: 10, color: '#666', transform: 'rotate(-45deg)', whiteSpace: 'nowrap' }}>
-                  {d.date ? new Date(d.date).toLocaleDateString('en', { weekday: 'short' }) : ''}
-                </span>
-              </div>
-            ))}
+          <div style={{ height: 180 }}>
+            <AnalyticsChart type="bar" data={dailyChartData} options={dailyChartOptions} height={180} />
           </div>
         </div>
 
         <div style={{ background: '#fff', borderRadius: 16, padding: 20, border: '1px solid #eaeaea', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
           <h3 style={{ fontSize: 16, fontWeight: 700, color: '#111', marginBottom: 20 }}>Most Ordered Areas (Top 5 Wards)</h3>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-            {(data.ordersPerWard || []).map((w, i) => (
-              <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                <span style={{ width: 20, fontSize: 13, fontWeight: 700, color: '#666' }}>#{i + 1}</span>
-                <span style={{ width: 100, fontSize: 14, fontWeight: 600, color: '#1a1a1a' }}>{w.ward}</span>
-                <div style={{ flex: 1, height: 24, background: '#f5f5f5', borderRadius: 12, overflow: 'hidden' }}>
-                  <div style={{ width: `${(w.count / maxWard) * 100}%`, height: '100%', background: 'linear-gradient(90deg, #111, #555)', borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'flex-end', paddingRight: 8, minWidth: 40 }}>
-                    <span style={{ fontSize: 11, fontWeight: 700, color: '#fff' }}>{w.count}</span>
-                  </div>
-                </div>
-              </div>
-            ))}
+          <div style={{ height: 180 }}>
+            <AnalyticsChart type="bar" data={wardChartData} options={wardChartOptions} height={180} />
           </div>
         </div>
       </div>
@@ -97,20 +139,8 @@ export default function DemandAnalysis() {
 
         <div style={{ background: '#fff', borderRadius: 16, padding: 20, border: '1px solid #eaeaea', boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
           <h3 style={{ fontSize: 16, fontWeight: 700, color: '#111', marginBottom: 20 }}>Product Categories</h3>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-            {(data.productCategories || []).map((c, i) => {
-              const maxCat = Math.max(...(data.productCategories || []).map(x => x.total), 1);
-              return (
-                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                  <span style={{ width: 90, fontSize: 14, fontWeight: 600, color: '#1a1a1a', textTransform: 'capitalize' }}>{c.category}</span>
-                  <div style={{ flex: 1, height: 20, background: '#f5f5f5', borderRadius: 10, overflow: 'hidden' }}>
-                    <div style={{ width: `${(c.total / maxCat) * 100}%`, height: '100%', background: 'linear-gradient(90deg, #40916c, #555)', borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'flex-end', paddingRight: 8, minWidth: 30 }}>
-                      <span style={{ fontSize: 10, fontWeight: 700, color: '#fff' }}>{c.total}</span>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
+          <div style={{ height: 180 }}>
+            <AnalyticsChart type="doughnut" data={categoryChartData} options={categoryChartOptions} height={180} />
           </div>
         </div>
       </div>

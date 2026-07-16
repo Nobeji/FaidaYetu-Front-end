@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { api } from '../../services/api';
+import AnalyticsChart from '../../components/AnalyticsChart';
 
 export default function EnhancedPerformance() {
   const [data, setData] = useState(null);
@@ -15,6 +16,27 @@ export default function EnhancedPerformance() {
   if (!data) return <div style={{ padding: 40, textAlign: 'center', color: '#d32f2f' }}>Failed to load data</div>;
 
   const { summary, daily, deliveries } = data;
+
+  // Prepare trends chart data
+  const trendChartData = {
+    labels: (daily || []).map(d => d.date ? d.date.slice(5) : ''),
+    datasets: [{
+      label: 'Avg Delivery Time (mins)',
+      data: (daily || []).map(d => d.avg_time),
+      borderColor: '#0a6e46',
+      backgroundColor: 'rgba(10, 110, 70, 0.1)',
+      tension: 0.2,
+      fill: true,
+      pointRadius: 3,
+    }]
+  };
+
+  const trendChartOptions = {
+    scales: {
+      x: { grid: { display: false } },
+      y: { min: 0 }
+    }
+  };
 
   return (
     <div>
@@ -48,20 +70,8 @@ export default function EnhancedPerformance() {
       {daily && daily.length > 0 && (
         <div style={{ background: '#fff', borderRadius: 8, padding: 20, border: '1px solid #eee', marginBottom: 24 }}>
           <h3 style={{ fontSize: 14, fontWeight: 600, marginBottom: 16 }}>Daily Delivery Trends</h3>
-          <div style={{ overflowX: 'auto' }}>
-            <div style={{ display: 'flex', gap: 4, alignItems: 'flex-end', height: 200, padding: '0 8px' }}>
-              {daily.map((d, i) => {
-                const maxTime = Math.max(...daily.map(x => x.avg_time), 1);
-                const h = (d.avg_time / maxTime) * 160;
-                return (
-                  <div key={i} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', minWidth: 30, flex: 1 }}>
-                    <div style={{ fontSize: 10, color: '#888', marginBottom: 2 }}>{d.avg_time}m</div>
-                    <div style={{ width: '100%', height: h, background: `linear-gradient(180deg, #0a6e46, #34d058)`, borderRadius: '4px 4px 0 0', minHeight: 4 }} />
-                    <div style={{ fontSize: 9, color: '#888', marginTop: 4, transform: 'rotate(-45deg)', whiteSpace: 'nowrap' }}>{d.date?.slice(5)}</div>
-                  </div>
-                );
-              })}
-            </div>
+          <div style={{ height: 200 }}>
+            <AnalyticsChart type="line" data={trendChartData} options={trendChartOptions} height={200} />
           </div>
         </div>
       )}

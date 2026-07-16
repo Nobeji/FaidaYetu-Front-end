@@ -2,13 +2,14 @@ import { useState, useEffect } from 'react';
 import DashboardShell from '../../components/DashboardShell';
 import { api } from '../../services/api';
 import { useToast } from '../../components/ToastContext';
+import { Truck, Route, Coins, Settings, HelpCircle } from 'lucide-react';
 
 const navItems = [
-  { icon: '🚚', label: 'Active Tasks', nav: '/delivery' },
-  { icon: '🛣️', label: 'Route History', nav: '/delivery/route-history' },
-  { icon: '💰', label: 'Earnings', nav: '/delivery/earnings' },
-  { icon: '⚙️', label: 'Settings', nav: '/delivery/settings' },
-  { icon: '❓', label: 'Support', nav: '/delivery/support' },
+  { icon: Truck, label: 'Active Tasks', nav: '/delivery' },
+  { icon: Route, label: 'Route History', nav: '/delivery/route-history' },
+  { icon: Coins, label: 'Earnings', nav: '/delivery/earnings' },
+  { icon: Settings, label: 'Settings', nav: '/delivery/settings' },
+  { icon: HelpCircle, label: 'Support', nav: '/delivery/support' },
 ];
 
 const fieldMeta = {

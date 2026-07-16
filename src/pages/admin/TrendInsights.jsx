@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { api } from '../../services/api';
+import { Lightbulb } from 'lucide-react';
 
 export default function TrendInsights() {
   const [data, setData] = useState(null);
@@ -13,7 +14,7 @@ export default function TrendInsights() {
 
   return (
     <div className="fade-in">
-      <h1 style={{ fontSize: 28, fontWeight: 700, margin: '0 0 4px' }}>💡 Trend Insights</h1>
+      <h1 style={{ fontSize: 28, fontWeight: 700, margin: '0 0 4px' }}><span style={{display:'inline-flex',verticalAlign:'middle',marginRight:8}}><Lightbulb size={24} /></span> Trend Insights</h1>
       <p style={{ fontSize: 15, color: '#666', marginBottom: 24 }}>Automated intelligence from platform data</p>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 16 }}>
         {data?.insights?.map((insight, i) => (

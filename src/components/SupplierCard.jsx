@@ -1,3 +1,5 @@
+import { Star, MapPin } from 'lucide-react';
+
 export default function SupplierCard({ name, rating, distance, price, img }) {
   return (
     <div style={{
@@ -11,12 +13,14 @@ export default function SupplierCard({ name, rating, distance, price, img }) {
     >
       <div style={{ height: 100, position: 'relative' }}>
         <img src={img} alt={name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-        <div style={{ position: 'absolute', top: 8, right: 8, background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(8px)', padding: '2px 10px', borderRadius: 999, fontSize: 12, fontWeight: 700, color: '#0f172a', border: '1px solid #e2e8f0', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>⭐ {rating}</div>
+        <div style={{ position: 'absolute', top: 8, right: 8, background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(8px)', padding: '2px 10px', borderRadius: 999, fontSize: 12, fontWeight: 700, color: '#0f172a', border: '1px solid #e2e8f0', boxShadow: '0 1px 3px rgba(0,0,0,0.1)', display: 'flex', alignItems: 'center', gap: 4 }}>
+          <Star size={12} fill="#f59e0b" color="#f59e0b" /> {rating}
+        </div>
       </div>
       <div style={{ padding: 14 }}>
         <div style={{ fontSize: 15, fontWeight: 700, marginBottom: 4, color: '#0f172a' }}>{name}</div>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <span style={{ fontSize: 12, color: '#94a3b8' }}>📍 {distance} away</span>
+          <span style={{ fontSize: 12, color: '#94a3b8', display: 'flex', alignItems: 'center', gap: 4 }}><MapPin size={12} /> {distance} away</span>
           <span style={{ fontSize: 12, fontWeight: 700, color: '#0a6e46' }}>From {price}</span>
         </div>
       </div>

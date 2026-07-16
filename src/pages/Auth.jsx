@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { api } from '../services/api';
 import LocationPicker from '../components/LocationPicker';
+import { Egg } from 'lucide-react';
 
 export default function Auth() {
   const [searchParams] = useSearchParams();
@@ -117,7 +118,7 @@ export default function Auth() {
             background: 'linear-gradient(135deg, #0a6e46, #10b981)',
             marginBottom: 14, boxShadow: '0 4px 16px rgba(10,110,70,0.25)',
           }}>
-            <span style={{ fontSize: 24 }}>🐔</span>
+            <Egg size={24} color="#fff" />
           </div>
           <h1 style={{ fontSize: 26, fontWeight: 800, color: '#0f172a', letterSpacing: '-0.02em' }}>FaidaYetu</h1>
           <p style={{ fontSize: 14, color: '#64748b', marginTop: 4 }}>

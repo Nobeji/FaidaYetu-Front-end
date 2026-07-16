@@ -2,23 +2,24 @@ import { useState, useEffect } from 'react';
 import DashboardShell from '../../components/DashboardShell';
 import { api } from '../../services/api';
 import Spinner from '../../components/Spinner';
+import { Home, ShoppingCart, ClipboardList, Bell, User, DollarSign, Package, XCircle, Truck, AlertTriangle } from 'lucide-react';
 
 const navItems = [
-  { icon: '🏠', label: 'Explore', nav: '/customer' },
-  { icon: '🛒', label: 'Marketplace', nav: '/customer/marketplace' },
-  { icon: '📋', label: 'My Orders', nav: '/customer/orders' },
-  { icon: '🔔', label: 'Notifications', nav: '/customer/notifications' },
-  { icon: '👤', label: 'Profile', nav: '/customer/profile' },
+  { icon: Home, label: 'Explore', nav: '/customer' },
+  { icon: ShoppingCart, label: 'Marketplace', nav: '/customer/marketplace' },
+  { icon: ClipboardList, label: 'My Orders', nav: '/customer/orders' },
+  { icon: Bell, label: 'Notifications', nav: '/customer/notifications' },
+  { icon: User, label: 'Profile', nav: '/customer/profile' },
 ];
 
 const getIcon = (type) => {
   switch (type) {
-    case 'payment_received': return '💰';
-    case 'new_order': return '📦';
-    case 'order_cancelled': return '❌';
-    case 'delivery_update': return '🚚';
-    case 'low_stock': return '⚠️';
-    default: return '🔔';
+    case 'payment_received': return <DollarSign size={24} />;
+    case 'new_order': return <Package size={24} />;
+    case 'order_cancelled': return <XCircle size={24} />;
+    case 'delivery_update': return <Truck size={24} />;
+    case 'low_stock': return <AlertTriangle size={24} />;
+    default: return <Bell size={24} />;
   }
 };
 
@@ -96,7 +97,7 @@ export default function CustomerNotifications() {
           </div>
         ) : notifications.length === 0 ? (
           <div style={{ textAlign: 'center', padding: 48, color: '#888' }}>
-            <div style={{ fontSize: 48, marginBottom: 12 }}>🔔</div>
+            <div style={{ marginBottom: 12, display: 'flex', justifyContent: 'center' }}><Bell size={48} /></div>
             <div style={{ fontSize: 16, fontWeight: 600, marginBottom: 4 }}>Hakuna arifa bado</div>
             <div style={{ fontSize: 13, color: '#aaa' }}>Utapokea arifa za malipo na msafirishaji hapa.</div>
           </div>
@@ -109,7 +110,7 @@ export default function CustomerNotifications() {
                 border: `1px solid ${n.is_read ? '#eee' : '#cce5ff'}`,
                 borderRadius: 10, alignItems: 'flex-start',
               }}>
-                <span style={{ fontSize: 24, marginTop: 2, flexShrink: 0 }}>{getIcon(n.notification_type)}</span>
+                <span style={{ marginTop: 2, flexShrink: 0 }}>{getIcon(n.notification_type)}</span>
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{ fontWeight: n.is_read ? 500 : 700, fontSize: 14, color: '#000', marginBottom: 4 }}>
                     {n.title}

@@ -1,22 +1,23 @@
 import { useState, useEffect } from 'react';
+import { LayoutDashboard, Package, ShoppingCart, Bell, TrendingUp, TrendingDown, Settings, HelpCircle, Store, User, Clock } from 'lucide-react';
 import DashboardShell from '../../components/DashboardShell';
 import { api } from '../../services/api';
 import { useToast } from '../../components/ToastContext';
 
 const navItems = [
-  { icon: '📊', label: 'Dashboard', nav: '/supplier' },
-  { icon: '📦', label: 'Inventory', nav: '/supplier/inventory' },
-  { icon: '🛒', label: 'Orders', nav: '/supplier/orders' },
-  { icon: '🔔', label: 'Notifications', nav: '/supplier/notifications' },
-  { icon: '📈', label: 'Analytics', nav: '/supplier/analytics' },
-  { icon: '📉', label: 'Statistics', nav: '/supplier/statistics' },
-  { icon: '⚙️', label: 'Settings', nav: '/supplier/settings' },
-  { icon: '❓', label: 'Support', nav: '/supplier/support' },
+  { icon: LayoutDashboard, label: 'Dashboard', nav: '/supplier' },
+  { icon: Package, label: 'Inventory', nav: '/supplier/inventory' },
+  { icon: ShoppingCart, label: 'Orders', nav: '/supplier/orders' },
+  { icon: Bell, label: 'Notifications', nav: '/supplier/notifications' },
+  { icon: TrendingUp, label: 'Analytics', nav: '/supplier/analytics' },
+  { icon: TrendingDown, label: 'Statistics', nav: '/supplier/statistics' },
+  { icon: Settings, label: 'Settings', nav: '/supplier/settings' },
+  { icon: HelpCircle, label: 'Support', nav: '/supplier/support' },
 ];
 
 const sectionsConfig = {
   store: {
-    icon: '🏪', label: 'Store Profile',
+    icon: Store, label: 'Store Profile',
     fields: [
       { key: 'business_name', label: 'Business Name', type: 'text' },
       { key: 'business_email', label: 'Business Email', type: 'text' },
@@ -26,7 +27,7 @@ const sectionsConfig = {
     ],
   },
   account: {
-    icon: '👤', label: 'Account',
+    icon: User, label: 'Account',
     fields: [
       { key: 'username', label: 'Username', type: 'text' },
       { key: 'email', label: 'Email', type: 'text' },
@@ -35,7 +36,7 @@ const sectionsConfig = {
     ],
   },
   notifications: {
-    icon: '🔔', label: 'Notifications',
+    icon: Bell, label: 'Notifications',
     fields: [
       { key: 'push', label: 'Push Notifications', type: 'toggle' },
       { key: 'sms', label: 'SMS Alerts', type: 'toggle' },
@@ -43,7 +44,7 @@ const sectionsConfig = {
     ],
   },
   business: {
-    icon: '⏰', label: 'Business Hours',
+    icon: Clock, label: 'Business Hours',
     fields: [
       { key: 'opening', label: 'Opening Time', type: 'text', placeholder: 'e.g. 08:00' },
       { key: 'closing', label: 'Closing Time', type: 'text', placeholder: 'e.g. 18:00' },
@@ -213,44 +214,47 @@ export default function SupplierSettings() {
         )}
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 12 }}>
-          {Object.entries(sectionsConfig).map(([key, section]) => (
-            <div key={key} style={{ background: '#fff', borderRadius: 12, border: '1px solid #eee', overflow: 'hidden' }}>
-              <div
-                onClick={() => setOpenSection(openSection === key ? null : key)}
-                style={{ padding: 12, display: 'flex', alignItems: 'center', gap: 12, cursor: 'pointer' }}
-              >
-                <div style={{ width: 48, height: 48, borderRadius: 8, background: '#f5f5f5', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22 }}>{section.icon}</div>
-                <div style={{ flex: 1 }}>
-                  <div style={{ fontWeight: 700, fontSize: 15, color: '#111' }}>{section.label}</div>
-                  <div style={{ fontSize: 13, color: '#888' }}>{openSection === key ? 'Click to close' : 'Click to manage'}</div>
+          {Object.entries(sectionsConfig).map(([key, section]) => {
+            const SectionIcon = section.icon;
+            return (
+              <div key={key} style={{ background: '#fff', borderRadius: 12, border: '1px solid #eee', overflow: 'hidden' }}>
+                <div
+                  onClick={() => setOpenSection(openSection === key ? null : key)}
+                  style={{ padding: 12, display: 'flex', alignItems: 'center', gap: 12, cursor: 'pointer' }}
+                >
+                  <div style={{ width: 48, height: 48, borderRadius: 8, background: '#f5f5f5', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><SectionIcon size={22} /></div>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontWeight: 700, fontSize: 15, color: '#111' }}>{section.label}</div>
+                    <div style={{ fontSize: 13, color: '#888' }}>{openSection === key ? 'Click to close' : 'Click to manage'}</div>
+                  </div>
+                  <span style={{ color: '#888', transform: openSection === key ? 'rotate(90deg)' : 'none', transition: '0.2s' }}>→</span>
                 </div>
-                <span style={{ color: '#888', transform: openSection === key ? 'rotate(90deg)' : 'none', transition: '0.2s' }}>→</span>
+                {openSection === key && (
+                  <div style={{ padding: '0 12px 12px', borderTop: '1px solid #eee' }}>
+                    <div style={{ padding: 12, display: 'flex', flexDirection: 'column', gap: 12 }}>
+                      {section.fields.map(f => (
+                        <div key={f.key}>
+                          {f.type !== 'toggle' && <label style={{ fontSize: 13, fontWeight: 600, display: 'block', marginBottom: 4 }}>{f.label}</label>}
+                          {f.type === 'toggle' ? (
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                              <span style={{ fontSize: 14 }}>{f.label}</span>
+                              {renderField(key, f)}
+                            </div>
+                          ) : (
+                            renderField(key, f)
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                    <div style={{ display: 'flex', gap: 12 }}>
+                      <button onClick={() => handleSectionSave(key)} style={{ flex: 1, padding: '10px', borderRadius: 8, background: '#000', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 700 }}>Save</button>
+                      <button onClick={() => setOpenSection(null)} style={{ flex: 1, padding: '10px', borderRadius: 8, background: 'none', border: '1px solid #eee', cursor: 'pointer', fontWeight: 600 }}>Cancel</button>
+                    </div>
+                  </div>
+                )}
               </div>
-              {openSection === key && (
-                <div style={{ padding: '0 12px 12px', borderTop: '1px solid #eee' }}>
-                  <div style={{ padding: 12, display: 'flex', flexDirection: 'column', gap: 12 }}>
-                    {section.fields.map(f => (
-                      <div key={f.key}>
-                        {f.type !== 'toggle' && <label style={{ fontSize: 13, fontWeight: 600, display: 'block', marginBottom: 4 }}>{f.label}</label>}
-                        {f.type === 'toggle' ? (
-                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                            <span style={{ fontSize: 14 }}>{f.label}</span>
-                            {renderField(key, f)}
-                          </div>
-                        ) : (
-                          renderField(key, f)
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                  <div style={{ display: 'flex', gap: 12 }}>
-                    <button onClick={() => handleSectionSave(key)} style={{ flex: 1, padding: '10px', borderRadius: 8, background: '#000', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 700 }}>Save</button>
-                    <button onClick={() => setOpenSection(null)} style={{ flex: 1, padding: '10px', borderRadius: 8, background: 'none', border: '1px solid #eee', cursor: 'pointer', fontWeight: 600 }}>Cancel</button>
-                  </div>
-                </div>
-              )}
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </DashboardShell>
