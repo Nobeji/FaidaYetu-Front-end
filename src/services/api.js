@@ -173,6 +173,7 @@ export const api = {
   createOrder: (data) => request('/orders/', { method: 'POST', body: JSON.stringify(data) }),
   updateOrder: (id, data) => request(`/orders/${id}/`, { method: 'PATCH', body: JSON.stringify(data) }),
   assignDelivery: (orderId, data) => request(`/orders/${orderId}/assign-delivery/`, { method: 'POST', body: JSON.stringify(data) }),
+  autoAssignDelivery: (orderId) => request(`/orders/${orderId}/assign-delivery/`, { method: 'POST', body: JSON.stringify({}) }),
 
   // Deliveries
   deliveries: (params) => request(`/deliveries/${params ? '?' + new URLSearchParams(params) : ''}`),
@@ -183,6 +184,7 @@ export const api = {
 
   // Delivery Persons
   deliveryPersons: (params) => request(`/delivery-persons/${params ? '?' + new URLSearchParams(params) : ''}`),
+  updateDriverStatus: (deliveryPersonId, status) => request(`/delivery-persons/${deliveryPersonId}/status/`, { method: 'PATCH', body: JSON.stringify({ status }) }),
 
   // Dashboard
   supplierDashboard: (id) => request(`/dashboard/supplier/${id}/`),

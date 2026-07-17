@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { LayoutDashboard, Package, ShoppingCart, Bell, TrendingUp, TrendingDown, Settings, HelpCircle, MapPin, Star } from 'lucide-react';
+import { LayoutDashboard, Package, ShoppingCart, Bell, TrendingUp, TrendingDown, Settings, HelpCircle, MapPin, Zap } from 'lucide-react';
 
 import DashboardShell from '../../components/DashboardShell';
 import StatusBadge from '../../components/StatusBadge';
@@ -60,21 +60,19 @@ export default function SupplierOrders() {
     }
   };
 
-  const openAssign = async (order) => {
-    setShowAssign(order);
-    setLoadingDrivers(true);
+  const handleAutoAssign = async (order) => {
+    setAssigningDrivers(p => ({ ...p, [order.id]: true }));
     try {
-      const profile = JSON.parse(localStorage.getItem('profile') || '{}');
-      const lat = profile.lat;
-      const lng = profile.lng;
-      const params = { status: 'online', radius: 50 };
-      if (lat != null) { params.lat = lat; params.lng = lng; }
-      const data = await api.deliveryPersons(params);
-      setDrivers(data);
-    } catch {
-      setDrivers([]);
+      await api.autoAssignDelivery(order.id);
+      toast('Driver auto-assigned! They have been notified.', 'success');
+      const updated = await api.orders({ supplier: supplierId });
+      setOrders(updated);
+      setSelectedOrder(null);
+    } catch (e) {
+      const msg = e?.response?.data?.error || e?.message || 'Auto-assign failed.';
+      toast(msg, 'error');
     } finally {
-      setLoadingDrivers(false);
+      setAssigningDrivers(p => ({ ...p, [order.id]: false }));
     }
   };
 
@@ -162,7 +160,10 @@ export default function SupplierOrders() {
                           </button>
                         )}
                         {o.status === 'ready' && (
-                          <button onClick={() => openAssign(o)} style={{ padding: '6px 14px', borderRadius: 8, background: '#e67e22', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: 12 }}>{t('common.track')}</button>
+                          <button onClick={() => handleAutoAssign(o)} disabled={assigningDrivers[o.id]} style={{ padding: '6px 14px', borderRadius: 8, background: '#e67e22', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: 12, display: 'flex', alignItems: 'center', gap: 4 }}>
+                            {assigningDrivers[o.id] && <Spinner size={10} color="#fff" />}
+                            <Zap size={12} /> {t('common.autoAssign') || 'Auto-Assign'}
+                          </button>
                         )}
                       </td>
                     </tr>
@@ -211,7 +212,10 @@ export default function SupplierOrders() {
 
             <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
               {selectedOrder.status === 'ready' && (
-                <button onClick={() => { setSelectedOrder(null); openAssign(selectedOrder); }} style={{ padding: '10px 20px', borderRadius: 8, background: '#e67e22', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 700, flex: 1 }}>{t('orders.assignDriver')}</button>
+                <button onClick={() => handleAutoAssign(selectedOrder)} disabled={assigningDrivers[selectedOrder.id]} style={{ padding: '10px 20px', borderRadius: 8, background: '#e67e22', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 700, flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
+                  {assigningDrivers[selectedOrder.id] && <Spinner size={12} color="#fff" />}
+                  <Zap size={14} /> {t('common.autoAssign') || 'Auto-Assign Driver'}
+                </button>
               )}
               {['new', 'ready'].includes(selectedOrder.status) && (
                 <button onClick={() => handleStatusUpdate(selectedOrder.id, 'cancelled')} disabled={confirmingPayments[selectedOrder.id]} style={{ padding: '10px 20px', borderRadius: 8, background: '#fef2f2', color: '#d32f2f', border: '1px solid #fecaca', cursor: 'pointer', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 4 }}>
@@ -221,42 +225,6 @@ export default function SupplierOrders() {
               )}
               <button onClick={() => setSelectedOrder(null)} style={{ padding: '10px 20px', borderRadius: 8, background: 'none', border: `1px solid ${'#eee'}`, cursor: 'pointer', fontWeight: 600 }}>{t('common.close')}</button>
             </div>
-          </div>
-        </div>
-      )}
-
-      {/* Assign Delivery Modal */}
-      {showAssign && (
-        <div style={modalOverlay} onClick={() => setShowAssign(null)}>
-          <div style={modalBox} onClick={e => e.stopPropagation()}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-              <h3 style={{ fontSize: 20, fontWeight: 700, color: '#000' }}>{t('orders.assignDriver')} — Order #{showAssign.id}</h3>
-              <button onClick={() => setShowAssign(null)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 20, color: '#888' }}>✕</button>
-            </div>
-            <p style={{ fontSize: 14, color: '#888', marginBottom: 16 }}>Available delivery personnel nearby:</p>
-
-            {loadingDrivers ? (
-              <div style={{ textAlign: 'center', padding: 28, color: '#888' }}>{t('common.loading')}</div>
-            ) : drivers.length === 0 ? (
-              <div style={{ textAlign: 'center', padding: 28, color: '#888' }}>{t('orders.noDrivers')}</div>
-            ) : (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                {drivers.map(d => (
-                  <div key={d.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: 12, borderRadius: 8, border: `1px solid ${'#eee'}`, background: '#fafafa' }}>
-                    <div>
-                      <div style={{ fontWeight: 600 }}>{d.profile?.user?.username || `Driver #${d.id}`}</div>
-                      <div style={{ fontSize: 12, color: '#888', display: 'flex', alignItems: 'center', gap: 4 }}>
-                        {d.vehicle_type} • <Star size={12} /> {d.rating || 'N/A'} • {d.total_routes || 0} routes
-                      </div>
-                    </div>
-                    <button onClick={() => handleAssign(showAssign.id, d.id)} disabled={assigningDrivers[d.id]} style={{ padding: '8px 16px', borderRadius: 8, background: '#000', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: 13, display: 'flex', alignItems: 'center', gap: 4 }}>
-                      {assigningDrivers[d.id] && <Spinner size={10} color="#fff" />}
-                      Assign
-                    </button>
-                  </div>
-                ))}
-              </div>
-            )}
           </div>
         </div>
       )}

@@ -13,6 +13,7 @@ export const translations = {
       noData: 'No data available', confirm: 'Confirm', close: 'Close', track: 'Track',
       paid: 'Paid', payNow: 'Pay Now', pending: 'Pending', newLabel: 'New', active: 'Active',
       delivered: 'Delivered', cancelled: 'Cancelled', startRoute: 'Start Route', complete: 'Complete',
+      autoAssign: 'Auto-Assign Driver',
       contact: 'Contact', online: 'Online', offline: 'Offline',
     },
     dashboard: {
@@ -98,6 +99,7 @@ export const translations = {
       noData: 'Hakuna data', confirm: 'Thibitisha', close: 'Funga', track: 'Fuatilia',
       paid: 'Imelipwa', payNow: 'Lipa Sasa', pending: 'Inasubiri', newLabel: 'Mpya', active: 'Hai',
       delivered: 'Imefikishwa', cancelled: 'Imeghairiwa', startRoute: 'Anza Njia', complete: 'Maliza',
+      autoAssign: 'Teua Dereva Otomatiki',
       contact: 'Wasiliana', online: 'Mtandaoni', offline: 'Nje ya mtandao',
     },
     dashboard: {

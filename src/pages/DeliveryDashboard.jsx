@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Truck, Navigation, Coins, Settings, HelpCircle, FileText, ClipboardList, TrendingUp, Package, MapPin, Inbox } from 'lucide-react';
+import { Truck, Navigation, Coins, Settings, HelpCircle, FileText, ClipboardList, TrendingUp, Package, MapPin, Inbox, Power } from 'lucide-react';
 import DashboardShell from '../components/DashboardShell';
 import MapComponent from '../components/MapComponent';
+import NotificationBell from '../components/NotificationBell';
 import { api } from '../services/api';
 import { useToast } from '../components/ToastContext';
 import { useLang } from '../components/LanguageContext';
@@ -29,6 +30,17 @@ export default function DeliveryDashboard() {
   const toast = useToast();
   const [deliveryPerson, setDeliveryPerson] = useState(() => JSON.parse(localStorage.getItem('delivery_person') || '{}'));
   const dpId = deliveryPerson.id || 1;
+
+  const handleOnlineToggle = async () => {
+    const newStatus = driverOnline ? 'offline' : 'online';
+    try {
+      await api.updateDriverStatus(dpId, newStatus);
+      setDriverOnline(!driverOnline);
+      toast(`You are now ${newStatus}`, 'success');
+    } catch {
+      toast('Failed to update status.', 'error');
+    }
+  };
 
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth < 768);
@@ -67,7 +79,7 @@ export default function DeliveryDashboard() {
     try {
       const deliveries = await api.deliveries({ delivery_person: dpId });
       const activeDel = deliveries.find(d => d.status === 'in_transit' || d.status === 'assigned' || d.status === 'picked_up');
-      if (activeDel) { await api.updateDelivery(activeDel.id, { status: 'completed' }); const dash = await api.deliveryDashboard(dpId); setDashboardData(dash); }
+      if (activeDel) { await api.updateDelivery(activeDel.id, { status: 'completed' }); const dash = await api.deliveryDashboard(dpId); setDashboardData(dash); setDriverOnline(true); }
     } catch (e) { toast('Could not complete delivery.', 'error'); }
   };
 
@@ -101,8 +113,9 @@ export default function DeliveryDashboard() {
             <p style={{ fontSize: 13, color: '#64748b', margin: '4px 0 0' }}>{t('delivery.taskQueue')}</p>
           </div>
           <div style={{ display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap' }}>
-            <div onClick={() => setDriverOnline(!driverOnline)} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '8px 16px', background: '#fff', borderRadius: 20, border: '1px solid #e2e8f0', cursor: 'pointer' }}>
-              <span style={{ width: 8, height: 8, borderRadius: '50%', background: driverOnline ? '#22c55e' : '#d1d5db' }} />
+            <NotificationBell deliveryPersonId={dpId} />
+            <div onClick={handleOnlineToggle} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '8px 16px', background: '#fff', borderRadius: 20, border: '1px solid #e2e8f0', cursor: 'pointer' }}>
+              <Power size={14} color={driverOnline ? '#22c55e' : '#d1d5db'} />
               <span style={{ fontSize: 13, fontWeight: 500, color: '#475569' }}>{driverOnline ? t('common.online') : t('common.offline')}</span>
             </div>
             <button onClick={() => navigate('/delivery/route-history')} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '10px 20px', borderRadius: 8, background: '#0a6e46', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: 13 }}>

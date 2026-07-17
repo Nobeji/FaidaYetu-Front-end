@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { Bell, CircleDollarSign, Package, XCircle, Truck, AlertTriangle } from 'lucide-react';
 import { api } from '../services/api';
 
-export default function NotificationBell({ supplierId, customerId }) {
+export default function NotificationBell({ supplierId, customerId, deliveryPersonId }) {
   const [open, setOpen] = useState(false);
   const [notifications, setNotifications] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
@@ -15,13 +15,14 @@ export default function NotificationBell({ supplierId, customerId }) {
       const params = {};
       if (supplierId) params.supplier_id = supplierId;
       if (customerId) params.customer_id = customerId;
+      if (deliveryPersonId) params.delivery_person_id = deliveryPersonId;
       const data = await api.notifications(params);
       setNotifications(data.notifications || []);
       setUnreadCount(data.unread_count || 0);
     } catch {} finally { setLoading(false); }
   };
 
-  useEffect(() => { fetchNotifications(); const i = setInterval(fetchNotifications, 30000); return () => clearInterval(i); }, [supplierId, customerId]);
+  useEffect(() => { fetchNotifications(); const i = setInterval(fetchNotifications, 30000); return () => clearInterval(i); }, [supplierId, customerId, deliveryPersonId]);
   useEffect(() => { const h = (e) => { if (ref.current && !ref.current.contains(e.target)) setOpen(false); }; document.addEventListener('mousedown', h); return () => document.removeEventListener('mousedown', h); }, []);
 
   const handleMarkRead = async (id) => { try { await api.markNotificationRead(id); setNotifications(p => p.map(n => n.id === id ? { ...n, is_read: true } : n)); setUnreadCount(p => Math.max(0, p - 1)); } catch {} };

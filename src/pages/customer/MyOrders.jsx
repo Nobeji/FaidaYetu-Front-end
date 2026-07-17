@@ -6,7 +6,7 @@ import MapComponent from '../../components/MapComponent';
 import { api } from '../../services/api';
 import { useToast } from '../../components/ToastContext';
 import Spinner from '../../components/Spinner';
-import { Home, ShoppingCart, ClipboardList, Bell, User, Package, Clock, MapPin, FileText, Star } from 'lucide-react';
+import { Home, ShoppingCart, ClipboardList, Bell, User, Package, Clock, MapPin, FileText, Zap } from 'lucide-react';
 import { useLang } from '../../components/LanguageContext';
 
 const modalOverlay = {
@@ -24,9 +24,6 @@ export default function MyOrders() {
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('All');
   const [selectedOrder, setSelectedOrder] = useState(null);
-  const [showAssign, setShowAssign] = useState(null);
-  const [drivers, setDrivers] = useState([]);
-  const [loadingDrivers, setLoadingDrivers] = useState(false);
   const [showPayModal, setShowPayModal] = useState(null);
   const [phoneNumber, setPhoneNumber] = useState('');
   const [paying, setPaying] = useState(false);
@@ -135,29 +132,20 @@ export default function MyOrders() {
 
   const filtered = filter === 'All' ? orders : orders.filter(o => o.status === filter);
 
-  const openAssign = async (order) => {
-    setShowAssign(order);
-    setLoadingDrivers(true);
-    try {
-      const profile = JSON.parse(localStorage.getItem('profile') || '{}');
-      const params = { status: 'online', radius: 50 };
-      if (profile.lat != null) { params.lat = profile.lat; params.lng = profile.lng; }
-      setDrivers(await api.deliveryPersons(params));
-    } catch {
-      setDrivers([]);
-    } finally {
-      setLoadingDrivers(false);
-    }
-  };
+  const [assigningOrders, setAssigningOrders] = useState({});
 
-  const handleAssign = async (orderId, driverId) => {
+  const handleAutoAssign = async (order) => {
+    setAssigningOrders(p => ({ ...p, [order.id]: true }));
     try {
-      await api.assignDelivery(orderId, { delivery_person_id: driverId });
+      await api.autoAssignDelivery(order.id);
+      toast('Driver auto-assigned! They have been notified.', 'success');
       const updated = await api.orders({ customer: customerId });
       setOrders(updated);
-      setShowAssign(null);
-    } catch {
-      toast('Failed to assign delivery.', 'error');
+    } catch (e) {
+      const msg = e?.response?.data?.error || e?.message || 'Auto-assign failed.';
+      toast(msg, 'error');
+    } finally {
+      setAssigningOrders(p => ({ ...p, [order.id]: false }));
     }
   };
 
@@ -255,7 +243,10 @@ export default function MyOrders() {
                       )}
                       {o.status === 'in_transit' && <button onClick={() => navigate('/customer')} style={{ padding: '6px 14px', borderRadius: 8, background: '#000', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: 12 }}>{t('common.track')}</button>}
                       {!o.delivery && ['new', 'processing'].includes(o.status) && o.paid && (
-                        <button onClick={() => openAssign(o)} style={{ padding: '6px 14px', borderRadius: 8, background: '#e67e22', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: 12 }}>{t('orders.assignDriver')}</button>
+                        <button onClick={() => handleAutoAssign(o)} disabled={assigningOrders[o.id]} style={{ padding: '6px 14px', borderRadius: 8, background: '#e67e22', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: 12, display: 'flex', alignItems: 'center', gap: 4 }}>
+                          {assigningOrders[o.id] && <Spinner size={10} color="#fff" />}
+                          <Zap size={12} /> {t('common.autoAssign') || 'Auto-Assign'}
+                        </button>
                       )}
                     </div>
                   </div>
@@ -357,38 +348,6 @@ export default function MyOrders() {
                 {paying ? t('payment.sending') : `Pay ${Number(showPayModal.total).toLocaleString()} TZS`}
               </button>
             </div>
-          </div>
-        </div>
-      )}
-
-      {showAssign && (
-        <div style={modalOverlay} onClick={() => setShowAssign(null)}>
-          <div style={modalBox} onClick={e => e.stopPropagation()}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-              <h3 style={{ fontSize: 20, fontWeight: 700, color: '#000' }}>{t('orders.assignDriver')} — {t('orders.order')} #{showAssign.id}</h3>
-              <button onClick={() => setShowAssign(null)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 20, color: '#888' }}>✕</button>
-            </div>
-            <p style={{ fontSize: 14, color: '#888', marginBottom: 16 }}>{t('orders.nearbyDrivers')}</p>
-
-            {loadingDrivers ? (
-              <div style={{ textAlign: 'center', padding: 28, color: '#888' }}>{t('common.loading')}</div>
-            ) : drivers.length === 0 ? (
-              <div style={{ textAlign: 'center', padding: 28, color: '#888' }}>{t('orders.noDrivers')}</div>
-            ) : (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                {drivers.map(d => (
-                  <div key={d.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: 12, borderRadius: 8, border: `1px solid ${'#eee'}`, background: '#fafafa' }}>
-                    <div>
-                      <div style={{ fontWeight: 600 }}>{d.profile?.user?.username || `Driver #${d.id}`}</div>
-                      <div style={{ fontSize: 12, color: '#888', display: 'flex', alignItems: 'center', gap: 4 }}>
-                        {d.vehicle_type} • <Star size={14} fill="#f59e0b" color="#f59e0b" /> {d.rating || 'N/A'} • {d.total_routes || 0} {t('orders.routes')}
-                      </div>
-                    </div>
-                    <button onClick={() => handleAssign(showAssign.id, d.id)} style={{ padding: '8px 16px', borderRadius: 8, background: '#000', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 600, fontSize: 13 }}>{t('common.confirm')}</button>
-                  </div>
-                ))}
-              </div>
-            )}
           </div>
         </div>
       )}
